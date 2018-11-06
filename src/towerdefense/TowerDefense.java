@@ -11,8 +11,9 @@ public class TowerDefense {
 
     /**
      * @param args the command line arguments
+     * @throws InterruptedException 
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
     	LaserTower lt = new LaserTower();
     	Game game = new Game();
     	game.start();

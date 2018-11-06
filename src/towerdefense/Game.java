@@ -42,7 +42,7 @@ public class Game {
 		currentMode = modes.get(0);
 	}
 
-	public void start() {
+	public void start() throws InterruptedException {
 		try {
 			terminal = new DefaultTerminalFactory().createTerminal();
 			screen = new TerminalScreen(terminal);
@@ -63,7 +63,7 @@ public class Game {
 		}
 	}
 
-	private void mainMenu() throws IOException {
+	private void mainMenu() throws IOException, InterruptedException {
 		if (players.isEmpty()) {
 			addPlayer();
 		}
@@ -250,157 +250,213 @@ public class Game {
 		screen.readInput();
 	}
 
-	private void playerSelect() throws IOException {
+	private void playerSelect() throws IOException, InterruptedException {
 		screen.clear();
-		screen.refresh();
 
-		if (players.isEmpty()) {
-			addPlayer();
+		int nicknameMaxLength = 15;
+		TerminalSize terminalSize = terminal.getTerminalSize();
+		TerminalPosition labelBoxTopLeft = new TerminalPosition(
+				(terminalSize.getColumns() - nicknameMaxLength - 10) / 2,
+				(terminalSize.getRows() - players.size() - 7) / 2);
+		TerminalPosition startPosition = labelBoxTopLeft.withRelative(3, 4);
+
+		printPlayerSelectWindow(labelBoxTopLeft);
+		screen.setCursorPosition(startPosition);
+
+		KeyStroke keyStroke;
+		KeyType keyType;
+		int listSize, currentSelection = 0;
+		while(true) {
+			if(players.isEmpty()) {
+				addPlayer();
+			}
+			do {
+				printPlayersList(currentSelection, startPosition);
+				printPSOptionsList(currentSelection, startPosition.withRelativeRow(players.size()+1));
+
+				keyStroke = screen.readInput();
+				keyType = keyStroke.getKeyType();
+				listSize = players.size() + 2;
+				switch (keyType) {
+				case ArrowDown:
+					currentSelection = (currentSelection + 1) % listSize;
+					break;
+				case ArrowUp:
+					currentSelection = (currentSelection - 1 + listSize) % listSize;
+					break;
+				case ArrowRight:
+					if (currentSelection == players.size()) {
+						currentSelection = (currentSelection + 1) % listSize;
+					}
+					break;
+				case ArrowLeft:
+					if (currentSelection == players.size() + 1) {
+						currentSelection = (currentSelection - 1 + listSize) % listSize;
+					}
+					break;
+				}
+
+				if (currentSelection < players.size()) {
+					screen.setCursorPosition(startPosition.withRelativeRow(currentSelection));
+				} else if (currentSelection == players.size()) {
+					screen.setCursorPosition(startPosition.withRelativeRow(currentSelection + 1));
+				} else if (currentSelection == players.size() + 1) {
+					screen.setCursorPosition(startPosition.withRelative(7, currentSelection));
+				}
+			} while (keyType != KeyType.Enter);
+			if (currentSelection == listSize - 2) {
+				addPlayer();
+				screen.clear();
+				printPlayerSelectWindow(startPosition.withRelative(-3, -4));
+				screen.setCursorPosition(startPosition.withRelativeRow(currentSelection));
+			} else if (currentSelection == listSize - 1) {
+				deletePlayer(startPosition);
+			} else {
+				break;
+			}
+			screen.refresh();
 		}
-		printPlayerSelectWindow();
-
 		screen.clear();
-		screen.refresh();
 	}
 
-	private void printPlayerSelectWindow() throws IOException {
-		
+	private void printPlayerSelectWindow(TerminalPosition startPosition) throws IOException {
+
 		String label = "Choose player";
-		TerminalSize terminalSize = terminal.getTerminalSize();
 		int nicknameMaxLength = 15;
-		TerminalPosition labelBoxTopLeft = new TerminalPosition((terminalSize.getColumns() - nicknameMaxLength - 10) / 2,
-				(terminalSize.getRows() - players.size() - 7) / 2);
+
 		TerminalSize labelBoxSize = new TerminalSize(nicknameMaxLength + 10, players.size() + 7);
-		TerminalPosition labelBoxTopRightCorner = labelBoxTopLeft.withRelativeColumn(labelBoxSize.getColumns() - 1);
+		TerminalPosition labelBoxTopRightCorner = startPosition.withRelativeColumn(labelBoxSize.getColumns() - 1);
 
 		TextGraphics textGraphics = screen.newTextGraphics();
 		textGraphics.setForegroundColor(TextColor.ANSI.RED);
-		textGraphics.fillRectangle(labelBoxTopLeft, labelBoxSize, ' ');
+		textGraphics.fillRectangle(startPosition, labelBoxSize, ' ');
 
-		textGraphics.drawLine(labelBoxTopLeft.withRelativeColumn(1),
-				labelBoxTopLeft.withRelativeColumn(labelBoxSize.getColumns() - 2), Symbols.DOUBLE_LINE_HORIZONTAL);
+		textGraphics.drawLine(startPosition.withRelativeColumn(1),
+				startPosition.withRelativeColumn(labelBoxSize.getColumns() - 2), Symbols.DOUBLE_LINE_HORIZONTAL);
 
-		textGraphics.drawLine(
-				labelBoxTopLeft.withRelativeRow(labelBoxSize.getRows()).withRelativeColumn(1), labelBoxTopLeft
-						.withRelativeRow(labelBoxSize.getRows()).withRelativeColumn(labelBoxSize.getColumns() - 2),
+		textGraphics.drawLine(startPosition.withRelativeRow(labelBoxSize.getRows()).withRelativeColumn(1),
+				startPosition.withRelativeRow(labelBoxSize.getRows()).withRelativeColumn(labelBoxSize.getColumns() - 2),
 				Symbols.DOUBLE_LINE_HORIZONTAL);
 
-		textGraphics.setCharacter(labelBoxTopLeft, Symbols.DOUBLE_LINE_TOP_LEFT_CORNER);
+		textGraphics.setCharacter(startPosition, Symbols.DOUBLE_LINE_TOP_LEFT_CORNER);
 		textGraphics.setCharacter(labelBoxTopRightCorner, Symbols.DOUBLE_LINE_TOP_RIGHT_CORNER);
-		textGraphics.setCharacter(labelBoxTopLeft.withRelativeRow(labelBoxSize.getRows()),
+		textGraphics.setCharacter(startPosition.withRelativeRow(labelBoxSize.getRows()),
 				Symbols.DOUBLE_LINE_BOTTOM_LEFT_CORNER);
 		textGraphics.setCharacter(labelBoxTopRightCorner.withRelativeRow(labelBoxSize.getRows()),
 				Symbols.DOUBLE_LINE_BOTTOM_RIGHT_CORNER);
 
 		for (int i = 1; i < labelBoxSize.getRows(); i++) {
-			textGraphics.setCharacter(labelBoxTopLeft.withRelativeRow(i), Symbols.DOUBLE_LINE_VERTICAL);
+			textGraphics.setCharacter(startPosition.withRelativeRow(i), Symbols.DOUBLE_LINE_VERTICAL);
 			textGraphics.setCharacter(labelBoxTopRightCorner.withRelativeRow(i), Symbols.DOUBLE_LINE_VERTICAL);
 		}
 
-		textGraphics.setCharacter(labelBoxTopLeft.withRelativeRow(labelBoxSize.getRows() - 1),
+		textGraphics.setCharacter(startPosition.withRelativeRow(labelBoxSize.getRows() - 1),
 				Symbols.DOUBLE_LINE_VERTICAL);
 		textGraphics.setCharacter(labelBoxTopRightCorner.withRelativeRow(labelBoxSize.getRows() - 1),
 				Symbols.DOUBLE_LINE_VERTICAL);
-		textGraphics.putString(labelBoxTopLeft.withRelative(2, 2), label);
+		textGraphics.putString(startPosition.withRelative(2, 2), label);
 
 		for (int i = 0; i < players.size(); i++) {
-			textGraphics.setCharacter(labelBoxTopLeft.withRelativeRow(i + 4), Symbols.DOUBLE_LINE_VERTICAL);
+			textGraphics.setCharacter(startPosition.withRelativeRow(i + 4), Symbols.DOUBLE_LINE_VERTICAL);
 			textGraphics.setCharacter(labelBoxTopRightCorner.withRelativeRow(i + 4), Symbols.DOUBLE_LINE_VERTICAL);
 		}
-		printPlayersList(labelBoxTopLeft.withRelative(3, 4));
 		screen.refresh();
-
-		currentPlayer = changePlayer(labelBoxTopLeft.withRelative(3,4));
-
+		printPlayersList(0, startPosition.withRelative(3, 4));
 	}
 
-	private void printPlayersList(TerminalPosition startPosition) throws IOException {
+	private void printPlayersList(int currentSelection, TerminalPosition startPosition) throws IOException {
 		TextGraphics textGraphics = screen.newTextGraphics();
 		textGraphics.setForegroundColor(TextColor.ANSI.RED);
-		
-		int currentSelection = 0;
-		for (int i = 0; i < players.size() + 1; i++) {
+
+		for (int i = 0; i < players.size() + 2; i++) {
 			if (i == currentSelection) {
 				if (i < players.size()) {
 					textGraphics.putString(startPosition.withRelativeRow(i), players.get(i).getNickname(), SGR.BLINK,
 							SGR.BOLD);
-				} else if (i == players.size()) {
-					textGraphics.putString(startPosition.withRelativeRow(players.size()+1), "ADD", SGR.BOLD,
-							SGR.ITALIC, SGR.BLINK);
-				}/* else if (i == players.size() + 1) {
-					textGraphics.putString(startPosition.withRelative(7, players.size()+1), "DELETE", SGR.BOLD,
-							SGR.ITALIC, SGR.BLINK);
-				}*/
+				}
 			} else {
 				if (i < players.size()) {
 					textGraphics.putString(startPosition.withRelativeRow(i), players.get(i).getNickname(), SGR.BOLD);
-				} else if (i == players.size()) {
-					textGraphics.putString(startPosition.withRelativeRow(players.size()+1), "ADD", SGR.BOLD,
-							SGR.ITALIC);
-				} /*else if (i == players.size() + 1) {
-					textGraphics.putString(startPosition.withRelative(7, players.size()+1), "DELETE", SGR.BOLD,
-							SGR.ITALIC);
-				}*/
+				}
 			}
 			screen.refresh();
 		}
 	}
 
-	private Player changePlayer(TerminalPosition startPosition) throws IOException {
+	private void printPSOptionsList(int currentSelection, TerminalPosition startPosition) throws IOException {
+		TextGraphics textGraphics = screen.newTextGraphics();
+		textGraphics.setForegroundColor(TextColor.ANSI.RED);
+		
+		textGraphics.fillRectangle(startPosition, new TerminalSize(15, 1), ' ');
+		
+		for (int i = players.size(); i < players.size() + 2; i++) {
+			if (i == currentSelection) {
+				if (i == players.size()) {
+					textGraphics.putString(startPosition, "ADD", SGR.ITALIC,
+							SGR.BLINK);
+				} else if (i == players.size() + 1) {
+					textGraphics.putString(startPosition.withRelativeColumn(7), "DELETE", SGR.ITALIC,
+							SGR.BLINK);
+				}
+			} else {
+				if (i == players.size()) {
+					textGraphics.putString(startPosition, "ADD", SGR.ITALIC);
+				} else if (i == players.size() + 1) {
+					textGraphics.putString(startPosition.withRelativeColumn(7), "DELETE", SGR.ITALIC);
+				}
+			}
+			screen.refresh();
+		}
+
+	}
+
+	private void deletePlayer(TerminalPosition startPosition) throws IOException, InterruptedException {
+		int nicknameMaxLength = 15;
+		TerminalSize boxSize = new TerminalSize(nicknameMaxLength, players.size() + 3);
+		TextGraphics textGraphics = screen.newTextGraphics();
+
+		textGraphics.setForegroundColor(TextColor.ANSI.RED);
 		screen.setCursorPosition(startPosition);
 
+		int currentSelection = 0;
 		KeyStroke keyStroke;
 		KeyType keyType;
-		int listSize;
-		
-		int currentSelection = 0;
-		do {
-			printPlayersList(startPosition);
-
-			keyStroke = screen.readInput();
-			keyType = keyStroke.getKeyType();
-			listSize = players.size() + 1;
-			switch (keyType) {
-			case ArrowDown:
-				currentSelection = (currentSelection + 1) % listSize;
+		while (true) {
+			if (players.isEmpty() || currentSelection == players.size()+1) {
+				textGraphics.putString(startPosition, "List is empty", SGR.BOLD);
+				screen.refresh();
+				currentPlayer = null;
+				Thread.sleep(1500);
 				break;
-			case ArrowUp:
-				currentSelection = (currentSelection - 1 + listSize) % listSize;
-				break;
-			case ArrowRight:
-				if (currentSelection == players.size()) {
+			}
+			do {
+				if (currentSelection < players.size()) {
+					screen.setCursorPosition(startPosition.withRelativeRow(currentSelection));
+				} else if (currentSelection == players.size()) {
+					screen.setCursorPosition(startPosition.withRelativeRow(currentSelection + 1));
+				}
+				textGraphics.fillRectangle(startPosition, boxSize, ' ');
+				printPlayersList(currentSelection, startPosition);
+				textGraphics.putString(startPosition.withRelativeRow(players.size() + 1), "DONE", SGR.ITALIC);
+				screen.refresh();
+				keyStroke = screen.readInput();
+				keyType = keyStroke.getKeyType();
+				
+				int listSize = players.size() + 1;
+				switch (keyType) {
+				case ArrowDown:
 					currentSelection = (currentSelection + 1) % listSize;
-				}
-				break;
-			case ArrowLeft:
-				if (currentSelection == players.size() + 1) {
+					break;
+				case ArrowUp:
 					currentSelection = (currentSelection - 1 + listSize) % listSize;
+					break;
 				}
+			} while (keyType != KeyType.Enter);
+			if(currentSelection == players.size()) {
 				break;
 			}
-
-			if (currentSelection < players.size()) {
-				screen.setCursorPosition(startPosition.withRelativeRow(currentSelection));
-			} else if (currentSelection == players.size()) {
-				screen.setCursorPosition(startPosition.withRelativeRow(currentSelection+1));
-			} else if (currentSelection == players.size() + 1) {
-				screen.setCursorPosition(startPosition.withRelative(7, currentSelection));
-			}
-		} while (keyType != KeyType.Enter);
-
-		if(currentSelection == listSize - 1) {
-			addPlayer();
-		}/* else if (currentSelection == listSize - 1) {
-			deletePlayer();
-		}*/
-		
-		return players.get(currentSelection);
-	}
-	
-	private void deletePlayer(TerminalPosition startPosition) throws IOException {
-		
-		screen.refresh();
-		screen.readInput();
+			players.remove(currentSelection);
+		}
 	}
 
 	private void shop() throws IOException {
