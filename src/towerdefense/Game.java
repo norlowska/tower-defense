@@ -69,17 +69,15 @@ public class Game {
 	public void mainMenu() throws IOException {
 		if(players.isEmpty()) {
 			addPlayer();
-		} else {
-			currentPlayer = players.get(0);
 		}
 		
 		screen.clear();
+		screen.refresh();
 		
 		TerminalSize terminalSize = terminal.getTerminalSize();
 		TerminalPosition startPosition = new TerminalPosition(terminalSize.getColumns()/3, terminalSize.getRows()/3);
 		TextGraphics textGraphics = screen.newTextGraphics();
-		String greeting = "Hello, " + currentPlayer.getNickname() + "!";
-        
+
 		textGraphics.setForegroundColor(TextColor.ANSI.RED);
 		
         KeyStroke keyStroke;
@@ -87,6 +85,7 @@ public class Game {
         
         int currentSelection = 0;
         while(true) {
+        	String greeting = "Hello, " + currentPlayer.getNickname() + "!";
     		textGraphics.putString(terminalSize.getColumns()-greeting.length() - 3, 1, greeting);
         	screen.setCursorPosition(startPosition.withRelativeRow(currentSelection));
         	terminal.setCursorVisible(false); //doesn't work
@@ -97,7 +96,7 @@ public class Game {
         				textGraphics.putString(startPosition, "PLAY", SGR.BLINK, SGR.BOLD);
         				break;
         			case 1:
-        				textGraphics.putString(startPosition.withRelativeRow(1), "CHANGE PLAYER", SGR.BLINK, SGR.BOLD);
+        				textGraphics.putString(startPosition.withRelativeRow(1), "PLAYER SELECT", SGR.BLINK, SGR.BOLD);
         				break;
         			case 2:
         				textGraphics.putString(startPosition.withRelativeRow(2), "SHOP", SGR.BLINK, SGR.BOLD);
@@ -112,7 +111,7 @@ public class Game {
             				textGraphics.putString(startPosition, "PLAY", SGR.BOLD);
             				break;
             			case 1:
-            				textGraphics.putString(startPosition.withRelativeRow(1), "CHANGE PLAYER", SGR.BOLD);
+            				textGraphics.putString(startPosition.withRelativeRow(1), "PLAYER SELECT", SGR.BOLD);
             				break;
             			case 2:
             				textGraphics.putString(startPosition.withRelativeRow(2), "SHOP", SGR.BOLD);
@@ -143,6 +142,7 @@ public class Game {
                 	break;
                 case 1:
                 	changePlayer();
+                	System.out.println(currentPlayer.getNickname());
                 	break;
                 case 2:
                 	shop();
@@ -240,6 +240,7 @@ public class Game {
 	            while((line = bufferedReader.readLine()) != null) {
 	                players.add(new Player(line, new Map()));
 	            }   
+	            currentPlayer = players.get(0);
 	            bufferedReader.close();         
 	        }
 	        catch(FileNotFoundException ex) {
@@ -262,14 +263,99 @@ public class Game {
 		screen.clear();
 		screen.refresh();
 
-		while(!players.isEmpty()) {
-			screen.readInput();
+		if (players.isEmpty()) {
+			addPlayer();
 		}
-		addPlayer();
-		screen.readInput();
+		currentPlayer = printPlayersList();
+		
+		screen.clear();
+		screen.refresh();
+	}
+	
+	public Player printPlayersList() throws IOException {
+		terminal.setCursorVisible(false);
+		TerminalSize terminalSize = terminal.getTerminalSize();
+		String label = "Choose player";
+		int nicknameMaxLength = 15;
+        TerminalPosition labelBoxTopLeft = new TerminalPosition((terminalSize.getColumns() - nicknameMaxLength - 4)/2, (terminalSize.getRows()-players.size() - 4)/2);
+        TerminalSize labelBoxSize = new TerminalSize(nicknameMaxLength + 4, players.size() + 5);
+        TerminalPosition labelBoxTopRightCorner = labelBoxTopLeft.withRelativeColumn(labelBoxSize.getColumns() - 1);
+        
+        TextGraphics textGraphics = screen.newTextGraphics();
+        textGraphics.setForegroundColor(TextColor.ANSI.RED);
+        textGraphics.fillRectangle(labelBoxTopLeft, labelBoxSize, ' ');
+        
+        textGraphics.drawLine(
+                labelBoxTopLeft.withRelativeColumn(1),
+                labelBoxTopLeft.withRelativeColumn(labelBoxSize.getColumns() - 2),
+                Symbols.DOUBLE_LINE_HORIZONTAL);
+        
+        textGraphics.drawLine(
+                labelBoxTopLeft.withRelativeRow(labelBoxSize.getRows()).withRelativeColumn(1),
+                labelBoxTopLeft.withRelativeRow(labelBoxSize.getRows()).withRelativeColumn(labelBoxSize.getColumns() - 2),
+                Symbols.DOUBLE_LINE_HORIZONTAL);
+
+        textGraphics.setCharacter(labelBoxTopLeft, Symbols.DOUBLE_LINE_TOP_LEFT_CORNER);
+        textGraphics.setCharacter(labelBoxTopRightCorner, Symbols.DOUBLE_LINE_TOP_RIGHT_CORNER);
+        textGraphics.setCharacter(labelBoxTopLeft.withRelativeRow(labelBoxSize.getRows()), Symbols.DOUBLE_LINE_BOTTOM_LEFT_CORNER);
+        textGraphics.setCharacter(labelBoxTopRightCorner.withRelativeRow(labelBoxSize.getRows()), Symbols.DOUBLE_LINE_BOTTOM_RIGHT_CORNER);
+        
+        for (int i=1; i<4; i++) {
+        	textGraphics.setCharacter(labelBoxTopLeft.withRelativeRow(i), Symbols.DOUBLE_LINE_VERTICAL);
+            textGraphics.setCharacter(labelBoxTopRightCorner.withRelativeRow(i), Symbols.DOUBLE_LINE_VERTICAL);
+        }
+        
+        textGraphics.setCharacter(labelBoxTopLeft.withRelativeRow(labelBoxSize.getRows()-1), Symbols.DOUBLE_LINE_VERTICAL);
+        textGraphics.setCharacter(labelBoxTopRightCorner.withRelativeRow(labelBoxSize.getRows()-1), Symbols.DOUBLE_LINE_VERTICAL);
+        textGraphics.putString(labelBoxTopLeft.withRelative(3, 2), label);
+        
+        for(int i=0; i<players.size(); i++) {
+        	textGraphics.setCharacter(labelBoxTopLeft.withRelativeRow(i+4), Symbols.DOUBLE_LINE_VERTICAL);
+        	textGraphics.putString(labelBoxTopLeft.withRelative(3, i+4), players.get(i).getNickname(), SGR.BOLD);
+        	textGraphics.setCharacter(labelBoxTopRightCorner.withRelativeRow(i+4), Symbols.DOUBLE_LINE_VERTICAL);
+        }
+        
+        screen.setCursorPosition(labelBoxTopLeft.withRelative(3, 4));
+        
+        KeyStroke keyStroke;
+        KeyType keyType;
+        
+        int currentSelection = 0;
+        do {
+    		for (int i = 0; i < players.size(); i++) {
+        		if ( i == currentSelection) {
+                	textGraphics.putString(labelBoxTopLeft.withRelative(3, i+4), players.get(i).getNickname(), SGR.BLINK, SGR.BOLD);
+        		} else {
+                	textGraphics.putString(labelBoxTopLeft.withRelative(3, i+4), players.get(i).getNickname(), SGR.BOLD);
+        			}
+        		}
+    		screen.refresh();
+    		
+        	keyStroke = screen.readInput();
+        	keyType = keyStroke.getKeyType();
+        	switch(keyType) {
+        	case ArrowDown:
+        		currentSelection = (currentSelection+1)%players.size();
+        		screen.setCursorPosition(labelBoxTopLeft.withRelative(3, currentSelection+4));
+        		break;
+        	case ArrowUp:
+        		currentSelection = (currentSelection-1+players.size())%players.size();
+        		screen.setCursorPosition(labelBoxTopLeft.withRelative(3, currentSelection+4));
+        		break;
+        	}
+        } while(keyType != KeyType.Enter);
+        
+        screen.refresh();
+		
+		return players.get(currentSelection);
 	}
 	
 	public void shop() throws IOException {
+		screen.clear();
+		
+		
+		
+		screen.refresh();
 		screen.clear();
 		screen.refresh();
 		screen.readInput();
@@ -282,7 +368,7 @@ public class Game {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(playersFileName));
 
             for(Player p : players) {
-            	bufferedWriter.write(p.getNickname());
+            	bufferedWriter.write(p.getNickname()+'\n');
             }
             bufferedWriter.close();         
         }
