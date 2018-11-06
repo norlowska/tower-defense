@@ -5,12 +5,15 @@
  */
 package towerdefense;
 
+import towers.LaserTower;
+
 public class TowerDefense {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+    	LaserTower lt = new LaserTower();
     	Game game = new Game();
     	game.start();
     	
