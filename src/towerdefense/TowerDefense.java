@@ -5,7 +5,7 @@
  */
 package towerdefense;
 
-import towers.LaserTower;
+//import towers.LaserTower;
 
 public class TowerDefense {
 
@@ -14,9 +14,11 @@ public class TowerDefense {
      * @throws InterruptedException 
      */
     public static void main(String[] args) throws InterruptedException {
-    	LaserTower lt = new LaserTower();
+    	//LaserTower lt = new LaserTower();
     	Game game = new Game();
     	game.start();
+    	//Map map = new Map();
+    	//map.readMapLayout("map1");
     	
     	return;
     }

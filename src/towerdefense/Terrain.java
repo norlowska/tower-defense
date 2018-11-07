@@ -6,11 +6,13 @@ public class Terrain {
 	
 	static TextColor.ANSI color;
 	
-	public Terrain(boolean color) {
-		if(color) {
+	public Terrain() {
+		
+	}
+	
+	public void setColor(int color) {
+		if(color == 1) {
 			this.color = TextColor.ANSI.GREEN;
 		}else this.color = TextColor.ANSI.BLACK;
 	}
-	
-
 }
