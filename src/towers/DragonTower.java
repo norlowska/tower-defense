@@ -1,16 +1,13 @@
 package towers;
 
-import java.util.ArrayList;
+import com.googlecode.lanterna.TextColor;
 
-import towerdefense.Bullet;
 import towerdefense.Tower;
 
 public class DragonTower extends Tower {
 
 	public DragonTower() {
-		super(new ArrayList<Bullet>(), 7, 12);
-		name = "DRAGON";
-		setIcon();
+		super("DRAGON", TextColor.ANSI.GREEN, 7, 12);
 	}
 
 	@Override

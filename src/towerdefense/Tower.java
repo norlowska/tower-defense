@@ -19,10 +19,12 @@ public abstract class Tower {
 	protected String icon;
 	protected TextColor color;
 	
-	public Tower(List<Bullet> bullets, int range, int power) {
-		this.bullets = bullets;
+	public Tower(String name, TextColor color, int range, int power) {
+		this.name = name;
+		this.color = color;
 		this.range = range;
 		this.power = power;
+		setIcon();
 	}
 	
 	public List<Bullet> getBullets() {

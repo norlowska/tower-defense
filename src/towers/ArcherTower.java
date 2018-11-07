@@ -1,16 +1,13 @@
 package towers;
 
-import java.util.ArrayList;
+import com.googlecode.lanterna.TextColor;
 
-import towerdefense.Bullet;
 import towerdefense.Tower;
 
 public class ArcherTower extends Tower {
 
 	public ArcherTower() {
-		super(new ArrayList<Bullet>(), 7, 12);
-		name = "ARCHER";
-		setIcon();
+		super("ARCHER", TextColor.ANSI.WHITE, 7, 12);
 	}
 
 	@Override

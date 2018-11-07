@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import towerdefense.Map;
 import towerdefense.Tower;
+import towers.ArcherTower;
 
 public class Player {
 	protected String nickname;
@@ -16,10 +17,18 @@ public class Player {
 		this.money = 500;
 		this.lastMap = lastMap;
 		towers = new ArrayList<Tower>();
+		towers.add(new ArcherTower());
 	}
-
+	public String getNickname() {
+		return nickname;
+	}
+	
 	public List<Tower> getTowers() {
 		return towers;
+	}
+	
+	public Tower getTower(int index) {
+		return towers.get(index);
 	}
 
 	public void setTowers(List<Tower> towers) {
@@ -42,7 +51,5 @@ public class Player {
 		this.money = money;
 	}
 
-	public String getNickname() {
-		return nickname;
-	}
+	
 }

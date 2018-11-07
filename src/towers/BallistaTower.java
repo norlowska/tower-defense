@@ -1,16 +1,13 @@
 package towers;
 
-import java.util.ArrayList;
+import com.googlecode.lanterna.TextColor;
 
-import towerdefense.Bullet;
 import towerdefense.Tower;
 
 public class BallistaTower extends Tower {
 
 	public BallistaTower() {
-		super(new ArrayList<Bullet>(), 7, 12);
-		name = "BALLISTA";
-		setIcon();
+		super("BALLISTA", TextColor.ANSI.BLUE, 7, 12);
 	}
 
 	@Override

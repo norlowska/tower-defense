@@ -55,7 +55,7 @@ public class Game {
 
 	public void start() throws InterruptedException {
 		try {
-			TerminalSize ts = new TerminalSize(100,50);
+			TerminalSize ts = new TerminalSize(100, 50);
 			DefaultTerminalFactory dft = new DefaultTerminalFactory();
 			dft.setInitialTerminalSize(ts);
 			terminal = dft.createTerminal();
@@ -87,8 +87,8 @@ public class Game {
 		screen.refresh();
 
 		TerminalSize terminalSize = terminal.getTerminalSize();
-		TerminalPosition startPosition = new TerminalPosition(terminalSize.getColumns() *2/5,
-				terminalSize.getRows() *2/5);
+		TerminalPosition startPosition = new TerminalPosition(terminalSize.getColumns() * 2 / 5,
+				terminalSize.getRows() * 2 / 5);
 		TextGraphics textGraphics = screen.newTextGraphics();
 
 		textGraphics.setForegroundColor(TextColor.ANSI.RED);
@@ -170,34 +170,20 @@ public class Game {
 
 	private void addPlayer() throws IOException {
 		screen.clear();
-		terminal.setCursorVisible(true);
 		TerminalSize terminalSize = terminal.getTerminalSize();
 		String nameLabel = "Enter your nickname: (MAX 15 characters)";
 		TerminalPosition labelBoxTopLeft = new TerminalPosition(
 				(terminalSize.getColumns() - nameLabel.length() - 10) / 2, (terminalSize.getRows() - 6) / 2);
-		TerminalSize labelBoxSize = new TerminalSize(nameLabel.length() + 10, 6);
-		TerminalPosition labelBoxTopRightCorner = labelBoxTopLeft.withRelativeColumn(labelBoxSize.getColumns() - 1);
+		TerminalSize labelBoxSize = new TerminalSize(nameLabel.length() + 10, 4);
 		TextGraphics textGraphics = screen.newTextGraphics();
+
 		textGraphics.setForegroundColor(TextColor.ANSI.CYAN);
-		textGraphics.fillRectangle(labelBoxTopLeft, labelBoxSize, ' ');
-		textGraphics.drawLine(labelBoxTopLeft.withRelativeColumn(1),
-				labelBoxTopLeft.withRelativeColumn(labelBoxSize.getColumns() - 2), Symbols.DOUBLE_LINE_HORIZONTAL);
-		textGraphics.drawLine(labelBoxTopLeft.withRelativeRow(3).withRelativeColumn(1),
-				labelBoxTopLeft.withRelativeRow(3).withRelativeColumn(labelBoxSize.getColumns() - 2),
-				Symbols.DOUBLE_LINE_HORIZONTAL);
-		textGraphics.setCharacter(labelBoxTopLeft, Symbols.DOUBLE_LINE_TOP_LEFT_CORNER);
-		textGraphics.setCharacter(labelBoxTopLeft.withRelativeRow(1), Symbols.DOUBLE_LINE_VERTICAL);
-		textGraphics.setCharacter(labelBoxTopLeft.withRelativeRow(2), Symbols.DOUBLE_LINE_VERTICAL);
-		textGraphics.setCharacter(labelBoxTopLeft.withRelativeRow(3), Symbols.DOUBLE_LINE_BOTTOM_LEFT_CORNER);
-		textGraphics.setCharacter(labelBoxTopRightCorner, Symbols.DOUBLE_LINE_TOP_RIGHT_CORNER);
-		textGraphics.setCharacter(labelBoxTopRightCorner.withRelativeRow(1), Symbols.DOUBLE_LINE_VERTICAL);
-		textGraphics.setCharacter(labelBoxTopRightCorner.withRelativeRow(2), Symbols.DOUBLE_LINE_VERTICAL);
-		textGraphics.setCharacter(labelBoxTopRightCorner.withRelativeRow(3), Symbols.DOUBLE_LINE_BOTTOM_RIGHT_CORNER);
+		drawDoubleLineBox(labelBoxTopLeft, labelBoxSize, TextColor.ANSI.CYAN, null);
 		textGraphics.putString(labelBoxTopLeft.withRelative(1, 1), nameLabel);
 		screen.setCursorPosition(labelBoxTopLeft.withRelative(1, 2));
 		screen.refresh();
 
-		KeyStroke keyStroke = screen.readInput();
+		KeyStroke keyStroke;
 		StringBuilder sb = new StringBuilder();
 		KeyType keyType;
 		TerminalPosition startPosition = screen.getCursorPosition();
@@ -283,6 +269,9 @@ public class Game {
 		while (true) {
 			if (players.isEmpty()) {
 				addPlayer();
+				screen.clear();
+				printPlayerSelectWindow(startPosition.withRelative(-3, -4));
+				screen.setCursorPosition(startPosition);
 			}
 			do {
 				printPlayersList(currentSelection, startPosition);
@@ -445,7 +434,7 @@ public class Game {
 	private void shop() throws IOException, InterruptedException {
 
 		TerminalSize terminalSize = terminal.getTerminalSize();
-		TerminalPosition startPosition = new TerminalPosition(terminalSize.getColumns() / 16,
+		TerminalPosition startPosition = new TerminalPosition(terminalSize.getColumns() / 12,
 				terminalSize.getRows() / 16);
 		TextGraphics textGraphics = screen.newTextGraphics();
 		TerminalSize towerBoxSize = new TerminalSize(10, 6);
@@ -464,38 +453,71 @@ public class Game {
 		screen.clear();
 		screen.setCursorPosition(null);
 
-		for (int i = 0; i < towersTypes.size() / 2; i++) {
-			for (int j = 0; j < 2; j++) {
-				drawDoubleLineBox(startPosition.withRelative(14 * i, 8 * j), towerBoxSize, TextColor.ANSI.RED, null);
-				drawTower(startPosition.withRelative(14 * i + 2, 8 * j + 1), towersTypes.get(i));
-				textGraphics.putString(startPosition.withRelative(14 * i, 8 * j + 6),
-						towersTypes.get(i + 4 * j).getName());
-			}
+		for (int i = 0; i < 2; i++) {
+			drawTowersBox(startPosition.withRelativeRow(i*8), TextColor.ANSI.RED, towersTypes.subList(i*4, i*4+4));
 		}
 
-		textGraphics.drawLine(new TerminalPosition(terminalSize.getColumns() * 3 / 4, 0),
-				new TerminalPosition(terminalSize.getColumns() * 3 / 4, terminalSize.getRows() - 1),
+		TerminalPosition towerDetailsPosition = new TerminalPosition(startPosition.withRelativeColumn(60).getColumn(),
+				0);
+		TerminalPosition boughtTowersPosition = new TerminalPosition(0, startPosition.withRelativeRow(17).getRow());
+		TerminalPosition boughtTowersListPosition = new TerminalPosition(startPosition.getColumn(),
+				boughtTowersPosition.withRelativeRow(4).getRow());
+		textGraphics.drawLine(towerDetailsPosition,
+				new TerminalPosition(towerDetailsPosition.getColumn(), boughtTowersPosition.getRow()),
 				Symbols.DOUBLE_LINE_VERTICAL);
+
+		textGraphics.drawLine(boughtTowersPosition,
+				new TerminalPosition(terminalSize.getColumns(), boughtTowersPosition.getRow()),
+				Symbols.DOUBLE_LINE_HORIZONTAL);
+
+		String boughtTowersTitle = "YOUR TOWERS";
+		String noTowers = "YOU HAVE NO TOWERS";
+		textGraphics.putString(
+				boughtTowersPosition.withRelative((terminalSize.getColumns() - boughtTowersTitle.length()) / 2 - 4, 2),
+				boughtTowersTitle, SGR.BOLD);
+		System.out.println(currentPlayer.getTowers().size());
+		if (!currentPlayer.getTowers().isEmpty()) {
+			drawTowersBox(boughtTowersListPosition, TextColor.ANSI.RED, currentPlayer.getTowers());
+		} else {
+			textGraphics.putString(
+					boughtTowersPosition.withRelative((terminalSize.getColumns() - noTowers.length()) / 2 - 4, 4),
+					noTowers, SGR.BOLD, SGR.ITALIC);
+		}
 
 		screen.refresh();
 		screen.readInput();
 		screen.clear();
 	}
 
-	private void drawTower(TerminalPosition startPoistion, Tower tower) {
+	private void drawTowersBox(TerminalPosition startPosition, TextColor color, List<Tower> towers) throws IOException {
+		TerminalSize towerBoxSize = new TerminalSize(10, 6);
+		TextGraphics textGraphics = screen.newTextGraphics();
+		textGraphics.setForegroundColor(color);
+		System.out.println(towers.size());
+		
+		for (int i = 0; i < 4 && i < towers.size(); i++) {
+			drawDoubleLineBox(startPosition.withRelativeColumn(14*i), towerBoxSize, color, null);
+			drawTower(startPosition.withRelative(2+14*i, 1), towers.get(i));
+			textGraphics.putString(startPosition.withRelative(14*i, 6), towers.get(i).getName());
+		}
+	}
+
+	private void drawTower(TerminalPosition startPosition, Tower tower) {
 		String stringTowerIcon = tower.getIcon();
+		TextColor color = tower.getColor();
+
 		TextImage towerIcon = new BasicTextImage(new TerminalSize(6, 4));
+		TextGraphics textGraphics = screen.newTextGraphics();
 		TextCharacter textCharacter;
 
 		for (int row = 0, i = 0; row < 4; row++) {
 			for (int column = 0; column < 6; column++, i++) {
-				textCharacter = new TextCharacter(stringTowerIcon.charAt(i));
+				textCharacter = new TextCharacter(stringTowerIcon.charAt(i), color, textGraphics.getBackgroundColor(),
+						SGR.BOLD);
 				towerIcon.setCharacterAt(column, row, textCharacter);
 			}
 		}
-		TextGraphics textGraphics = screen.newTextGraphics();
-		textGraphics.setForegroundColor(tower.getColor());
-		textGraphics.drawImage(startPoistion, towerIcon);
+		textGraphics.drawImage(startPosition, towerIcon);
 
 	}
 

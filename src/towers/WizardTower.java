@@ -1,16 +1,13 @@
 package towers;
 
-import java.util.ArrayList;
+import com.googlecode.lanterna.TextColor;
 
-import towerdefense.Bullet;
 import towerdefense.Tower;
 
 public class WizardTower extends Tower {
 
 	public WizardTower() {
-		super(new ArrayList<Bullet>(), 7, 12);
-		name = "WIZARD";
-		setIcon();
+		super("WIZARD", TextColor.ANSI.CYAN, 7, 12);
 	}
 
 	@Override

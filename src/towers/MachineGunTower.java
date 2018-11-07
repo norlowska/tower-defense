@@ -1,16 +1,13 @@
 package towers;
 
-import java.util.ArrayList;
+import com.googlecode.lanterna.TextColor;
 
-import towerdefense.Bullet;
 import towerdefense.Tower;
 
 public class MachineGunTower extends Tower {
 
 	public MachineGunTower() {
-		super(new ArrayList<Bullet>(), 7, 12);
-		name = "MACHINEGUN";
-		setIcon();
+		super("MACHINEGUN", TextColor.ANSI.BLACK, 7, 12);
 	}
 
 	@Override
