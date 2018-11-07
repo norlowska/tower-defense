@@ -5,17 +5,16 @@ import java.util.ArrayList;
 import towerdefense.Bullet;
 import towerdefense.Tower;
 
-public class ArcherTower extends Tower {
+public class BallistaTower extends Tower {
 
-	public ArcherTower() {
+	public BallistaTower() {
 		super(new ArrayList<Bullet>(), 7, 12);
-		name = "ARCHER";
+		name = "BALLISTA";
 		setIcon();
 	}
 
 	@Override
 	public void setIcon() {
-		super.setIcon("assets/towers/ArcherTower.txt");
+		super.setIcon("assets/towers/BallistaTower.txt");
 	}
-
 }

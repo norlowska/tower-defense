@@ -11,6 +11,7 @@ import com.googlecode.lanterna.TextColor;
 import data.Player;
 
 public abstract class Tower {
+	protected String name;
 	protected List<Bullet> bullets;
 	protected int range;
 	protected int power;
@@ -40,16 +41,21 @@ public abstract class Tower {
 		return color;
 	}
 	
-	public void setIcon(String filename) {
+	public String getName() {
+		return name;
+	}
+	
+	protected void setIcon(String filename) {
 		StringBuilder sb = new StringBuilder();
 		String line = null;
+		int nrLine = 0;
 		 try {
 	            BufferedReader bufferedReader = new BufferedReader(new FileReader(filename));
 
-	            while((line = bufferedReader.readLine()) != null) {
-	                sb.append(line).append('\n');
+	            while((line = bufferedReader.readLine()) != null || nrLine <4) {
+	                sb.append(line);
+	                nrLine++;
 	            }
-	            sb.setLength(sb.length()-1);
 	            bufferedReader.close();         
 	        }
 	        catch(FileNotFoundException ex) {
@@ -62,5 +68,7 @@ public abstract class Tower {
 	        }
 		 this.icon = sb.toString();
 	}
+	
+	abstract public void setIcon();
 
 }

@@ -13,8 +13,11 @@ import com.googlecode.lanterna.SGR;
 import com.googlecode.lanterna.Symbols;
 import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TerminalSize;
+import com.googlecode.lanterna.TextCharacter;
 import com.googlecode.lanterna.TextColor;
+import com.googlecode.lanterna.graphics.BasicTextImage;
 import com.googlecode.lanterna.graphics.TextGraphics;
+import com.googlecode.lanterna.graphics.TextImage;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.Screen;
@@ -23,6 +26,14 @@ import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 
 import data.Player;
+import towers.ArcherTower;
+import towers.BallistaTower;
+import towers.CannonTower;
+import towers.DragonTower;
+import towers.LaserTower;
+import towers.MachineGunTower;
+import towers.PoisonTower;
+import towers.WizardTower;
 
 public class Game {
 	protected Terminal terminal = null;
@@ -44,7 +55,10 @@ public class Game {
 
 	public void start() throws InterruptedException {
 		try {
-			terminal = new DefaultTerminalFactory().createTerminal();
+			TerminalSize ts = new TerminalSize(100,50);
+			DefaultTerminalFactory dft = new DefaultTerminalFactory();
+			dft.setInitialTerminalSize(ts);
+			terminal = dft.createTerminal();
 			screen = new TerminalScreen(terminal);
 
 			screen.startScreen();
@@ -73,8 +87,8 @@ public class Game {
 		screen.refresh();
 
 		TerminalSize terminalSize = terminal.getTerminalSize();
-		TerminalPosition startPosition = new TerminalPosition(terminalSize.getColumns() / 3,
-				terminalSize.getRows() / 3);
+		TerminalPosition startPosition = new TerminalPosition(terminalSize.getColumns() *2/5,
+				terminalSize.getRows() *2/5);
 		TextGraphics textGraphics = screen.newTextGraphics();
 
 		textGraphics.setForegroundColor(TextColor.ANSI.RED);
@@ -87,7 +101,7 @@ public class Game {
 			String greeting = "Hello, " + currentPlayer.getNickname() + "!";
 			textGraphics.putString(terminalSize.getColumns() - greeting.length() - 3, 1, greeting);
 			screen.setCursorPosition(startPosition.withRelativeRow(currentSelection));
-			terminal.setCursorVisible(false); // doesn't work
+
 			for (int i = 0; i < 4; i++) {
 				if (i == currentSelection) {
 					switch (currentSelection) {
@@ -190,6 +204,7 @@ public class Game {
 		Boolean creatingPlayer = true;
 
 		while (creatingPlayer) {
+			keyStroke = screen.readInput();
 			keyType = keyStroke.getKeyType();
 			switch (keyType) {
 			case Enter:
@@ -222,7 +237,6 @@ public class Game {
 				break;
 			}
 			screen.refresh();
-			keyStroke = screen.readInput();
 		}
 	}
 
@@ -266,13 +280,13 @@ public class Game {
 		KeyStroke keyStroke;
 		KeyType keyType;
 		int listSize, currentSelection = 0;
-		while(true) {
-			if(players.isEmpty()) {
+		while (true) {
+			if (players.isEmpty()) {
 				addPlayer();
 			}
 			do {
 				printPlayersList(currentSelection, startPosition);
-				printPSOptionsList(currentSelection, startPosition.withRelativeRow(players.size()+1));
+				printPSOptionsList(currentSelection, startPosition.withRelativeRow(players.size() + 1));
 
 				keyStroke = screen.readInput();
 				keyType = keyStroke.getKeyType();
@@ -316,6 +330,7 @@ public class Game {
 			}
 			screen.refresh();
 		}
+		currentPlayer = players.get(currentSelection);
 		screen.clear();
 	}
 
@@ -324,42 +339,12 @@ public class Game {
 		String label = "Choose player";
 		int nicknameMaxLength = 15;
 
-		TerminalSize labelBoxSize = new TerminalSize(nicknameMaxLength + 10, players.size() + 7);
+		TerminalSize labelBoxSize = new TerminalSize(nicknameMaxLength + 10, players.size() + 8);
 		TerminalPosition labelBoxTopRightCorner = startPosition.withRelativeColumn(labelBoxSize.getColumns() - 1);
-
 		TextGraphics textGraphics = screen.newTextGraphics();
+		drawDoubleLineBox(startPosition, labelBoxSize, TextColor.ANSI.RED, null);
 		textGraphics.setForegroundColor(TextColor.ANSI.RED);
-		textGraphics.fillRectangle(startPosition, labelBoxSize, ' ');
-
-		textGraphics.drawLine(startPosition.withRelativeColumn(1),
-				startPosition.withRelativeColumn(labelBoxSize.getColumns() - 2), Symbols.DOUBLE_LINE_HORIZONTAL);
-
-		textGraphics.drawLine(startPosition.withRelativeRow(labelBoxSize.getRows()).withRelativeColumn(1),
-				startPosition.withRelativeRow(labelBoxSize.getRows()).withRelativeColumn(labelBoxSize.getColumns() - 2),
-				Symbols.DOUBLE_LINE_HORIZONTAL);
-
-		textGraphics.setCharacter(startPosition, Symbols.DOUBLE_LINE_TOP_LEFT_CORNER);
-		textGraphics.setCharacter(labelBoxTopRightCorner, Symbols.DOUBLE_LINE_TOP_RIGHT_CORNER);
-		textGraphics.setCharacter(startPosition.withRelativeRow(labelBoxSize.getRows()),
-				Symbols.DOUBLE_LINE_BOTTOM_LEFT_CORNER);
-		textGraphics.setCharacter(labelBoxTopRightCorner.withRelativeRow(labelBoxSize.getRows()),
-				Symbols.DOUBLE_LINE_BOTTOM_RIGHT_CORNER);
-
-		for (int i = 1; i < labelBoxSize.getRows(); i++) {
-			textGraphics.setCharacter(startPosition.withRelativeRow(i), Symbols.DOUBLE_LINE_VERTICAL);
-			textGraphics.setCharacter(labelBoxTopRightCorner.withRelativeRow(i), Symbols.DOUBLE_LINE_VERTICAL);
-		}
-
-		textGraphics.setCharacter(startPosition.withRelativeRow(labelBoxSize.getRows() - 1),
-				Symbols.DOUBLE_LINE_VERTICAL);
-		textGraphics.setCharacter(labelBoxTopRightCorner.withRelativeRow(labelBoxSize.getRows() - 1),
-				Symbols.DOUBLE_LINE_VERTICAL);
 		textGraphics.putString(startPosition.withRelative(2, 2), label);
-
-		for (int i = 0; i < players.size(); i++) {
-			textGraphics.setCharacter(startPosition.withRelativeRow(i + 4), Symbols.DOUBLE_LINE_VERTICAL);
-			textGraphics.setCharacter(labelBoxTopRightCorner.withRelativeRow(i + 4), Symbols.DOUBLE_LINE_VERTICAL);
-		}
 		screen.refresh();
 		printPlayersList(0, startPosition.withRelative(3, 4));
 	}
@@ -386,17 +371,15 @@ public class Game {
 	private void printPSOptionsList(int currentSelection, TerminalPosition startPosition) throws IOException {
 		TextGraphics textGraphics = screen.newTextGraphics();
 		textGraphics.setForegroundColor(TextColor.ANSI.RED);
-		
+
 		textGraphics.fillRectangle(startPosition, new TerminalSize(15, 1), ' ');
-		
+
 		for (int i = players.size(); i < players.size() + 2; i++) {
 			if (i == currentSelection) {
 				if (i == players.size()) {
-					textGraphics.putString(startPosition, "ADD", SGR.ITALIC,
-							SGR.BLINK);
+					textGraphics.putString(startPosition, "ADD", SGR.ITALIC, SGR.BLINK);
 				} else if (i == players.size() + 1) {
-					textGraphics.putString(startPosition.withRelativeColumn(7), "DELETE", SGR.ITALIC,
-							SGR.BLINK);
+					textGraphics.putString(startPosition.withRelativeColumn(7), "DELETE", SGR.ITALIC, SGR.BLINK);
 				}
 			} else {
 				if (i == players.size()) {
@@ -422,7 +405,7 @@ public class Game {
 		KeyStroke keyStroke;
 		KeyType keyType;
 		while (true) {
-			if (players.isEmpty() || currentSelection == players.size()+1) {
+			if (players.isEmpty() || currentSelection == players.size() + 1) {
 				textGraphics.putString(startPosition, "List is empty", SGR.BOLD);
 				screen.refresh();
 				currentPlayer = null;
@@ -441,7 +424,7 @@ public class Game {
 				screen.refresh();
 				keyStroke = screen.readInput();
 				keyType = keyStroke.getKeyType();
-				
+
 				int listSize = players.size() + 1;
 				switch (keyType) {
 				case ArrowDown:
@@ -452,20 +435,99 @@ public class Game {
 					break;
 				}
 			} while (keyType != KeyType.Enter);
-			if(currentSelection == players.size()) {
+			if (currentSelection == players.size()) {
 				break;
 			}
 			players.remove(currentSelection);
 		}
 	}
 
-	private void shop() throws IOException {
+	private void shop() throws IOException, InterruptedException {
+
+		TerminalSize terminalSize = terminal.getTerminalSize();
+		TerminalPosition startPosition = new TerminalPosition(terminalSize.getColumns() / 16,
+				terminalSize.getRows() / 16);
+		TextGraphics textGraphics = screen.newTextGraphics();
+		TerminalSize towerBoxSize = new TerminalSize(10, 6);
+		textGraphics.setForegroundColor(TextColor.ANSI.RED);
+
+		List<Tower> towersTypes = new ArrayList<Tower>();
+		towersTypes.add(new ArcherTower());
+		towersTypes.add(new BallistaTower());
+		towersTypes.add(new CannonTower());
+		towersTypes.add(new DragonTower());
+		towersTypes.add(new LaserTower());
+		towersTypes.add(new MachineGunTower());
+		towersTypes.add(new PoisonTower());
+		towersTypes.add(new WizardTower());
+
 		screen.clear();
+		screen.setCursorPosition(null);
+
+		for (int i = 0; i < towersTypes.size() / 2; i++) {
+			for (int j = 0; j < 2; j++) {
+				drawDoubleLineBox(startPosition.withRelative(14 * i, 8 * j), towerBoxSize, TextColor.ANSI.RED, null);
+				drawTower(startPosition.withRelative(14 * i + 2, 8 * j + 1), towersTypes.get(i));
+				textGraphics.putString(startPosition.withRelative(14 * i, 8 * j + 6),
+						towersTypes.get(i + 4 * j).getName());
+			}
+		}
+
+		textGraphics.drawLine(new TerminalPosition(terminalSize.getColumns() * 3 / 4, 0),
+				new TerminalPosition(terminalSize.getColumns() * 3 / 4, terminalSize.getRows() - 1),
+				Symbols.DOUBLE_LINE_VERTICAL);
 
 		screen.refresh();
-		screen.clear();
-		screen.refresh();
 		screen.readInput();
+		screen.clear();
+	}
+
+	private void drawTower(TerminalPosition startPoistion, Tower tower) {
+		String stringTowerIcon = tower.getIcon();
+		TextImage towerIcon = new BasicTextImage(new TerminalSize(6, 4));
+		TextCharacter textCharacter;
+
+		for (int row = 0, i = 0; row < 4; row++) {
+			for (int column = 0; column < 6; column++, i++) {
+				textCharacter = new TextCharacter(stringTowerIcon.charAt(i));
+				towerIcon.setCharacterAt(column, row, textCharacter);
+			}
+		}
+		TextGraphics textGraphics = screen.newTextGraphics();
+		textGraphics.setForegroundColor(tower.getColor());
+		textGraphics.drawImage(startPoistion, towerIcon);
+
+	}
+
+	private void drawDoubleLineBox(TerminalPosition startPosition, TerminalSize boxSize, TextColor foregroundColor,
+			TextColor backgroundColor) throws IOException {
+		TextGraphics textGraphics = screen.newTextGraphics();
+
+		if (foregroundColor != null) {
+			textGraphics.setForegroundColor(foregroundColor);
+		}
+		if (backgroundColor != null) {
+			textGraphics.setBackgroundColor(backgroundColor);
+		}
+
+		// textGraphics.fillRectangle(startPosition, boxSize, ' ');
+		textGraphics.setCharacter(startPosition, Symbols.DOUBLE_LINE_TOP_LEFT_CORNER);
+		textGraphics.setCharacter(startPosition.withRelativeColumn(boxSize.getColumns() - 1),
+				Symbols.DOUBLE_LINE_TOP_RIGHT_CORNER);
+		textGraphics.drawLine(startPosition.withRelativeColumn(1),
+				startPosition.withRelativeColumn(boxSize.getColumns() - 2), Symbols.DOUBLE_LINE_HORIZONTAL);
+		textGraphics.drawLine(startPosition.withRelativeRow(1), startPosition.withRelativeRow(boxSize.getRows() - 2),
+				Symbols.DOUBLE_LINE_VERTICAL);
+		textGraphics.drawLine(startPosition.withRelative(boxSize.getColumns() - 1, 1),
+				startPosition.withRelative(boxSize.getColumns() - 1, boxSize.getRows() - 2),
+				Symbols.DOUBLE_LINE_VERTICAL);
+		textGraphics.drawLine(startPosition.withRelative(1, boxSize.getRows() - 1),
+				startPosition.withRelative(boxSize.getColumns() - 2, boxSize.getRows() - 1),
+				Symbols.DOUBLE_LINE_HORIZONTAL);
+		textGraphics.setCharacter(startPosition.withRelativeRow(boxSize.getRows() - 1),
+				Symbols.DOUBLE_LINE_BOTTOM_LEFT_CORNER);
+		textGraphics.setCharacter(startPosition.withRelative(boxSize.getColumns() - 1, boxSize.getRows() - 1),
+				Symbols.DOUBLE_LINE_BOTTOM_RIGHT_CORNER);
 	}
 
 	private void exit() {
