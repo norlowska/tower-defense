@@ -26,6 +26,7 @@ public class Map {
 				String[] splited = line.split(" ");
 				
 				for(int i = 0;i<splited.length; i++) {
+					
 					if(Character.getNumericValue(splited[i].charAt(0)) == 1) {
 						terrain.setColor(1);
 					}else {
@@ -43,5 +44,25 @@ public class Map {
 		} catch (IOException ex) {
 			System.out.println("Error reading file '" + mapName + "'");
 		}
+	}
+	
+	public void addTower(Tower tower, int x, int y) {
+		map.get(y).get(x).setTower(tower);
+		
+	}
+	
+	public void addEnemy(Enemy enemy, int x, int y) {
+		map.get(y).get(x).setEnemy(enemy);
+		
+	}
+	
+	public void deleteTower(int x, int y) {
+		map.get(y).get(x).deleteTower();
+		
+	}
+	
+	public void deleteEnemy(int x, int y) {
+		map.get(y).get(x).deleteEnemy();
+		
 	}
 }
