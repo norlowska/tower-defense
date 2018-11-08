@@ -36,6 +36,9 @@ public abstract class Tower {
 	public int getPower() {
 		return power;
 	}
+	public int getCost() {
+		return cost;
+	}
 	public String getIcon() {
 		return icon;
 	}
