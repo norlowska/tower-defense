@@ -247,6 +247,9 @@ public class Game {
 	private void play() throws IOException {
 		screen.clear();
 		screen.refresh();
+		GameMap gameMap = new GameMap("map1", terminal, screen);
+		gameMap.displayMap();
+		//displayMap();
 		screen.readInput();
 	}
 
@@ -701,6 +704,46 @@ public class Game {
 			System.out.println("Error reading file '" + playersFileName + "'");
 		}
 		System.exit(0);
+	}
+	
+public void displayMap() throws IOException {
+		
+		screen.clear();
+		screen.setCursorPosition(null);
+		//screen = new TerminalScreen(terminal);
+
+		//screen.startScreen();
+		TerminalSize terminalSize = terminal.getTerminalSize();
+		TerminalPosition startPosition = new TerminalPosition(terminalSize.getColumns() / 12,
+				terminalSize.getRows() / 16);
+		TerminalPosition endPosition = new TerminalPosition(terminalSize.getColumns(),
+				terminalSize.getRows());
+		TextGraphics textGraphics = screen.newTextGraphics();
+		//textGraphics.drawLine(startPosition, endPosition, '.');
+		drawField(startPosition);
+		//textGraphics.drawLine(startPosition.withRelative(1,1), endPosition, '.');
+		//drawField(startPosition.withRelative(0,6));
+		//textGraphics.drawLine(startPosition, endPosition, 'x');
+		screen.refresh();
+		//screen.refresh();
+		screen.readInput();
+		
+	}
+	
+	public void drawField(TerminalPosition startPosition) throws IOException {
+		TextGraphics textGraphics = screen.newTextGraphics();
+		int column = startPosition.getColumn();
+		int row = startPosition.getRow();
+		for(column = 3; column < 6; column++) {
+            for(row = 5; row < 6; row++) {
+                screen.setCharacter(column, row, new TextCharacter(
+                        ' ',
+                        TextColor.ANSI.DEFAULT,
+                        // This will pick a random background color
+                        TextColor.ANSI.GREEN));
+            }
+        }
+		screen.refresh();
 	}
 
 }

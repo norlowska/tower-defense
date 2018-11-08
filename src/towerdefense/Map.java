@@ -9,11 +9,11 @@ import java.util.ArrayList;
 
 public class Map {
 	protected String colorScheme;
-	Terrain terrain = new Terrain();
+	//Terrain terrain = new Terrain();
 	ArrayList<ArrayList<Field>> map = new ArrayList<ArrayList<Field>>();
 	
 	
-	public void readMapLayout(String name) {
+	public ArrayList<ArrayList<Field>> readMapLayout(String name) {
 		String mapName = "data/"+ name +".txt";
 		String line = null;
 
@@ -26,7 +26,7 @@ public class Map {
 				String[] splited = line.split(" ");
 				
 				for(int i = 0;i<splited.length; i++) {
-					
+					Terrain terrain = new Terrain();
 					if(Character.getNumericValue(splited[i].charAt(0)) == 1) {
 						terrain.setColor(1);
 					}else {
@@ -39,11 +39,13 @@ public class Map {
 				numberOfArrays++;
 			}
 			bufferedReader.close();
+			return map;
 		} catch (FileNotFoundException ex) {
 			System.out.println("Unable to open file '" + mapName + "'");
 		} catch (IOException ex) {
 			System.out.println("Error reading file '" + mapName + "'");
 		}
+		return map;
 	}
 	
 	public void addTower(Tower tower, int x, int y) {
@@ -65,4 +67,5 @@ public class Map {
 		map.get(y).get(x).deleteEnemy();
 		
 	}
+	
 }

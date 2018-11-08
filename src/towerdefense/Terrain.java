@@ -4,7 +4,7 @@ import com.googlecode.lanterna.TextColor;
 
 public class Terrain {
 	
-	static TextColor.ANSI color;
+	int color;
 	
 	public Terrain() {
 		
@@ -12,9 +12,13 @@ public class Terrain {
 	
 	public void setColor(int color) {
 		if(color == 1) {
-			this.color = TextColor.ANSI.GREEN;
+			this.color = 1;
 		}else  {
-			this.color = TextColor.ANSI.BLACK;
+			this.color = 0;
 		}
+	}
+	
+	public int getColor() {
+		return color;
 	}
 }
