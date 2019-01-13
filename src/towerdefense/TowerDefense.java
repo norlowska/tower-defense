@@ -7,20 +7,22 @@ package towerdefense;
 
 //import towers.LaserTower;
 
+import towerdefense.document.Game;
+
 public class TowerDefense {
 
     /**
      * @param args the command line arguments
-     * @throws InterruptedException 
+     * @throws InterruptedException
      */
     public static void main(String[] args) throws InterruptedException {
-    	//LaserTower lt = new LaserTower();
-    	Game game = new Game();
-    	game.start();
-    	//Map map = new Map();
-    	//map.readMapLayout("map1");
-    	
-    	return;
+        //LaserTower lt = new LaserTower();
+        Game game = new Game();
+        game.start();
+        //Map map = new Map();
+        //map.readMapLayout("map1");
+
+        return;
     }
-    
+
 }

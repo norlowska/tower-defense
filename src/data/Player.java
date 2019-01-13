@@ -7,8 +7,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import towerdefense.Map;
-import towerdefense.Tower;
+import towerdefense.document.Map;
+import towerdefense.document.Tower;
 import towers.ArcherTower;
 
 public class Player {

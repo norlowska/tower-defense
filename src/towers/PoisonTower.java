@@ -2,7 +2,7 @@ package towers;
 
 import com.googlecode.lanterna.TextColor;
 
-import towerdefense.Tower;
+import towerdefense.document.Tower;
 
 public class PoisonTower extends Tower {
 
