@@ -4,9 +4,9 @@ public abstract class Field {
 
     protected boolean start;
     protected boolean finish;
-    protected String color;
+    protected Color color;
 
-    public Field(boolean start, boolean finish, String color) {
+    public Field(boolean start, boolean finish, Color color) {
         this.start = start;
         this.finish = finish;
         this.color = color;
@@ -28,11 +28,11 @@ public abstract class Field {
         this.finish = finish;
     }
 
-    public String getColor() {
+    public Color getColor() {
         return color;
     }
 
-    public void setColor(String color) {
+    public void setColor(Color color) {
         this.color = color;
     }
 }

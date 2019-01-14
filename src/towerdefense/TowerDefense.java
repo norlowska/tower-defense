@@ -5,7 +5,7 @@
  */
 package towerdefense;
 
-//import towers.LaserTower;
+//import towerdefense.document.towers.EarthTower;
 
 import towerdefense.document.Game;
 
@@ -16,7 +16,7 @@ public class TowerDefense {
      * @throws InterruptedException
      */
     public static void main(String[] args) throws InterruptedException {
-        //LaserTower lt = new LaserTower();
+        //EarthTower lt = new EarthTower();
         Game game = new Game();
         game.start();
         //Map map = new Map();

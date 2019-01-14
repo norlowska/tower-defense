@@ -1,16 +1,16 @@
 package towerdefense.view;
 
-public abstract class PlayerView extends View {
+public abstract class PlayerNewView extends View {
     @Override
     public void render() {
         displayWindow();
-        displayPlayerList();
+        displayInfo();
         displayOptions();
     }
 
     protected abstract void displayOptions();
 
-    protected abstract void displayPlayerList();
+    protected abstract void displayInfo();
 
     protected abstract void displayWindow();
 }

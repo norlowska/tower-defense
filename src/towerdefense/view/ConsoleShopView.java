@@ -2,7 +2,7 @@ package towerdefense.view;
 
 import towerdefense.document.Tower;
 
-public class ConsoleShopView extends ShopView {
+public class ConsoleShopView extends ShopView implements ConsoleView {
     @Override
     protected void displayBoughtTowers() {
 

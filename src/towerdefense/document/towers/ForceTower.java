@@ -1,17 +1,17 @@
-package towers;
+package towerdefense.document.towers;
 
 import com.googlecode.lanterna.TextColor;
 
 import towerdefense.document.Tower;
 
-public class BallistaTower extends Tower {
+public class ForceTower extends Tower {
 
-	public BallistaTower() {
+	public ForceTower() {
 		super("BALLISTA", TextColor.ANSI.BLUE, 7, 12);
 	}
 
 	@Override
 	public void setIcon() {
-		super.setIcon("assets/towers/BallistaTower.txt");
+		super.setIcon("assets/towerdefense.document.towers/ForceTower.txt");
 	}
 }

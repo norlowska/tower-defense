@@ -10,22 +10,26 @@ import java.io.IOException;
 public class Enemy implements IFlyweight {
 
     protected final int maxHealth;
-    protected final int speed;
+    protected final double speed;
     protected String icon;
-    protected TextColor color;
+    protected String name;
+    protected Color color;
 
-    public Enemy(int maxHealth, int speed, TextColor color, String filename) {
+    public Enemy(int maxHealth, double speed, Color color, String filename) {
         this.maxHealth = maxHealth;
         this.speed = speed;
         setIcon(filename);
         this.color = color;
     }
 
+    public String getName() {
+        return name;
+    }
     public int getMaxHealth() {
         return maxHealth;
     }
 
-    public int getSpeed() {
+    public double getSpeed() {
         return speed;
     }
 

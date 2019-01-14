@@ -1,13 +1,13 @@
 package towerdefense.view;
 
-public class ConsolePlayerView extends PlayerView {
+public class GUIPlayerSelectView extends PlayerSelectView {
     @Override
     protected void displayOptions() {
 
     }
 
     @Override
-    protected void displayPlayerList() {
+    protected void displayPlayersList() {
 
     }
 

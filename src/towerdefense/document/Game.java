@@ -10,10 +10,8 @@ import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
-import data.Player;
 import towerdefense.GameMap;
-import towerdefense.Mode;
-import towers.*;
+import towerdefense.document.towers.*;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -24,17 +22,10 @@ public class Game {
     protected Screen screen = null;
     protected List<Player> players;
     protected Player currentPlayer;
-    protected Mode currentMode;
-    protected List<Mode> modes;
 
     public Game() {
         players = new ArrayList<Player>();
         readPlayersList();
-        modes = new ArrayList<Mode>();
-        modes.add(new Mode("Easy", 1, 1, 1));
-        modes.add(new Mode("Medium", 0.98, 1.05, 1.1));
-        modes.add(new Mode("Hard", 0.95, 1.1, 1.2));
-        currentMode = modes.get(0);
     }
 
     public void start() throws InterruptedException {
@@ -62,94 +53,7 @@ public class Game {
     }
 
     private void mainMenu() throws IOException, InterruptedException {
-        if (players.isEmpty()) {
-            addPlayer();
-        }
-        currentPlayer = players.get(0);
 
-        screen.clear();
-        screen.refresh();
-
-        TerminalSize terminalSize = terminal.getTerminalSize();
-        TerminalPosition startPosition = new TerminalPosition(terminalSize.getColumns() * 2 / 5,
-                terminalSize.getRows() * 2 / 5);
-        TextGraphics textGraphics = screen.newTextGraphics();
-
-        textGraphics.setForegroundColor(TextColor.ANSI.RED);
-
-        KeyStroke keyStroke;
-        KeyType keyType;
-
-        int currentSelection = 0;
-        while (true) {
-            String greeting = "Hello, " + currentPlayer.getNickname() + "!";
-            textGraphics.putString(terminalSize.getColumns() - greeting.length() - 3, 1, greeting);
-            screen.setCursorPosition(startPosition.withRelativeRow(currentSelection));
-
-            for (int i = 0; i < 4; i++) {
-                if (i == currentSelection) {
-                    switch (currentSelection) {
-                        case 0:
-                            textGraphics.putString(startPosition, "PLAY", SGR.BLINK, SGR.BOLD);
-                            break;
-                        case 1:
-                            textGraphics.putString(startPosition.withRelativeRow(1), "PLAYER SELECT", SGR.BLINK, SGR.BOLD);
-                            break;
-                        case 2:
-                            textGraphics.putString(startPosition.withRelativeRow(2), "SHOP", SGR.BLINK, SGR.BOLD);
-                            break;
-                        case 3:
-                            textGraphics.putString(startPosition.withRelativeRow(3), "EXIT", SGR.BLINK, SGR.BOLD);
-                            break;
-                    }
-                } else {
-                    switch (i) {
-                        case 0:
-                            textGraphics.putString(startPosition, "PLAY", SGR.BOLD);
-                            break;
-                        case 1:
-                            textGraphics.putString(startPosition.withRelativeRow(1), "PLAYER SELECT", SGR.BOLD);
-                            break;
-                        case 2:
-                            textGraphics.putString(startPosition.withRelativeRow(2), "SHOP", SGR.BOLD);
-                            break;
-                        case 3:
-                            textGraphics.putString(startPosition.withRelativeRow(3), "EXIT", SGR.BOLD);
-                    }
-                }
-            }
-            screen.refresh();
-
-            keyStroke = screen.readInput();
-            keyType = keyStroke.getKeyType();
-            switch (keyType) {
-                case ArrowDown:
-                    currentSelection = (currentSelection + 1) % 4;
-                    break;
-                case ArrowUp:
-                    currentSelection = (currentSelection - 1 + 4) % 4;
-                    break;
-                case Escape:
-                    exit();
-                    break;
-                case Enter:
-                    switch (currentSelection) {
-                        case 0:
-                            play();
-                            break;
-                        case 1:
-                            playerSelect();
-                            break;
-                        case 2:
-                            shop();
-                            break;
-                        case 3:
-                            exit();
-                            break;
-                    }
-                    break;
-            }
-        }
     }
 
     private void addPlayer() throws IOException {
@@ -162,7 +66,7 @@ public class Game {
         TextGraphics textGraphics = screen.newTextGraphics();
 
         textGraphics.setForegroundColor(TextColor.ANSI.CYAN);
-        drawDoubleLineBox(labelBoxTopLeft, labelBoxSize, TextColor.ANSI.CYAN, null);
+        //drawDoubleLineBox(labelBoxTopLeft, labelBoxSize, TextColor.ANSI.CYAN, null);
         textGraphics.putString(labelBoxTopLeft.withRelative(1, 1), nameLabel);
         screen.setCursorPosition(labelBoxTopLeft.withRelative(1, 2));
         screen.refresh();
@@ -218,6 +122,14 @@ public class Game {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(playersFileName));
 
             while ((line = bufferedReader.readLine()) != null) {
+                String[] parts = line.split(" ");
+                List<Tower> towers = new ArrayList<Tower>();
+                Tower tower;
+                for(int i = 3; i < parts.length; i++) {
+                    switch(parts[i]) {
+
+                    }
+                }
                 players.add(new Player(line, new Map()));
             }
             bufferedReader.close();
@@ -226,15 +138,6 @@ public class Game {
         } catch (IOException ex) {
             System.out.println("Error reading file '" + playersFileName + "'");
         }
-    }
-
-    private void play() throws IOException {
-        screen.clear();
-        screen.refresh();
-        GameMap gameMap = new GameMap("map1", terminal, screen);
-        gameMap.displayMap();
-        //displayMap();
-        screen.readInput();
     }
 
     private void playerSelect() throws IOException, InterruptedException {
@@ -310,64 +213,7 @@ public class Game {
         screen.clear();
     }
 
-    private void printPlayerSelectWindow(TerminalPosition startPosition) throws IOException {
-
-        String label = "Choose player";
-        int nicknameMaxLength = 15;
-
-        TerminalSize labelBoxSize = new TerminalSize(nicknameMaxLength + 10, players.size() + 8);
-        TerminalPosition labelBoxTopRightCorner = startPosition.withRelativeColumn(labelBoxSize.getColumns() - 1);
-        TextGraphics textGraphics = screen.newTextGraphics();
-        drawDoubleLineBox(startPosition, labelBoxSize, TextColor.ANSI.RED, null);
-        textGraphics.setForegroundColor(TextColor.ANSI.RED);
-        textGraphics.putString(startPosition.withRelative(2, 2), label);
-        screen.refresh();
-        printPlayersList(0, startPosition.withRelative(3, 4));
-    }
-
-    private void printPlayersList(int currentSelection, TerminalPosition startPosition) throws IOException {
-        TextGraphics textGraphics = screen.newTextGraphics();
-        textGraphics.setForegroundColor(TextColor.ANSI.RED);
-
-        for (int i = 0; i < players.size() + 2; i++) {
-            if (i == currentSelection) {
-                if (i < players.size()) {
-                    textGraphics.putString(startPosition.withRelativeRow(i), players.get(i).getNickname(), SGR.BLINK,
-                            SGR.BOLD);
-                }
-            } else {
-                if (i < players.size()) {
-                    textGraphics.putString(startPosition.withRelativeRow(i), players.get(i).getNickname(), SGR.BOLD);
-                }
-            }
-            screen.refresh();
-        }
-    }
-
-    private void printPSOptionsList(int currentSelection, TerminalPosition startPosition) throws IOException {
-        TextGraphics textGraphics = screen.newTextGraphics();
-        textGraphics.setForegroundColor(TextColor.ANSI.RED);
-
-        textGraphics.fillRectangle(startPosition, new TerminalSize(15, 1), ' ');
-
-        for (int i = players.size(); i < players.size() + 2; i++) {
-            if (i == currentSelection) {
-                if (i == players.size()) {
-                    textGraphics.putString(startPosition, "ADD", SGR.ITALIC, SGR.BLINK);
-                } else if (i == players.size() + 1) {
-                    textGraphics.putString(startPosition.withRelativeColumn(7), "DELETE", SGR.ITALIC, SGR.BLINK);
-                }
-            } else {
-                if (i == players.size()) {
-                    textGraphics.putString(startPosition, "ADD", SGR.ITALIC);
-                } else if (i == players.size() + 1) {
-                    textGraphics.putString(startPosition.withRelativeColumn(7), "DELETE", SGR.ITALIC);
-                }
-            }
-            screen.refresh();
-        }
-
-    }
+    
 
     private void deletePlayer(TerminalPosition startPosition) throws IOException, InterruptedException {
         int nicknameMaxLength = 15;
@@ -427,13 +273,13 @@ public class Game {
         List<Tower> boughtTowers = currentPlayer.getTowers();
 
         towersTypes.add(new ArcherTower());
-        towersTypes.add(new BallistaTower());
-        towersTypes.add(new CannonTower());
-        towersTypes.add(new DragonTower());
-        towersTypes.add(new LaserTower());
-        towersTypes.add(new MachineGunTower());
-        towersTypes.add(new PoisonTower());
-        towersTypes.add(new WizardTower());
+        towersTypes.add(new ForceTower());
+        towersTypes.add(new ElectricityTower());
+        towersTypes.add(new FireTower());
+        towersTypes.add(new EarthTower());
+        towersTypes.add(new WaterTower());
+        towersTypes.add(new IceTower());
+        towersTypes.add(new NuclearTower());
         Tower currentTower = towersTypes.get(0);
 
         KeyStroke keyStroke;
@@ -589,8 +435,8 @@ public class Game {
             textGraphics.setBackgroundColor(backgroundColor);
         }
 
-        drawDoubleLineBox(startPosition.withRelative((boxSize.getColumns() - 10) / 2, 1), new TerminalSize(10, 6),
-                TextColor.ANSI.RED, null);
+       // drawDoubleLineBox(startPosition.withRelative((boxSize.getColumns() - 10) / 2, 1), new TerminalSize(10, 6),
+         //       TextColor.ANSI.RED, null);
         drawTower(startPosition.withRelative((boxSize.getColumns() - 10) / 2 + 2, 2), tower);
         textGraphics.putString(startPosition.withRelative((boxSize.getColumns() - tower.getName().length()) / 2, 7),
                 tower.getName());
@@ -613,7 +459,7 @@ public class Game {
 
         for (int i = 0; i < 4 && i < towers.size(); i++) {
             currentTower = towers.get(i);
-            drawDoubleLineBox(startPosition.withRelativeColumn(14 * i), towerBoxSize, color, null);
+          //  drawDoubleLineBox(startPosition.withRelativeColumn(14 * i), towerBoxSize, color, null);
             drawTower(startPosition.withRelative(2 + 14 * i, 1), currentTower);
             textGraphics.putString(
                     startPosition.withRelative(
@@ -624,7 +470,36 @@ public class Game {
 
     private void drawTower(TerminalPosition startPosition, Tower tower) {
         String stringTowerIcon = tower.getIcon();
-        TextColor color = tower.getColor();
+        Color c = tower.getColor();
+        TextColor color;
+        switch(c) {
+            case BLACK:
+                color = TextColor.ANSI.BLACK;
+                break;
+            case BLUE:
+                color = TextColor.ANSI.BLUE;
+                break;
+            case CYAN:
+                color = TextColor.ANSI.CYAN;
+                break;
+            case GREEN:
+                color = TextColor.ANSI.GREEN;
+                break;
+            case MAGENTA:
+                color = TextColor.ANSI.MAGENTA;
+                break;
+            case RED:
+                color = TextColor.ANSI.RED;
+                break;
+            case YELLOW:
+                color = TextColor.ANSI.YELLOW;
+                break;
+            case WHITE:
+                color = TextColor.ANSI.WHITE;
+                break;
+            default:
+                color = TextColor.ANSI.DEFAULT;
+        }
 
         TextImage towerIcon = new BasicTextImage(new TerminalSize(6, 4));
         TextGraphics textGraphics = screen.newTextGraphics();
@@ -639,36 +514,6 @@ public class Game {
         }
         textGraphics.drawImage(startPosition, towerIcon);
 
-    }
-
-    private void drawDoubleLineBox(TerminalPosition startPosition, TerminalSize boxSize, TextColor foregroundColor,
-                                   TextColor backgroundColor) throws IOException {
-        TextGraphics textGraphics = screen.newTextGraphics();
-
-        if (foregroundColor != null) {
-            textGraphics.setForegroundColor(foregroundColor);
-        }
-        if (backgroundColor != null) {
-            textGraphics.setBackgroundColor(backgroundColor);
-        }
-
-        textGraphics.setCharacter(startPosition, Symbols.DOUBLE_LINE_TOP_LEFT_CORNER);
-        textGraphics.setCharacter(startPosition.withRelativeColumn(boxSize.getColumns() - 1),
-                Symbols.DOUBLE_LINE_TOP_RIGHT_CORNER);
-        textGraphics.drawLine(startPosition.withRelativeColumn(1),
-                startPosition.withRelativeColumn(boxSize.getColumns() - 2), Symbols.DOUBLE_LINE_HORIZONTAL);
-        textGraphics.drawLine(startPosition.withRelativeRow(1), startPosition.withRelativeRow(boxSize.getRows() - 2),
-                Symbols.DOUBLE_LINE_VERTICAL);
-        textGraphics.drawLine(startPosition.withRelative(boxSize.getColumns() - 1, 1),
-                startPosition.withRelative(boxSize.getColumns() - 1, boxSize.getRows() - 2),
-                Symbols.DOUBLE_LINE_VERTICAL);
-        textGraphics.drawLine(startPosition.withRelative(1, boxSize.getRows() - 1),
-                startPosition.withRelative(boxSize.getColumns() - 2, boxSize.getRows() - 1),
-                Symbols.DOUBLE_LINE_HORIZONTAL);
-        textGraphics.setCharacter(startPosition.withRelativeRow(boxSize.getRows() - 1),
-                Symbols.DOUBLE_LINE_BOTTOM_LEFT_CORNER);
-        textGraphics.setCharacter(startPosition.withRelative(boxSize.getColumns() - 1, boxSize.getRows() - 1),
-                Symbols.DOUBLE_LINE_BOTTOM_RIGHT_CORNER);
     }
 
     private void exit() {

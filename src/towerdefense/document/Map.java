@@ -10,10 +10,31 @@ import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
 
+/**
+ * Reprezentuje mapę w grze, która składa się z pól-ścieżek,
+ * po których mogą się przemieszczać potwory oraz pól-terenów,
+ * na których gracz może ustawić wieże. Pola te są wizualnie
+ * odróżnialne dzięki kolorom zapisanym w atrybucie <i>colorScheme</i>
+ */
 public class Map implements Iterable<Field>{
-    //Terrain terrain = new Terrain();
+
+    /**
+     * Schemat kolorów mapy.
+     * colorScheme[0]   kolor pól-terenów
+     * colorScheme[1]   kolor pól-ścieżek
+     */
+    protected Color[] colorScheme = new Color[2];
+    /**
+     * Dwuwymiarowa tablica będąca mapą.
+     */
     ArrayList<ArrayList<Field>> map = new ArrayList<ArrayList<Field>>();
 
+    /**
+     * Odczytywanie wyglądu mapy z pliku.
+     *
+     * @param name  nazwa mapy
+     * @return array list   mapa
+     */
     public ArrayList<ArrayList<Field>> readMapLayout(String name) {
         String mapName = "data/" + name + ".txt";
         String line = null;
@@ -27,15 +48,15 @@ public class Map implements Iterable<Field>{
                 String[] splited = line.split(" ");
 
                 for (int i = 0; i < splited.length; i++) {
-                    Terrain terrain = new Terrain();
+                    Field f;
+                    boolean isStart = (splited[i].charAt(1) == '1');
+                    boolean isFinish = (splited[i].charAt(2) == '1');
                     if (Character.getNumericValue(splited[i].charAt(0)) == 1) {
-                        terrain.setColor(1);
+                        f = new FieldTerrain(isStart, isFinish, colorScheme[0], null);
                     } else {
-                        terrain.setColor(0);
+                        f = new FieldRoad(isStart, isFinish, colorScheme[1], null);
                     }
-                    Field field = new Field(terrain, Character.getNumericValue(splited[i].charAt(1)),
-                            Character.getNumericValue(splited[i].charAt(2)));
-                    map.get(numberOfArrays).add(field);
+                    map.get(numberOfArrays).add(f);
                 }
                 numberOfArrays++;
             }
@@ -48,6 +69,7 @@ public class Map implements Iterable<Field>{
         }
         return map;
     }
+
 
     @Override
     public Iterator<Field> iterator() {
@@ -90,5 +112,15 @@ public class Map implements Iterable<Field>{
                 throw new UnsupportedOperationException();
             }
         };
+    }
+
+
+    /**
+     * Zwraca mapę.
+     *
+     * @return mapa
+     */
+    public ArrayList<ArrayList<Field>> getMap() {
+        return map;
     }
 }

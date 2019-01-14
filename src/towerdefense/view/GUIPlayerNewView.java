@@ -1,13 +1,13 @@
 package towerdefense.view;
 
-public class GUIPlayerView extends PlayerView {
+public class GUIPlayerNewView extends PlayerNewView {
     @Override
     protected void displayOptions() {
 
     }
 
     @Override
-    protected void displayPlayerList() {
+    protected void displayInfo() {
 
     }
 

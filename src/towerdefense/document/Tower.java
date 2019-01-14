@@ -9,14 +9,15 @@ import java.io.IOException;
 
 public abstract class Tower {
 
-    protected int damage;
-    protected int price;
-    protected int range;
-    protected String icon;
-    protected TextColor color;
-    protected double speed;
+    int damage;
+    int price;
+    int range;
+    String icon;
+    String name;
+    Color color;
+    double speed;
 
-    public Tower(int damage, int price, int range, TextColor color, double speed) {
+    public Tower(int damage, int price, int range, double speed, Color color) {
         this.damage = damage;
         this.price = price;
         this.range = range;
@@ -53,11 +54,11 @@ public abstract class Tower {
         return icon;
     }
 
-    public TextColor getColor() {
+    public Color getColor() {
         return color;
     }
 
-    public void setColor(TextColor color) {
+    public void setColor(Color color) {
         this.color = color;
     }
 
@@ -67,6 +68,14 @@ public abstract class Tower {
 
     public void setSpeed(double speed) {
         this.speed = speed;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     protected void setIcon(String filename) {

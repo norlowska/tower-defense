@@ -5,7 +5,7 @@ import towerdefense.document.Document;
 public abstract class View {
     public Document document;
 
-    public Document getDoc() {
+    public Document getDoc(){
         return document;
     }
 
