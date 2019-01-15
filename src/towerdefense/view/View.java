@@ -2,14 +2,17 @@ package towerdefense.view;
 
 import towerdefense.document.Document;
 
-public abstract class View {
+public class View {
     public Document document;
+    public View view;
 
     public Document getDoc(){
         return document;
     }
 
-    public abstract void render();
+    public void render(){
+        view.render();
+    }
 
     public View() {
     }

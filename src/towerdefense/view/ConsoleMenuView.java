@@ -23,7 +23,7 @@ public class ConsoleMenuView extends MenuView implements ConsoleView {
     TextUI textUI = TextUI.getInstance();
     Screen screen = textUI.getScreen();
     TerminalPosition startPosition = screen.getCursorPosition();
-    TerminalSize terminalSize = textUI.getTerminalSize()
+    TerminalSize terminalSize = textUI.getTerminalSize();
 
     @Override
     protected void displayGreeting() {
