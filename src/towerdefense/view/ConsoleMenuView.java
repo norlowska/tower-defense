@@ -106,7 +106,7 @@ public class ConsoleMenuView extends MenuView implements ConsoleView {
                 terminalSize.getRows() * 2 / 5);
     }
 
-    protected void handleKeysStroke(KeyStroke keyStroke) {
+    private void handleKeysStroke(KeyStroke keyStroke) {
         KeyType keyType;
         keyType = keyStroke.getKeyType();
         switch (keyType) {

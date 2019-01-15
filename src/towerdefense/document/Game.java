@@ -10,7 +10,6 @@ import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
-import towerdefense.GameMap;
 import towerdefense.document.towers.*;
 
 import java.io.*;
@@ -266,163 +265,12 @@ public class Game {
 
     private void shop() throws IOException, InterruptedException {
 
-        TerminalSize terminalSize = terminal.getTerminalSize();
-        TerminalPosition startPosition = new TerminalPosition(terminalSize.getColumns() / 12,
-                terminalSize.getRows() / 16);
-        List<Tower> towersTypes = new ArrayList<Tower>();
-        List<Tower> boughtTowers = currentPlayer.getTowers();
-
-        towersTypes.add(new ArcherTower());
-        towersTypes.add(new ForceTower());
-        towersTypes.add(new ElectricityTower());
-        towersTypes.add(new FireTower());
-        towersTypes.add(new EarthTower());
-        towersTypes.add(new WaterTower());
-        towersTypes.add(new IceTower());
-        towersTypes.add(new NuclearTower());
-        Tower currentTower = towersTypes.get(0);
-
-        KeyStroke keyStroke;
-        KeyType keyType;
-        int currentSelection = 0;
-        do {
-            printShop(startPosition, towersTypes, currentTower);
-            if (currentSelection < 4) {
-                screen.setCursorPosition(startPosition.withRelative(
-                        (10 - currentTower.getName().length()) / 2 + 14 * (currentSelection % 4),
-                        6 * ((currentSelection + 4) / 4 % 3)));
-
-            } else {
-                screen.setCursorPosition(startPosition.withRelative(
-                        (10 - currentTower.getName().length()) / 2 + 14 * (currentSelection % 4),
-                        6 * ((currentSelection + 4) / 4 % 3) + 2));
-            }
-            screen.refresh();
-            keyStroke = screen.readInput();
-            keyType = keyStroke.getKeyType();
-
-            switch (keyType) {
-                case ArrowRight:
-                    currentSelection = (currentSelection + 1) % towersTypes.size();
-                    break;
-                case ArrowLeft:
-                    currentSelection = (currentSelection - 1 + towersTypes.size()) % towersTypes.size();
-                    break;
-                case ArrowUp:
-                    if (currentSelection > 3)
-                        currentSelection = (currentSelection + 4) % towersTypes.size();
-                    break;
-                case ArrowDown:
-                    if (currentSelection < 4)
-                        currentSelection = (currentSelection - 4 + towersTypes.size()) % towersTypes.size();
-                    break;
-                case Enter:
-                    Boolean removed = false;
-                    if (boughtTowers.size() <= 4) {
-                        for (int i = 0; i < boughtTowers.size(); i++) {
-                            if (currentTower.getClass().equals(boughtTowers.get(i).getClass())) {
-                                boughtTowers.remove(i);
-                                removed = true;
-                                break;
-                            }
-                        }
-                        if (!removed && boughtTowers.size() < 4) {
-                            boughtTowers.add(currentTower);
-                        }
-                    }
-                    break;
-            }
-            currentTower = towersTypes.get(currentSelection);
-        } while (keyType != KeyType.Escape);
-        screen.clear();
 
     }
 
     private void printShop(TerminalPosition startPosition, List<Tower> towersTypes, Tower currentTower)
             throws IOException, InterruptedException {
-        TerminalSize terminalSize = terminal.getTerminalSize();
 
-        TextGraphics textGraphics = screen.newTextGraphics();
-        TerminalSize towerBoxSize = new TerminalSize(10, 6);
-        textGraphics.setForegroundColor(TextColor.ANSI.RED);
-
-        List<Tower> boughtTowers = currentPlayer.getTowers();
-
-        screen.clear();
-        screen.setCursorPosition(null);
-
-        for (int i = 0; i < 2; i++) {
-            drawTowersBox(startPosition.withRelativeRow(i * 8), TextColor.ANSI.RED,
-                    towersTypes.subList(i * 4, i * 4 + 4));
-        }
-
-        TerminalPosition towerDetailsPosition = new TerminalPosition(startPosition.withRelativeColumn(60).getColumn(),
-                0);
-        TerminalPosition boughtTowersPosition = new TerminalPosition(0, startPosition.withRelativeRow(17).getRow());
-        TerminalPosition boughtTowersListPosition = new TerminalPosition(startPosition.getColumn(),
-                boughtTowersPosition.withRelativeRow(4).getRow());
-        textGraphics.drawLine(towerDetailsPosition,
-                new TerminalPosition(towerDetailsPosition.getColumn(), boughtTowersPosition.getRow()),
-                Symbols.DOUBLE_LINE_VERTICAL);
-
-        textGraphics.drawLine(boughtTowersPosition,
-                new TerminalPosition(terminalSize.getColumns(), boughtTowersPosition.getRow()),
-                Symbols.DOUBLE_LINE_HORIZONTAL);
-
-        String boughtTowersTitle = "YOUR TOWERS";
-        String noTowers = "YOU HAVE NO TOWERS";
-        textGraphics.putString(
-                boughtTowersPosition.withRelative((terminalSize.getColumns() - boughtTowersTitle.length()) / 2 - 4, 2),
-                boughtTowersTitle, SGR.BOLD);
-
-        if (!boughtTowers.isEmpty()) {
-            drawTowersBox(boughtTowersListPosition, TextColor.ANSI.RED, boughtTowers);
-        } else {
-            textGraphics.putString(
-                    boughtTowersPosition.withRelative((terminalSize.getColumns() - noTowers.length()) / 2 - 4, 4),
-                    noTowers, SGR.BOLD, SGR.ITALIC);
-        }
-
-        String shopTitle = "S H O P";
-        String shopInfo = "Press <Enter> to buy or sell tower";
-        String escapeInfo = "Press <ESC> to leave shop";
-        TerminalSize towerDetailsBoxSize = new TerminalSize(
-                terminalSize.getColumns() - startPosition.withRelativeColumn(60).getColumn(),
-                terminalSize.getRows() - startPosition.withRelativeRow(17).getRow());
-        textGraphics.putString(
-                towerDetailsPosition.withRelative((towerDetailsBoxSize.getColumns() - shopTitle.length()) / 2, 1),
-                shopTitle, SGR.BOLD);
-        textGraphics.putString(
-                towerDetailsPosition.withRelative((towerDetailsBoxSize.getColumns() - shopInfo.length()) / 2, 2),
-                shopInfo, SGR.ITALIC);
-        textGraphics.putString(
-                towerDetailsPosition.withRelative((towerDetailsBoxSize.getColumns() - escapeInfo.length()) / 2, 3),
-                escapeInfo, SGR.ITALIC);
-        printTowerDetails(towerDetailsPosition.withRelativeRow(3), towerDetailsBoxSize, TextColor.ANSI.RED, null,
-                currentTower);
-
-        String buyLabel = "B U Y";
-        String sellLabel = "S E L L";
-        textGraphics.fillRectangle(towerDetailsPosition.withRelative(1, 16),
-                new TerminalSize(terminalSize.getColumns() - towerDetailsPosition.getColumn() - 1, 2), ' ');
-
-        for (Tower t : boughtTowers) {
-            if (currentTower.getClass().equals(t.getClass())) {
-                textGraphics
-                        .putString(
-                                towerDetailsPosition
-                                        .withRelative((towerDetailsBoxSize.getColumns() - sellLabel.length()) / 2, 17),
-                                sellLabel, SGR.ITALIC, SGR.BOLD);
-                break;
-            } else {
-                textGraphics
-                        .putString(
-                                towerDetailsPosition
-                                        .withRelative((towerDetailsBoxSize.getColumns() - buyLabel.length()) / 2, 17),
-                                buyLabel, SGR.ITALIC, SGR.BOLD);
-            }
-        }
-        screen.refresh();
     }
 
     private void printTowerDetails(TerminalPosition startPosition, TerminalSize boxSize, TextColor foregroundColor,

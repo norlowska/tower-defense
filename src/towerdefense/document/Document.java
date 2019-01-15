@@ -1,13 +1,18 @@
 package towerdefense.document;
 
+import towerdefense.view.ConsoleMenuView;
 import towerdefense.view.View;
 
 import java.util.List;
 
 public class Document {
     private View currentView;
-    private CurrentPlayer currentPlayer;
+    private Game game;
 
+    public Document() {
+        game = new Game();
+        currentView = new ConsoleMenuView();
+    }
     public void switchToView(View View) {
         currentView = View;
     }
@@ -16,12 +21,11 @@ public class Document {
         currentView.render();
     }
 
-    public Document() {
-
+    public CurrentPlayer getCurrentPlayer(){
+        return game.getCurrentPlayer();
     }
 
-    public CurrentPlayer getPlayer() {
-        return currentPlayer.getInstance(); //?
+    public ArrayList<Player> getPlayers(){
+        return game.getPlayers();
     }
-
 }
