@@ -4,13 +4,13 @@ public abstract class PlayerNewView extends View {
     @Override
     public void render() {
         displayWindow();
-        displayInfo();
-        displayOptions();
+        displayLabel();
+        displayInput();
     }
 
-    protected abstract void displayOptions();
+    protected abstract void displayInput();
 
-    protected abstract void displayInfo();
+    protected abstract void displayLabel();
 
     protected abstract void displayWindow();
 }

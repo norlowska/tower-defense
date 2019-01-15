@@ -21,6 +21,13 @@ public class Player {
         this.towers = towers;
     }
 
+    public Player(String nickname, int money) {
+        this.nickname = nickname;
+        this.money = money;
+        this.lastMap = new Map(); //pierwsza mapa w kolejności
+        this.towers = new ArrayList<Tower>();
+    }
+
     private Player() {
     }
 

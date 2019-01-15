@@ -13,11 +13,11 @@ import towerdefense.document.Player;
 import towerdefense.textUI.TextUI;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.ArrayList;
 
 public class ConsoleMenuView extends MenuView implements ConsoleView {
-    CurrentPlayer currentPlayer = document.getPlayer();
-    List<Player> players = document.getPlayers();
+    CurrentPlayer currentPlayer = document.getCurrentPlayer();
+    ArrayList<Player> players = document.getPlayers();
     int currentSelection = 0;
 
     TextUI textUI = TextUI.getInstance();
@@ -28,20 +28,17 @@ public class ConsoleMenuView extends MenuView implements ConsoleView {
     @Override
     protected void displayGreeting() {
         TextGraphics textGraphics = screen.newTextGraphics();
+        textGraphics.setForegroundColor(TextColor.ANSI.RED);
         String greeting = "Hello, " + currentPlayer.getNickname() + "!";
         textGraphics.putString(terminalSize.getColumns() - greeting.length() - 3, 1, greeting);
-        screen.setCursorPosition(startPosition.withRelativeRow(currentSelection));
     }
 
     @Override
     protected void displayOptions() {
         TextGraphics textGraphics = screen.newTextGraphics();
-
         textGraphics.setForegroundColor(TextColor.ANSI.RED);
-
-
-
         while (true) {
+            screen.setCursorPosition(startPosition.withRelativeRow(currentSelection));
             for (int i = 0; i < 4; i++) {
                 if (i == currentSelection) {
                     switch (currentSelection) {
@@ -95,8 +92,8 @@ public class ConsoleMenuView extends MenuView implements ConsoleView {
             document.switchToView(new ConsolePlayerNewView());
         }
 
-        screen.clear();
         try {
+            screen.clear();
             screen.refresh();
         } catch (IOException e) {
             e.printStackTrace();
@@ -107,8 +104,7 @@ public class ConsoleMenuView extends MenuView implements ConsoleView {
     }
 
     private void handleKeysStroke(KeyStroke keyStroke) {
-        KeyType keyType;
-        keyType = keyStroke.getKeyType();
+        KeyType keyType = keyStroke.getKeyType();
         switch (keyType) {
             case ArrowDown:
                 currentSelection = (currentSelection + 1) % 4;

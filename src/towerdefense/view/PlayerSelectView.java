@@ -8,13 +8,10 @@ public abstract class PlayerSelectView extends View {
     @Override
     public void render() {
         displayWindow();
-        displayPlayersList();
-        displayOptions();
+        displayContent();
     }
 
-    protected abstract void displayOptions();
-
-    protected abstract void displayPlayersList();
+    protected abstract void displayContent();
 
     protected abstract void displayWindow();
 }

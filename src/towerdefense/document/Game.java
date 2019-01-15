@@ -19,12 +19,28 @@ import java.util.List;
 public class Game {
     protected Terminal terminal = null;
     protected Screen screen = null;
-    protected List<Player> players;
-    protected Player currentPlayer;
+    protected ArrayList<Player> players;
+    protected CurrentPlayer currentPlayer;
 
     public Game() {
         players = new ArrayList<Player>();
         readPlayersList();
+    }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(ArrayList<Player> players) {
+        this.players = players;
+    }
+
+    public CurrentPlayer getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(CurrentPlayer currentPlayer) {
+        this.currentPlayer = currentPlayer;
     }
 
     public void start() throws InterruptedException {
@@ -48,68 +64,6 @@ public class Game {
                     e.printStackTrace();
                 }
             }
-        }
-    }
-
-    private void mainMenu() throws IOException, InterruptedException {
-
-    }
-
-    private void addPlayer() throws IOException {
-        screen.clear();
-        TerminalSize terminalSize = terminal.getTerminalSize();
-        String nameLabel = "Enter your nickname: (MAX 15 characters)";
-        TerminalPosition labelBoxTopLeft = new TerminalPosition(
-                (terminalSize.getColumns() - nameLabel.length() - 10) / 2, (terminalSize.getRows() - 6) / 2);
-        TerminalSize labelBoxSize = new TerminalSize(nameLabel.length() + 10, 4);
-        TextGraphics textGraphics = screen.newTextGraphics();
-
-        textGraphics.setForegroundColor(TextColor.ANSI.CYAN);
-        //drawDoubleLineBox(labelBoxTopLeft, labelBoxSize, TextColor.ANSI.CYAN, null);
-        textGraphics.putString(labelBoxTopLeft.withRelative(1, 1), nameLabel);
-        screen.setCursorPosition(labelBoxTopLeft.withRelative(1, 2));
-        screen.refresh();
-
-        KeyStroke keyStroke;
-        StringBuilder sb = new StringBuilder();
-        KeyType keyType;
-        TerminalPosition startPosition = screen.getCursorPosition();
-        Boolean creatingPlayer = true;
-
-        while (creatingPlayer) {
-            keyStroke = screen.readInput();
-            keyType = keyStroke.getKeyType();
-            switch (keyType) {
-                case Enter:
-                    if (sb.length() > 0) {
-                        players.add(new Player(sb.toString(), new Map()));
-                        currentPlayer = players.get(0);
-                        creatingPlayer = false;
-                    }
-                    break;
-                case Escape:
-                    if (players.isEmpty())
-                        exit();
-                    creatingPlayer = false;
-                    break;
-                case Character:
-                    if (sb.length() <= 15) {
-                        sb.append(keyStroke.getCharacter());
-                        textGraphics.putString(startPosition, sb.toString());
-                        screen.setCursorPosition(screen.getCursorPosition().withRelativeColumn(1));
-                    }
-                    break;
-                case Backspace:
-                    if (sb.length() > 0) {
-                        sb.deleteCharAt(sb.length() - 1);
-                        textGraphics.putString(startPosition, "");
-                        screen.refresh();
-                        textGraphics.putString(startPosition, sb.toString() + " ");
-                        screen.setCursorPosition(screen.getCursorPosition().withRelativeColumn(-1));
-                    }
-                    break;
-            }
-            screen.refresh();
         }
     }
 
@@ -137,140 +91,6 @@ public class Game {
         } catch (IOException ex) {
             System.out.println("Error reading file '" + playersFileName + "'");
         }
-    }
-
-    private void playerSelect() throws IOException, InterruptedException {
-        screen.clear();
-
-        int nicknameMaxLength = 15;
-        TerminalSize terminalSize = terminal.getTerminalSize();
-        TerminalPosition labelBoxTopLeft = new TerminalPosition(
-                (terminalSize.getColumns() - nicknameMaxLength - 10) / 2,
-                (terminalSize.getRows() - players.size() - 7) / 2);
-        TerminalPosition startPosition = labelBoxTopLeft.withRelative(3, 4);
-
-        printPlayerSelectWindow(labelBoxTopLeft);
-        screen.setCursorPosition(startPosition);
-
-        KeyStroke keyStroke;
-        KeyType keyType;
-        int listSize, currentSelection = 0;
-        while (true) {
-            if (players.isEmpty()) {
-                addPlayer();
-                screen.clear();
-                printPlayerSelectWindow(startPosition.withRelative(-3, -4));
-                screen.setCursorPosition(startPosition);
-            }
-            do {
-                printPlayersList(currentSelection, startPosition);
-                printPSOptionsList(currentSelection, startPosition.withRelativeRow(players.size() + 1));
-
-                keyStroke = screen.readInput();
-                keyType = keyStroke.getKeyType();
-                listSize = players.size() + 2;
-                switch (keyType) {
-                    case ArrowDown:
-                        currentSelection = (currentSelection + 1) % listSize;
-                        break;
-                    case ArrowUp:
-                        currentSelection = (currentSelection - 1 + listSize) % listSize;
-                        break;
-                    case ArrowRight:
-                        if (currentSelection == players.size()) {
-                            currentSelection = (currentSelection + 1) % listSize;
-                        }
-                        break;
-                    case ArrowLeft:
-                        if (currentSelection == players.size() + 1) {
-                            currentSelection = (currentSelection - 1 + listSize) % listSize;
-                        }
-                        break;
-                }
-
-                if (currentSelection < players.size()) {
-                    screen.setCursorPosition(startPosition.withRelativeRow(currentSelection));
-                } else if (currentSelection == players.size()) {
-                    screen.setCursorPosition(startPosition.withRelativeRow(currentSelection + 1));
-                } else if (currentSelection == players.size() + 1) {
-                    screen.setCursorPosition(startPosition.withRelative(7, currentSelection));
-                }
-            } while (keyType != KeyType.Enter);
-            if (currentSelection == listSize - 2) {
-                addPlayer();
-                screen.clear();
-                printPlayerSelectWindow(startPosition.withRelative(-3, -4));
-                screen.setCursorPosition(startPosition.withRelativeRow(currentSelection));
-            } else if (currentSelection == listSize - 1) {
-                deletePlayer(startPosition);
-            } else {
-                break;
-            }
-            screen.refresh();
-        }
-        currentPlayer = players.get(currentSelection);
-        screen.clear();
-    }
-
-    
-
-    private void deletePlayer(TerminalPosition startPosition) throws IOException, InterruptedException {
-        int nicknameMaxLength = 15;
-        TerminalSize boxSize = new TerminalSize(nicknameMaxLength, players.size() + 3);
-        TextGraphics textGraphics = screen.newTextGraphics();
-
-        textGraphics.setForegroundColor(TextColor.ANSI.RED);
-        screen.setCursorPosition(startPosition);
-
-        int currentSelection = 0;
-        KeyStroke keyStroke;
-        KeyType keyType;
-        while (true) {
-            if (players.isEmpty() || currentSelection == players.size() + 1) {
-                textGraphics.putString(startPosition, "List is empty", SGR.BOLD);
-                screen.refresh();
-                currentPlayer = null;
-                Thread.sleep(1500);
-                break;
-            }
-            do {
-                if (currentSelection < players.size()) {
-                    screen.setCursorPosition(startPosition.withRelativeRow(currentSelection));
-                } else if (currentSelection == players.size()) {
-                    screen.setCursorPosition(startPosition.withRelativeRow(currentSelection + 1));
-                }
-                textGraphics.fillRectangle(startPosition, boxSize, ' ');
-                printPlayersList(currentSelection, startPosition);
-                textGraphics.putString(startPosition.withRelativeRow(players.size() + 1), "DONE", SGR.ITALIC);
-                screen.refresh();
-                keyStroke = screen.readInput();
-                keyType = keyStroke.getKeyType();
-
-                int listSize = players.size() + 1;
-                switch (keyType) {
-                    case ArrowDown:
-                        currentSelection = (currentSelection + 1) % listSize;
-                        break;
-                    case ArrowUp:
-                        currentSelection = (currentSelection - 1 + listSize) % listSize;
-                        break;
-                }
-            } while (keyType != KeyType.Enter);
-            if (currentSelection == players.size()) {
-                break;
-            }
-            players.remove(currentSelection);
-        }
-    }
-
-    private void shop() throws IOException, InterruptedException {
-
-
-    }
-
-    private void printShop(TerminalPosition startPosition, List<Tower> towersTypes, Tower currentTower)
-            throws IOException, InterruptedException {
-
     }
 
     private void printTowerDetails(TerminalPosition startPosition, TerminalSize boxSize, TextColor foregroundColor,
@@ -364,7 +184,7 @@ public class Game {
 
     }
 
-    private void exit() {
+    public void exit() {
         String playersFileName = "data/players.txt";
 
         try {
@@ -416,7 +236,6 @@ public class Game {
                 screen.setCharacter(column, row, new TextCharacter(
                         ' ',
                         TextColor.ANSI.DEFAULT,
-                        // This will pick a random background color
                         TextColor.ANSI.GREEN));
             }
         }

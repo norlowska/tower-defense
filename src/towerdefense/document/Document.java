@@ -3,6 +3,7 @@ package towerdefense.document;
 import towerdefense.view.ConsoleMenuView;
 import towerdefense.view.View;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Document {
@@ -27,5 +28,9 @@ public class Document {
 
     public ArrayList<Player> getPlayers(){
         return game.getPlayers();
+    }
+
+    public void exit(){
+        game.exit();
     }
 }
