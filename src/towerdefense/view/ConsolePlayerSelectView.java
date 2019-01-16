@@ -74,7 +74,7 @@ public class ConsolePlayerSelectView extends PlayerSelectView {
     @Override
     protected void displayWindow() {
         screen.clear();
-
+        terminalSize = screen.getTerminalSize();
         String label = "Choose player";
         int nicknameMaxLength = 15;
         TerminalPosition labelBoxTopLeft = new TerminalPosition(

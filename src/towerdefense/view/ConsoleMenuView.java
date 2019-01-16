@@ -39,7 +39,6 @@ public class ConsoleMenuView extends MenuView {
 
     @Override
     protected void displayOptions() {
-        System.out.println("Options");
         TextGraphics textGraphics = screen.newTextGraphics();
         textGraphics.setForegroundColor(TextColor.ANSI.RED);
         while (true) {
