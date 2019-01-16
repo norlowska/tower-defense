@@ -3,6 +3,7 @@ package towerdefense.view;
 import towerdefense.document.CurrentPlayer;
 import towerdefense.document.Document;
 import towerdefense.document.Player;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,39 +28,53 @@ public class GUIPlayerSelectView extends PlayerSelectView {
 
     @Override
     protected void displayContent() {
+        for (Player p : playersList) {
+            comboBox.addItem(p.getNickname());
+        }
+
+        currentPlayerNameLabel.setText("Current player: " + currentPlayer.getNickname());
+
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 newPlayerName = newPlayerTextField.getText();
-                if(!newPlayerName.equals("")){
-                    comboBox.addItem(newPlayerName);
-//                    playersList.add(new Player(...)); //dodać do gry (listy graczy) obiekt nowego gracza
+//                if (!newPlayerName.equals("")) {
+//                    comboBox.addItem(newPlayerName);
+//                    document.addPlayer(new Player(newPlayerName, 500, null));
+//                }
+                try {
+                    if (!newPlayerName.equals("")) {
+                        for (Player p : playersList) {
+                            if (!p.getNickname().equals(newPlayerName)) {
+                                comboBox.addItem(newPlayerName);
+                                document.addPlayer(new Player(newPlayerName, 500, null));
+                            } else {
+                                System.out.println("Such nickname already exists");
+                            }
+                        }
+                    }
+                } catch (java.util.ConcurrentModificationException exception) {
+                    exception.getMessage();
                 }
                 newPlayerTextField.setText("");
                 newPlayerTextField.grabFocus();
             }
         });
 
-        currentPlayerNameLabel.setText("Current player: " + currentPlayer.getNickname());
-
-        for (Player pl : playersList) {
-            comboBox.addItem(pl.getNickname());
-        }
-
-        //mockup
-        comboBox.addItem("One");
-        comboBox.addItem("Two");
-
         done.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 newPlayerName = comboBox.getSelectedItem().toString();
                 System.out.println(newPlayerName);
-                //aktualnego gracza zamienić na tego z nazwą -> newPlayerName (obiekt jego został już wcześniej stworzony, wystarczy po liście graczy odnaleźć nazwę pasującą do newPlayerGame)
-                //jak to zrobić z poziomu tej klasy -> nie mamy dostępu do game
+                for (Player p : playersList) {
+                    if (p.getNickname().equals(newPlayerName)) {
+                        document.setCurrentPlayer(p);
+                    }
+                }
 
                 //powrót do Menu
-
+                window.setVisible(false);
+                document.switchToView(new GUIMenuView(document));
             }
         });
     }
