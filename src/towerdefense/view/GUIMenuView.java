@@ -18,7 +18,7 @@ public class GUIMenuView extends MenuView {
     private JButton EXITButton;
     private JButton PLAYButton;
     private JLabel greeting;
-    private CurrentPlayer currentPlayer = document.getPlayer();
+    private CurrentPlayer currentPlayer = document.getCurrentPlayer();
 
     public GUIMenuView () {
         window = new JFrame("Tower-Defense MENU");
@@ -38,13 +38,13 @@ public class GUIMenuView extends MenuView {
                 System.exit(0);
             }
         });
-        SHOPButton.addActionListener(new ActionListener() {
+      /*  SHOPButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 View shop = new GUIShopView();
                 shop.render();
             }
-        });
+        });*/
     }
 
     @Override

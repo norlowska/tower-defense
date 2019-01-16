@@ -25,7 +25,7 @@ public class GameMap {
         this.terminal = terminal;
         this.screen = screen;
     }
-
+/*
 
     public void displayMap() throws IOException {
 
@@ -78,6 +78,6 @@ public class GameMap {
             startPosition = startPosition.withRelative(1, -6);
         }
     }
-
+*/
 
 }

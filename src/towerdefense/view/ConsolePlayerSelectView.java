@@ -7,22 +7,26 @@ import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
-import jdk.nashorn.internal.ir.Terminal;
 import towerdefense.document.CurrentPlayer;
+import towerdefense.document.Document;
 import towerdefense.document.Player;
-import towerdefense.textUI.TextUI;
 
 import java.io.IOException;
 import java.util.List;
 
-import static com.googlecode.lanterna.input.KeyType.Enter;
+public class ConsolePlayerSelectView extends PlayerSelectView {
 
-public class ConsolePlayerSelectView extends PlayerSelectView implements ConsoleView {
-
-    List<Player> players = document.getPlayers();
-    CurrentPlayer currentPlayer = document.getCurrentPlayer();
+    List<Player> players;
+    CurrentPlayer currentPlayer;
     int currentSelection = 0;
     TerminalPosition startPosition;
+    TerminalSize terminalSize;
+
+    public ConsolePlayerSelectView(Document document) {
+        this.document = document;
+        players = document.getPlayers();
+        currentPlayer = document.getCurrentPlayer();
+    }
 
     private void displayOptions() {
         TextGraphics textGraphics = screen.newTextGraphics();
@@ -80,11 +84,9 @@ public class ConsolePlayerSelectView extends PlayerSelectView implements Console
         TerminalSize labelBoxSize = new TerminalSize(nicknameMaxLength + 10, players.size() + 8);
         //TerminalPosition labelBoxTopRightCorner = startPosition.withRelativeColumn(labelBoxSize.getColumns() - 1);
         TextGraphics textGraphics = screen.newTextGraphics();
-        try {
-            TextUI.getInstance().displayDoubleLineBox(startPosition, labelBoxSize, TextColor.ANSI.RED, null);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+         //   TextUI.getInstance().displayDoubleLineBox(startPosition, labelBoxSize, TextColor.ANSI.RED, null);
+
         textGraphics.setForegroundColor(TextColor.ANSI.RED);
         textGraphics.putString(startPosition.withRelative(2, 2), label);
         screen.setCursorPosition(startPosition);
@@ -97,7 +99,7 @@ public class ConsolePlayerSelectView extends PlayerSelectView implements Console
 
         while(true) {
             if(players.isEmpty()) {
-                document.switchToView(new ConsolePlayerNewView());
+                document.switchToView(new ConsolePlayerNewView(document));
             }
             do {
                 displayPlayersList();
@@ -117,7 +119,7 @@ public class ConsolePlayerSelectView extends PlayerSelectView implements Console
             } while(keyType != KeyType.Enter);
 
             if (currentSelection == players.size()) {
-                document.switchToView(new ConsolePlayerNewView());
+                document.switchToView(new ConsolePlayerNewView(document));
             } else {
                 break;
             }

@@ -10,40 +10,38 @@ import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
-import towerdefense.document.towers.*;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
-    protected Terminal terminal = null;
-    protected Screen screen = null;
     protected ArrayList<Player> players;
     protected CurrentPlayer currentPlayer;
 
     public Game() {
         players = new ArrayList<Player>();
-        readPlayersList();
+        currentPlayer = CurrentPlayer.getInstance();
+        //readPlayersList();
     }
 
     public ArrayList<Player> getPlayers() {
         return players;
     }
 
-    public void setPlayers(ArrayList<Player> players) {
-        this.players = players;
-    }
+//    public void setPlayers(ArrayList<Player> players) {
+    //    this.players = players;
+  //  }
 
     public CurrentPlayer getCurrentPlayer() {
         return currentPlayer;
     }
 
-    public void setCurrentPlayer(CurrentPlayer currentPlayer) {
-        this.currentPlayer = currentPlayer;
-    }
+ //   public void setCurrentPlayer(CurrentPlayer currentPlayer) {
+      //  this.currentPlayer = currentPlayer;
+   // }
 
-    public void start() throws InterruptedException {
+  /*  public void start() throws InterruptedException {
         try {
             TerminalSize ts = new TerminalSize(110, 50);
             DefaultTerminalFactory dft = new DefaultTerminalFactory();
@@ -52,7 +50,6 @@ public class Game {
             screen = new TerminalScreen(terminal);
 
             screen.startScreen();
-            mainMenu();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -83,7 +80,7 @@ public class Game {
 
                     }
                 }
-                players.add(new Player(line, new Map()));
+             //   players.add(new Player(line, new Map()));
             }
             bufferedReader.close();
         } catch (FileNotFoundException ex) {
@@ -183,7 +180,7 @@ public class Game {
         textGraphics.drawImage(startPosition, towerIcon);
 
     }
-
+*/
     public void exit() {
         String playersFileName = "data/players.txt";
 
@@ -202,7 +199,7 @@ public class Game {
         }
         System.exit(0);
     }
-
+/*
     public void displayMap() throws IOException {
 
         screen.clear();
@@ -240,6 +237,6 @@ public class Game {
             }
         }
         screen.refresh();
-    }
+    }*/
 
 }

@@ -6,19 +6,26 @@ import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
+import com.googlecode.lanterna.screen.Screen;
 import towerdefense.document.CurrentPlayer;
-import towerdefense.document.Map;
+import towerdefense.document.Document;
 import towerdefense.document.Player;
-import towerdefense.textUI.TextUI;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class ConsolePlayerNewView extends PlayerNewView implements ConsoleView {
+public class ConsolePlayerNewView extends PlayerNewView {
     String label = "Enter your nickname: (MAX 15 characters)";
+    ArrayList<Player> players;
+    CurrentPlayer currentPlayer;
+    TerminalSize terminalSize;
     TerminalPosition startPosition;
-    ArrayList<Player> players = document.getPlayers();
-    CurrentPlayer currentPlayer = document.getCurrentPlayer();
+
+    public ConsolePlayerNewView(Document document) {
+        this.document = document;
+        players = document.getPlayers();
+        currentPlayer = document.getCurrentPlayer();
+    }
 
     @Override
     protected void displayInput() {
@@ -94,7 +101,7 @@ public class ConsolePlayerNewView extends PlayerNewView implements ConsoleView {
 
         textGraphics.setForegroundColor(TextColor.ANSI.CYAN);
         try {
-            TextUI.getInstance().displayDoubleLineBox(startPosition, labelBoxSize, TextColor.ANSI.CYAN, null);
+           // TextUI.getInstance().displayDoubleLineBox(startPosition, labelBoxSize, TextColor.ANSI.CYAN, null);
             screen.setCursorPosition(startPosition.withRelative(1, 2));
             screen.refresh();
         } catch (IOException e) {

@@ -17,7 +17,7 @@ public class ArcherTower extends Tower {
 
 	@Override
 	public void setIcon() {
-		super.setIcon("assets/towerdefense.document.towers/ArcherTower.txt");
+		super.setIcon("assets/towers/ArcherTower.txt");
 	}
 
 }

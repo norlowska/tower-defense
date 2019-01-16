@@ -4,18 +4,16 @@ import towerdefense.view.ConsoleMenuView;
 import towerdefense.view.View;
 
 import java.util.ArrayList;
-import java.util.List;
-
 public class Document {
     private View currentView;
     private Game game;
 
     public Document() {
         game = new Game();
-        currentView = new ConsoleMenuView();
+        currentView = new ConsoleMenuView(this);
     }
-    public void switchToView(View View) {
-        currentView = View;
+    public void switchToView(View view) {
+        currentView = view;
     }
 
     public void notifyView() {
