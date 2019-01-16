@@ -86,10 +86,10 @@ public class ConsoleMenuView extends MenuView {
 
     @Override
     protected void displayWindow() {
-       /* if (players.isEmpty()) {
-            document.switchToView(new ConsolePlayerNewView());
-        }*/
-
+       if (players.isEmpty()) {
+            document.switchToView(new ConsolePlayerNewView(document));
+        }
+       document.setCurrentPlayer(players.get(0));
         try {
             screen.clear();
             screen.refresh();

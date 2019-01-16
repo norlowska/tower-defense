@@ -52,7 +52,9 @@ public class Game {
                 players.add(new Player(nickname, money, lastMap));
             }
             bufferedReader.close();
-            currentPlayer.setCurrentPlayer(players.get(0));
+            if(!players.isEmpty()){
+                currentPlayer.setCurrentPlayer(players.get(0));
+            }
         } catch (FileNotFoundException ex) {
             System.out.println("Unable to open file '" + playersFileName + "'");
         } catch (IOException ex) {

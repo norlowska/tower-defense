@@ -25,8 +25,14 @@ public class Document {
         return game.getCurrentPlayer();
     }
 
+    public void setCurrentPlayer(Player player) { game.currentPlayer.setCurrentPlayer(player); }
+
     public ArrayList<Player> getPlayers(){
         return game.getPlayers();
+    }
+
+    public void addPlayer(Player player) {
+        game.players.add(player);
     }
 
     public void exit(){
