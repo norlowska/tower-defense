@@ -1,1 +1,4 @@
-Wojtek 500 map1 ArcherTower BallistaTower LaserTower
+Ania 300 map1
+Zosia 200 map1
+Marek 100 map1
+Krzysztof 500 null

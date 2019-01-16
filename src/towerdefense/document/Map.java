@@ -28,6 +28,20 @@ public class Map implements Iterable<Field>{
      * Dwuwymiarowa tablica będąca mapą.
      */
     ArrayList<ArrayList<Field>> map = new ArrayList<ArrayList<Field>>();
+    String mapName;
+
+    public Map(String mapName) {
+        this.mapName = mapName;
+    }
+    public Map(){
+
+    }
+
+    public String getMapName() {
+        return mapName;
+    }
+
+
 
     /**
      * Odczytywanie wyglądu mapy z pliku.
@@ -35,12 +49,12 @@ public class Map implements Iterable<Field>{
      * @param name  nazwa mapy
      * @return array list   mapa
      */
-    public ArrayList<ArrayList<Field>> readMapLayout(String name) {
-        String mapName = "data/" + name + ".txt";
+    public ArrayList<ArrayList<Field>> readMapLayout() {
+        String mapFile = "data/" + mapName + ".txt";
         String line = null;
 
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(mapName));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(mapFile));
 
             int numberOfArrays = 0;
             while ((line = bufferedReader.readLine()) != null) {
@@ -63,9 +77,9 @@ public class Map implements Iterable<Field>{
             bufferedReader.close();
             return map;
         } catch (FileNotFoundException ex) {
-            System.out.println("Unable to open file '" + mapName + "'");
+            System.out.println("Unable to open file '" + mapFile + "'");
         } catch (IOException ex) {
-            System.out.println("Error reading file '" + mapName + "'");
+            System.out.println("Error reading file '" + mapFile + "'");
         }
         return map;
     }

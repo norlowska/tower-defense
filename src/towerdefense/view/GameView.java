@@ -10,11 +10,14 @@ public abstract class GameView extends View {
     @Override
     public final void render() {
         displayWindow();
+        displayDetails();
         displayBoughtTowers();
         displayMap();
     }
 
     protected abstract void displayBoughtTowers();
+
+    protected  abstract void displayDetails();
 
     protected abstract void displayMap();
 

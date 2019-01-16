@@ -9,22 +9,19 @@ import java.util.List;
 public class Player {
 
     protected String nickname;
-    protected List<Tower> towers;
     protected Map lastMap;
     protected int money;
 
-    public Player(String nickname, int money, Map lastMap, List<Tower> towers) {
+    public Player(String nickname, int money, Map lastMap) {
         this.nickname = nickname;
         this.money = money;
         this.lastMap = lastMap;
-        this.towers = towers;
     }
 
     public Player(String nickname, int money) {
         this.nickname = nickname;
         this.money = money;
         this.lastMap = new Map(); //pierwsza mapa w kolejności
-        this.towers = new ArrayList<Tower>();
     }
 
     public String getNickname() {
@@ -33,14 +30,6 @@ public class Player {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
-    }
-
-    public List<Tower> getTowers() {
-        return towers;
-    }
-
-    public void setTowers(List<Tower> towers) {
-        this.towers = towers;
     }
 
     public Map getLastMap() {
@@ -61,17 +50,11 @@ public class Player {
 
     public void savePlayer() {
         try {
-            File file = new File(nickname + ".txt");
+            File file = new File("data/players.txt");
             FileWriter write = new FileWriter(file);
             BufferedWriter bw = new BufferedWriter(write);
-            bw.write(nickname);
-            bw.newLine();
-            String result = new String();
-            for(Tower x: towers) {
-                result = result + x.getName();
-            }
+            String result = nickname + " " + money + " " +lastMap.getMapName();
             bw.write(result);
-
         }catch (FileNotFoundException ex) {
             System.out.println("Unable to open file '" + nickname + ".txt" + "'");
         } catch (IOException ex) {
