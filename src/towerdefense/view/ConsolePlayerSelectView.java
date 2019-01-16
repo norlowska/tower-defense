@@ -97,7 +97,7 @@ public class ConsolePlayerSelectView extends PlayerSelectView implements Console
 
         while(true) {
             if(players.isEmpty()) {
-                document.switchToView(new ConsolePlayerNewView());
+                document.setCurrentView(new ConsolePlayerNewView());
             }
             do {
                 displayPlayersList();
@@ -117,7 +117,7 @@ public class ConsolePlayerSelectView extends PlayerSelectView implements Console
             } while(keyType != KeyType.Enter);
 
             if (currentSelection == players.size()) {
-                document.switchToView(new ConsolePlayerNewView());
+                document.setCurrentView(new ConsolePlayerNewView());
             } else {
                 break;
             }

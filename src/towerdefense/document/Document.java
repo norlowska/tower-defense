@@ -14,7 +14,7 @@ public class Document {
         game = new Game();
         currentView = new ConsoleMenuView();
     }
-    public void switchToView(View View) {
+    public void setCurrentView(View View) {
         currentView = View;
     }
 

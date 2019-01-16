@@ -7,7 +7,10 @@ package towerdefense;
 
 //import towerdefense.document.towers.EarthTower;
 
+import towerdefense.document.Document;
 import towerdefense.document.Game;
+import towerdefense.view.GUIMenuView;
+import towerdefense.view.View;
 
 public class TowerDefense {
 
@@ -21,6 +24,13 @@ public class TowerDefense {
         game.start();
         //Map map = new Map();
         //map.readMapLayout("map1");
+
+        //GUI
+        View menuGUI = new GUIMenuView();
+        Document doc = new Document();
+        menuGUI.setDocument(doc);
+        doc.setCurrentView(menuGUI);
+        doc.notifyView();
 
         return;
     }

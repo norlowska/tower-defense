@@ -8,6 +8,6 @@ public class CurrentPlayer extends Player {
     }
 
     private CurrentPlayer() {
-        super(null, null);
+        super(null, 0);
     }
 }
