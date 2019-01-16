@@ -23,7 +23,7 @@ public class ConsolePlayerNewView extends PlayerNewView {
     TerminalPosition startPosition;
 
     public ConsolePlayerNewView(Document document) {
-        this.document = document;
+        super(document);
         players = document.getPlayers();
         currentPlayer = document.getCurrentPlayer();
     }

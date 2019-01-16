@@ -14,7 +14,7 @@ public class Document {
     }
     public void switchToView(View view) {
         currentView = view;
-        currentView.render();
+        notifyView();
     }
 
     public void notifyView() {

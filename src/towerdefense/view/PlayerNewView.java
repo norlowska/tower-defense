@@ -1,8 +1,14 @@
 package towerdefense.view;
 
+import towerdefense.document.Document;
+
 public abstract class PlayerNewView extends View {
+    public PlayerNewView(Document document) {
+        super(document);
+    }
+
     @Override
-    public void render() {
+    public final void render() {
         displayWindow();
         displayLabel();
         displayInput();

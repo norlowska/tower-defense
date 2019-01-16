@@ -1,8 +1,17 @@
 package towerdefense.view;
 
+import com.googlecode.lanterna.TerminalPosition;
+import towerdefense.document.Document;
+
+import java.io.IOException;
+
 public abstract class PlayerSelectView extends View {
+    public PlayerSelectView(Document document) {
+        super(document);
+    }
+
     @Override
-    public void render() {
+    public final void render() {
         displayWindow();
         displayContent();
     }

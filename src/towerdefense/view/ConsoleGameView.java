@@ -8,7 +8,7 @@ import java.io.IOException;
 public class ConsoleGameView extends GameView {
 
     public ConsoleGameView(Document document) {
-        this.document = document;
+        super(document);
     }
 
     @Override

@@ -1,8 +1,14 @@
 package towerdefense.view;
 
+import towerdefense.document.Document;
+
 public abstract class GameView extends View {
+    public GameView(Document document) {
+        super(document);
+    }
+
     @Override
-    public void render() {
+    public final void render() {
         displayWindow();
         displayDetails();
         displayBoughtTowers();
