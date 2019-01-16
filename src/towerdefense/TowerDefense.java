@@ -9,6 +9,8 @@ package towerdefense;
 
 import towerdefense.document.Document;
 import towerdefense.document.Game;
+import towerdefense.view.GUIMenuView;
+import towerdefense.view.View;
 
 public class TowerDefense {
 
@@ -18,12 +20,18 @@ public class TowerDefense {
      */
     public static void main(String[] args) throws InterruptedException {
         //EarthTower lt = new EarthTower();
-       // Game game = new Game();
-        //game.start();
+        Game game = new Game();
+        game.start();
         //Map map = new Map();
         //map.readMapLayout("map1");
-        Document document = new Document();
-        document.notifyView();
+
+        //GUI
+        View menuGUI = new GUIMenuView();
+        Document doc = new Document();
+        menuGUI.setDocument(doc);
+        doc.setCurrentView(menuGUI);
+        doc.notifyView();
+
         return;
     }
 
