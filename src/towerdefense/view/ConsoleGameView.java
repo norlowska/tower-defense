@@ -1,10 +1,16 @@
 package towerdefense.view;
 
-import towerdefense.GameMap;
+
+import towerdefense.document.Document;
 
 import java.io.IOException;
 
-public class ConsoleGameView extends GameView implements ConsoleView{
+public class ConsoleGameView extends GameView {
+
+    public ConsoleGameView(Document document) {
+        this.document = document;
+    }
+
     @Override
     protected void displayBoughtTowers() {
 

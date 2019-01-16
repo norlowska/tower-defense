@@ -8,7 +8,7 @@ public class EnemyFlyweightFactory {
 
     public IFlyweight getFlyweight(String name) {
         if(enemiesList.get(name) == null) {
-            Enemy enemy = new Enemy(name);
+         //   Enemy enemy = new Enemy(name);
         }
         return enemiesList.get(name);
     }

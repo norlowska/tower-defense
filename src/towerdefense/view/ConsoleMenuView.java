@@ -7,23 +7,27 @@ import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
-import com.googlecode.lanterna.screen.Screen;
 import towerdefense.document.CurrentPlayer;
+import towerdefense.document.Document;
 import towerdefense.document.Player;
-import towerdefense.textUI.TextUI;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class ConsoleMenuView extends MenuView implements ConsoleView {
-    CurrentPlayer currentPlayer = document.getCurrentPlayer();
-    ArrayList<Player> players = document.getPlayers();
+public class ConsoleMenuView extends MenuView {
+    CurrentPlayer currentPlayer;
+    ArrayList<Player> players;
     int currentSelection = 0;
 
-    TextUI textUI = TextUI.getInstance();
-    Screen screen = textUI.getScreen();
-    TerminalPosition startPosition = screen.getCursorPosition();
-    TerminalSize terminalSize = textUI.getTerminalSize();
+    TerminalSize terminalSize;
+    TerminalPosition startPosition;
+
+
+    public ConsoleMenuView(Document document){
+        this.document = document;
+        currentPlayer = document.getCurrentPlayer();
+        players = document.getPlayers();
+    }
 
     @Override
     protected void displayGreeting() {
@@ -35,11 +39,12 @@ public class ConsoleMenuView extends MenuView implements ConsoleView {
 
     @Override
     protected void displayOptions() {
+        System.out.println("Options");
         TextGraphics textGraphics = screen.newTextGraphics();
         textGraphics.setForegroundColor(TextColor.ANSI.RED);
         while (true) {
             screen.setCursorPosition(startPosition.withRelativeRow(currentSelection));
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 3; i++) {
                 if (i == currentSelection) {
                     switch (currentSelection) {
                         case 0:
@@ -49,10 +54,7 @@ public class ConsoleMenuView extends MenuView implements ConsoleView {
                             textGraphics.putString(startPosition.withRelativeRow(1), "PLAYER SELECT", SGR.BLINK, SGR.BOLD);
                             break;
                         case 2:
-                            textGraphics.putString(startPosition.withRelativeRow(2), "SHOP", SGR.BLINK, SGR.BOLD);
-                            break;
-                        case 3:
-                            textGraphics.putString(startPosition.withRelativeRow(3), "EXIT", SGR.BLINK, SGR.BOLD);
+                            textGraphics.putString(startPosition.withRelativeRow(2), "EXIT", SGR.BLINK, SGR.BOLD);
                             break;
                     }
                 } else {
@@ -64,10 +66,7 @@ public class ConsoleMenuView extends MenuView implements ConsoleView {
                             textGraphics.putString(startPosition.withRelativeRow(1), "PLAYER SELECT", SGR.BOLD);
                             break;
                         case 2:
-                            textGraphics.putString(startPosition.withRelativeRow(2), "SHOP", SGR.BOLD);
-                            break;
-                        case 3:
-                            textGraphics.putString(startPosition.withRelativeRow(3), "EXIT", SGR.BOLD);
+                            textGraphics.putString(startPosition.withRelativeRow(2), "EXIT", SGR.BOLD);
                     }
                 }
             }
@@ -88,29 +87,29 @@ public class ConsoleMenuView extends MenuView implements ConsoleView {
 
     @Override
     protected void displayWindow() {
-        if (players.isEmpty()) {
+       /* if (players.isEmpty()) {
             document.switchToView(new ConsolePlayerNewView());
-        }
+        }*/
 
         try {
             screen.clear();
             screen.refresh();
+            terminalSize = terminal.getTerminalSize();
+            startPosition = new TerminalPosition(terminalSize.getColumns() * 2 / 5,
+                    terminalSize.getRows() * 2 / 5);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        startPosition = new TerminalPosition(terminalSize.getColumns() * 2 / 5,
-                terminalSize.getRows() * 2 / 5);
     }
 
     private void handleKeysStroke(KeyStroke keyStroke) {
         KeyType keyType = keyStroke.getKeyType();
         switch (keyType) {
             case ArrowDown:
-                currentSelection = (currentSelection + 1) % 4;
+                currentSelection = (currentSelection + 1) % 3;
                 break;
             case ArrowUp:
-                currentSelection = (currentSelection - 1 + 4) % 4;
+                currentSelection = (currentSelection - 1 + 3) % 3;
                 break;
             case Escape:
                 document.exit();
@@ -118,13 +117,13 @@ public class ConsoleMenuView extends MenuView implements ConsoleView {
             case Enter:
                 switch (currentSelection) {
                     case 0:
-                        document.switchToView(new ConsoleGameView());
+                        document.switchToView(new ConsoleGameView(document));
                         break;
                     case 1:
-                        document.switchToView(new ConsolePlayerSelectView());
+                        document.switchToView(new ConsolePlayerSelectView(document));
                         break;
                     case 2:
-                        document.switchToView(new ConsoleShopView());
+                   //     document.switchToView(new ConsoleShopView());
                         break;
                     case 3:
                         document.exit();

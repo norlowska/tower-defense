@@ -12,7 +12,6 @@ public class Player {
     protected List<Tower> towers;
     protected Map lastMap;
     protected int money;
-    private static Player instance = new Player();
 
     public Player(String nickname, int money, Map lastMap, List<Tower> towers) {
         this.nickname = nickname;
@@ -27,11 +26,6 @@ public class Player {
         this.lastMap = new Map(); //pierwsza mapa w kolejności
         this.towers = new ArrayList<Tower>();
     }
-
-    private Player() {
-    }
-
-    public static Player getInstance() { return instance; }
 
     public String getNickname() {
         return nickname;
