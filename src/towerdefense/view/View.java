@@ -16,14 +16,12 @@ public class View {
         return document;
     }
 
-    public void setDocument(Document document) {
-        this.document = document;
-    }
-
     public void render(){
     }
 
-    public View() {
+    public View(Document document) {
+        this.document = document;
+
         /*
          if (terminal == null) {
             TerminalSize terminalSize = new TerminalSize(110, 50);

@@ -12,9 +12,11 @@ public class CurrentPlayer extends Player {
     }
 
     private CurrentPlayer() {
+        super("Marek", 300, null, null);
+
         //super("Marek", 300); this.lastMap = null; this.towers = new ArrayList<Tower>();
         //towers.add(new ArcherTower());
-        super(null, 0);
+//        super(null, 0);
     }
 
     public void setCurrentPlayer(Player player) {

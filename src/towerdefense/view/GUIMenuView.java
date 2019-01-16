@@ -1,6 +1,8 @@
 package towerdefense.view;
 
 import towerdefense.document.CurrentPlayer;
+import towerdefense.document.Document;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,7 +13,12 @@ public class GUIMenuView extends MenuView {
     private JButton EXITButton;
     private JButton PLAYButton;
     private JLabel greeting;
-    private CurrentPlayer currentPlayer = document.getCurrentPlayer();
+    private CurrentPlayer currentPlayer;
+
+    public GUIMenuView(Document document) {
+        super(document);
+        currentPlayer = document.getCurrentPlayer();
+    }
 
     @Override
     protected void displayGreeting() {
@@ -36,8 +43,7 @@ public class GUIMenuView extends MenuView {
             @Override
             public void actionPerformed(ActionEvent e) {
                 window.setVisible(false);
-                document.switchToView(new GUIPlayerSelectView());
-                document.notifyView();
+                document.switchToView(new GUIPlayerSelectView(document));
             }
         });
     }
@@ -51,6 +57,5 @@ public class GUIMenuView extends MenuView {
                 window.setVisible(true);
             }
         });
-
     }
 }

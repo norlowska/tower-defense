@@ -21,7 +21,7 @@ public class ConsolePlayerSelectView extends PlayerSelectView {
     String label = "Choose player";
 
     public ConsolePlayerSelectView(Document document) {
-        this.document = document;
+        super(document);
         players = document.getPlayers();
         currentPlayer = document.getCurrentPlayer();
     }
