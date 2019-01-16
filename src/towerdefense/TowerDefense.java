@@ -21,7 +21,7 @@ public class TowerDefense {
     public static void main(String[] args) throws InterruptedException {
         //EarthTower lt = new EarthTower();
         Game game = new Game();
-        game.start();
+//        game.start();
         //Map map = new Map();
         //map.readMapLayout("map1");
 
@@ -29,7 +29,7 @@ public class TowerDefense {
         View menuGUI = new GUIMenuView();
         Document doc = new Document();
         menuGUI.setDocument(doc);
-        doc.setCurrentView(menuGUI);
+        doc.switchToView(menuGUI);
         doc.notifyView();
 
         return;

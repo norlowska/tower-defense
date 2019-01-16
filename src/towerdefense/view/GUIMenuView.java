@@ -36,7 +36,7 @@ public class GUIMenuView extends MenuView {
             @Override
             public void actionPerformed(ActionEvent e) {
                 window.setVisible(false);
-                document.setCurrentView(new GUIPlayerSelectView());
+                document.switchToView(new GUIPlayerSelectView());
                 document.notifyView();
             }
         });
