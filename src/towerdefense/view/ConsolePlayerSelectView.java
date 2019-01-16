@@ -1,9 +1,6 @@
 package towerdefense.view;
 
-import com.googlecode.lanterna.SGR;
-import com.googlecode.lanterna.TerminalPosition;
-import com.googlecode.lanterna.TerminalSize;
-import com.googlecode.lanterna.TextColor;
+import com.googlecode.lanterna.*;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
@@ -21,6 +18,7 @@ public class ConsolePlayerSelectView extends PlayerSelectView {
     int currentSelection = 0;
     TerminalPosition startPosition;
     TerminalSize terminalSize;
+    String label = "Choose player";
 
     public ConsolePlayerSelectView(Document document) {
         this.document = document;
@@ -28,20 +26,19 @@ public class ConsolePlayerSelectView extends PlayerSelectView {
         currentPlayer = document.getCurrentPlayer();
     }
 
-    private void displayOptions() {
+    private void displayOptions(TerminalPosition optionsPosition) {
         TextGraphics textGraphics = screen.newTextGraphics();
         textGraphics.setForegroundColor(TextColor.ANSI.RED);
-        TerminalPosition optionsStartPosition = startPosition.withRelativeRow(players.size() +1);
-        textGraphics.fillRectangle(startPosition, new TerminalSize(15, 1), ' ');
+        textGraphics.fillRectangle(optionsPosition, new TerminalSize(15, 1), ' ');
 
-        for (int i = players.size(); i < players.size() + 2; i++) {
+        for (int i = players.size(); i < players.size() + 1; i++) {
             if (i == currentSelection) {
                 if (i == players.size()) {
-                    textGraphics.putString(optionsStartPosition, "ADD", SGR.ITALIC, SGR.BLINK);
+                    textGraphics.putString(optionsPosition, "ADD", SGR.ITALIC, SGR.BLINK);
                 }
             } else {
                 if (i == players.size()) {
-                    textGraphics.putString(optionsStartPosition, "ADD", SGR.ITALIC);
+                    textGraphics.putString(optionsPosition, "ADD", SGR.ITALIC);
                 }
             }
             try {
@@ -52,20 +49,19 @@ public class ConsolePlayerSelectView extends PlayerSelectView {
         }
     }
 
-    private void displayPlayersList(){
+    private void displayPlayersList(TerminalPosition listPosition){
         TextGraphics textGraphics = screen.newTextGraphics();
         textGraphics.setForegroundColor(TextColor.ANSI.RED);
-        TerminalPosition listStartPosition = startPosition.withRelative(3,4);
 
-        for (int i = 0; i < players.size() + 2; i++) {
+        for (int i = 0; i < players.size() + 1; i++) {
             if (i == currentSelection) {
                 if (i < players.size()) {
-                    textGraphics.putString(listStartPosition.withRelativeRow(i), players.get(i).getNickname(), SGR.BLINK,
+                    textGraphics.putString(listPosition.withRelativeRow(i), players.get(i).getNickname(), SGR.BLINK,
                             SGR.BOLD);
                 }
             } else {
                 if (i < players.size()) {
-                    textGraphics.putString(listStartPosition.withRelativeRow(i), players.get(i).getNickname(), SGR.BOLD);
+                    textGraphics.putString(listPosition.withRelativeRow(i), players.get(i).getNickname(), SGR.BOLD);
                 }
             }
         }
@@ -75,35 +71,31 @@ public class ConsolePlayerSelectView extends PlayerSelectView {
     protected void displayWindow() {
         screen.clear();
         terminalSize = screen.getTerminalSize();
-        String label = "Choose player";
         int nicknameMaxLength = 15;
-        TerminalPosition labelBoxTopLeft = new TerminalPosition(
+        startPosition = new TerminalPosition(
                 (terminalSize.getColumns() - nicknameMaxLength - 10) / 2,
                 (terminalSize.getRows() - players.size() - 7) / 2);
-        startPosition = labelBoxTopLeft;
-        TerminalSize labelBoxSize = new TerminalSize(nicknameMaxLength + 10, players.size() + 8);
-        //TerminalPosition labelBoxTopRightCorner = startPosition.withRelativeColumn(labelBoxSize.getColumns() - 1);
+        displayDoubleLineBox(nicknameMaxLength);
         TextGraphics textGraphics = screen.newTextGraphics();
-
-         //   TextUI.getInstance().displayDoubleLineBox(startPosition, labelBoxSize, TextColor.ANSI.RED, null);
-
-        textGraphics.setForegroundColor(TextColor.ANSI.RED);
-        textGraphics.putString(startPosition.withRelative(2, 2), label);
-        screen.setCursorPosition(startPosition);
+        startPosition = startPosition.withRelative(2, 2);
+        System.out.println("Label " + startPosition);
+        textGraphics.putString(startPosition, label);
+        startPosition = startPosition.withRelative(1, 2);
     }
 
     @Override
     protected void displayContent() {
         KeyStroke keyStroke = null;
         KeyType keyType;
-
         while(true) {
-            if(players.isEmpty()) {
+           if(players.isEmpty()) {
                 document.switchToView(new ConsolePlayerNewView(document));
+                displayWindow();
             }
+            screen.setCursorPosition(startPosition);
             do {
-                displayPlayersList();
-                displayOptions();
+                displayPlayersList(startPosition);
+                displayOptions(startPosition.withRelativeRow(players.size() + 1));
                 try {
                     keyStroke = screen.readInput();
                 } catch (IOException e) {
@@ -120,6 +112,8 @@ public class ConsolePlayerSelectView extends PlayerSelectView {
 
             if (currentSelection == players.size()) {
                 document.switchToView(new ConsolePlayerNewView(document));
+                currentSelection = 0;
+                displayWindow();
             } else {
                 break;
             }
@@ -153,6 +147,29 @@ public class ConsolePlayerSelectView extends PlayerSelectView {
                 }
                 break;
         }
+    }
+
+    private void displayDoubleLineBox(int contentLength) {
+        TextGraphics textGraphics = screen.newTextGraphics();
+        TerminalSize boxSize = new TerminalSize(contentLength + 10, players.size() + 8);
+        textGraphics.setForegroundColor(TextColor.ANSI.RED);
+        textGraphics.setCharacter(startPosition, Symbols.DOUBLE_LINE_TOP_LEFT_CORNER);
+        textGraphics.setCharacter(startPosition.withRelativeColumn(boxSize.getColumns() - 1),
+                Symbols.DOUBLE_LINE_TOP_RIGHT_CORNER);
+        textGraphics.drawLine(startPosition.withRelativeColumn(1),
+                startPosition.withRelativeColumn(boxSize.getColumns() - 2), Symbols.DOUBLE_LINE_HORIZONTAL);
+        textGraphics.drawLine(startPosition.withRelativeRow(1), startPosition.withRelativeRow(boxSize.getRows() - 2),
+                Symbols.DOUBLE_LINE_VERTICAL);
+        textGraphics.drawLine(startPosition.withRelative(boxSize.getColumns() - 1, 1),
+                startPosition.withRelative(boxSize.getColumns() - 1, boxSize.getRows() - 2),
+                Symbols.DOUBLE_LINE_VERTICAL);
+        textGraphics.drawLine(startPosition.withRelative(1, boxSize.getRows() - 1),
+                startPosition.withRelative(boxSize.getColumns() - 2, boxSize.getRows() - 1),
+                Symbols.DOUBLE_LINE_HORIZONTAL);
+        textGraphics.setCharacter(startPosition.withRelativeRow(boxSize.getRows() - 1),
+                Symbols.DOUBLE_LINE_BOTTOM_LEFT_CORNER);
+        textGraphics.setCharacter(startPosition.withRelative(boxSize.getColumns() - 1, boxSize.getRows() - 1),
+                Symbols.DOUBLE_LINE_BOTTOM_RIGHT_CORNER);
     }
 
 }

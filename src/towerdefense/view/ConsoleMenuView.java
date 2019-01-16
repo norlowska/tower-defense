@@ -117,14 +117,13 @@ public class ConsoleMenuView extends MenuView {
                 switch (currentSelection) {
                     case 0:
                         document.switchToView(new ConsoleGameView(document));
+                        render();
                         break;
                     case 1:
                         document.switchToView(new ConsolePlayerSelectView(document));
+                        render();
                         break;
                     case 2:
-                   //     document.switchToView(new ConsoleShopView());
-                        break;
-                    case 3:
                         document.exit();
                         break;
                 }
