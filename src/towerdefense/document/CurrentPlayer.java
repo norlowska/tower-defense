@@ -20,8 +20,6 @@ public class CurrentPlayer extends Player {
     public void setCurrentPlayer(Player player) {
         this.nickname = player.nickname;
         this.money = player.money;
-        this.lastMap = null;
-        this.towers = new ArrayList<Tower>();
-        towers.add(new ArcherTower());
+        this.lastMap = player.lastMap;
     }
 }

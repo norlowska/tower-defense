@@ -17,17 +17,18 @@ public class ConsoleGameView extends GameView {
     }
 
     @Override
+    protected void displayDetails() {
+
+    }
+
+    @Override
     protected void displayMap() {
-        screen.clear();
         try {
+            screen.clear();
             screen.refresh();
-            screen.readInput();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //  GameMap gameMap = new GameMap("map1", terminal, screen);
-       // gameMap.displayMap();
-        //displayMap();
 
     }
 

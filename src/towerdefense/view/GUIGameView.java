@@ -7,6 +7,11 @@ public class GUIGameView extends GameView {
     }
 
     @Override
+    protected void displayDetails() {
+
+    }
+
+    @Override
     protected void displayMap() {
 
     }

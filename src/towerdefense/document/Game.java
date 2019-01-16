@@ -22,7 +22,7 @@ public class Game {
     public Game() {
         players = new ArrayList<Player>();
         currentPlayer = CurrentPlayer.getInstance();
-        //readPlayersList();
+        readPlayersList();
     }
 
     public ArrayList<Player> getPlayers() {
@@ -37,6 +37,28 @@ public class Game {
         return currentPlayer;
     }
 
+    private void readPlayersList() {
+        String playersFileName = "data/players.txt";
+        String line = null;
+
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(playersFileName));
+
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] parts = line.split(" ");
+                String nickname = parts[0];
+                int money = Integer.parseInt(parts[1]);
+                Map lastMap = new Map(parts[2]);
+                players.add(new Player(nickname, money, lastMap));
+            }
+            bufferedReader.close();
+            currentPlayer.setCurrentPlayer(players.get(0));
+        } catch (FileNotFoundException ex) {
+            System.out.println("Unable to open file '" + playersFileName + "'");
+        } catch (IOException ex) {
+            System.out.println("Error reading file '" + playersFileName + "'");
+        }
+    }
  //   public void setCurrentPlayer(CurrentPlayer currentPlayer) {
       //  this.currentPlayer = currentPlayer;
    // }
@@ -64,31 +86,7 @@ public class Game {
         }
     }
 
-    private void readPlayersList() {
-        String playersFileName = "data/players.txt";
-        String line = null;
 
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(playersFileName));
-
-            while ((line = bufferedReader.readLine()) != null) {
-                String[] parts = line.split(" ");
-                List<Tower> towers = new ArrayList<Tower>();
-                Tower tower;
-                for(int i = 3; i < parts.length; i++) {
-                    switch(parts[i]) {
-
-                    }
-                }
-             //   players.add(new Player(line, new Map()));
-            }
-            bufferedReader.close();
-        } catch (FileNotFoundException ex) {
-            System.out.println("Unable to open file '" + playersFileName + "'");
-        } catch (IOException ex) {
-            System.out.println("Error reading file '" + playersFileName + "'");
-        }
-    }
 
     private void printTowerDetails(TerminalPosition startPosition, TerminalSize boxSize, TextColor foregroundColor,
                                    TextColor backgroundColor, Tower tower) throws IOException {
@@ -183,12 +181,11 @@ public class Game {
 */
     public void exit() {
         String playersFileName = "data/players.txt";
-
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(playersFileName));
-
             for (Player p : players) {
-                bufferedWriter.write(p.getNickname());
+                String result = p.getNickname() + " " + p.getMoney() + " " + p.getLastMap().getMapName();
+                bufferedWriter.write(result);
                 bufferedWriter.newLine();
             }
             bufferedWriter.close();
