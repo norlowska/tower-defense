@@ -91,11 +91,9 @@ public abstract class Tower {
             }
             bufferedReader.close();
         } catch (FileNotFoundException ex) {
-            System.out.println(
-                    "Unable to open file '" + filename + "'");
+            System.out.println("Unable to open file '" + filename + "'");
         } catch (IOException ex) {
-            System.out.println(
-                    "Error reading file '" + filename + "'");
+            System.out.println("Error reading file '" + filename + "'");
         }
         this.icon = sb.toString();
     }

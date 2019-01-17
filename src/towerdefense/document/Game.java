@@ -14,6 +14,7 @@ import com.googlecode.lanterna.terminal.Terminal;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Game {
     protected ArrayList<Player> players;
@@ -23,7 +24,7 @@ public class Game {
     public Game() {
         players = new ArrayList<Player>();
         currentPlayer = CurrentPlayer.getInstance();
-        currentMap = null;
+        currentMap = new Map("map1");
         readPlayersList();
     }
 
@@ -53,7 +54,12 @@ public class Game {
                 String[] parts = line.split(" ");
                 String nickname = parts[0];
                 int money = Integer.parseInt(parts[1]);
-                Map lastMap = new Map(parts[2]);
+                Map lastMap;
+                if(Objects.equals(parts[2], "null")) {
+                    lastMap = new Map("map1");
+                } else {
+                    lastMap = new Map(parts[2]);
+                }
                 players.add(new Player(nickname, money, lastMap));
             }
             bufferedReader.close();
@@ -62,9 +68,9 @@ public class Game {
                 currentMap = currentPlayer.getLastMap();
             }
         } catch (FileNotFoundException ex) {
-            System.out.println("Unable to open file '" + playersFileName + "'");
+            System.out.println("Unable to open players list file '" + playersFileName + "'");
         } catch (IOException ex) {
-            System.out.println("Error reading file '" + playersFileName + "'");
+            System.out.println("Error reading players list file '" + playersFileName + "'");
         }
     }
  //   public void setCurrentPlayer(CurrentPlayer currentPlayer) {

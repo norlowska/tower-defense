@@ -7,4 +7,8 @@ public class FieldTerrain extends Field {
         super(start, finish, color);
         this.tower = tower;
     }
+
+    public Tower getTower() {
+        return tower;
+    }
 }
