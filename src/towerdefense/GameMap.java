@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class GameMap {
 
-    Map map = new Map();
+    Map map = new Map("test");
     ArrayList<ArrayList<Field>> maps;
     Terminal terminal;
     Screen screen;
