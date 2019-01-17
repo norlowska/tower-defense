@@ -13,6 +13,7 @@ public abstract class GameView extends View {
         displayDetails();
         displayBoughtTowers();
         displayMap();
+        handleInput();
     }
 
     protected abstract void displayBoughtTowers();
@@ -22,4 +23,7 @@ public abstract class GameView extends View {
     protected abstract void displayMap();
 
     protected abstract void displayWindow();
+
+    protected abstract void handleInput();
+
 }

@@ -62,4 +62,9 @@ public class GUIMenuView extends MenuView {
             }
         });
     }
+
+    @Override
+    protected void handleInput(){
+
+    }
 }

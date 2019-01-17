@@ -26,4 +26,9 @@ public class GUIGameView extends GameView {
     protected void displayWindow() {
 
     }
+
+    @Override
+    protected void handleInput(){
+        
+    }
 }

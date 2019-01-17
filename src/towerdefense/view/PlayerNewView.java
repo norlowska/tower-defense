@@ -11,12 +11,12 @@ public abstract class PlayerNewView extends View {
     public final void render() {
         displayWindow();
         displayLabel();
-        displayInput();
+        handleInput();
     }
-
-    protected abstract void displayInput();
-
+    
     protected abstract void displayLabel();
 
     protected abstract void displayWindow();
+
+    protected abstract void handleInput();
 }
