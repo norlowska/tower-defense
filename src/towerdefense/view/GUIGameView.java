@@ -75,4 +75,9 @@ public class GUIGameView extends GameView {
             }
         });
     }
+
+    @Override
+    protected void handleInput() {
+        
+    }
 }
