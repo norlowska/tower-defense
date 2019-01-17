@@ -38,8 +38,12 @@ public class ConsoleGameView extends GameView {
             displayField(startPosition, currentField);
             System.out.println(column);
             System.out.println(currentField);
+            if(currentField instanceof FieldRoad && ((FieldRoad) currentField).getEnemy()!=null) {
+                displayEnemy(startPosition.withRelative(1,1),((FieldRoad) currentField).getEnemy());
+            } else if (currentField instanceof FieldTerrain && ((FieldTerrain)currentField).getTower()!=null) {
+                displayTower(startPosition.withRelative(1,1), ((FieldTerrain)currentField).getTower());
+            }
             if(column == 11) {
-                System.out.println("New row");
                 startPosition = startPosition.withRelativeRow(5);
                 startPosition = startPosition.withColumn(0);
                 column = 0;
@@ -47,20 +51,6 @@ public class ConsoleGameView extends GameView {
                 column++;
                 startPosition = startPosition.withRelativeColumn(6);
             }
-           /* if(currentField instanceof FieldRoad && ((FieldRoad) currentField).getEnemy()!=null) {
-                displayEnemy(startPosition.withRelative(1,1),((FieldRoad) currentField).getEnemy());
-            } else if (currentField instanceof FieldTerrain && ((FieldTerrain)currentField).getTower()!=null) {
-                displayTower(startPosition.withRelative(1,1), ((FieldTerrain)currentField).getTower());
-            }*/
-/*
-            try {
-                screen.refresh();
-                screen.readInput();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }*/
-
-
         }
         try {
             screen.refresh();
@@ -73,9 +63,10 @@ public class ConsoleGameView extends GameView {
     @Override
     protected void displayWindow() {
         currentMap = document.getCurrentMap();
+        screen.setCursorPosition(null);
         screen.clear();
-
     }
+
     private void displayField(TerminalPosition startPosition, Field field) {
         TextGraphics textGraphics = screen.newTextGraphics();
         TextCharacter textCharacter;
@@ -92,8 +83,18 @@ public class ConsoleGameView extends GameView {
     }
 
     private void displayEnemy(TerminalPosition startPosition, Enemy enemy) {
+        TextGraphics textGraphics = screen.newTextGraphics();
+        TextCharacter textCharacter;
+        TextImage enemyImage = new BasicTextImage(new TerminalSize(4, 3));
+        TextColor color = getTextColor(enemy.getColor());
 
-
+        for (int row = 0, i = 0; row < 3; row++) {
+            for (int column = 0; column < 4; column++, i++) {
+                textCharacter = new TextCharacter(' ', textGraphics.getForegroundColor(), color, SGR.BOLD);
+                enemyImage.setCharacterAt(column, row, textCharacter);
+            }
+        }
+        textGraphics.drawImage(startPosition, enemyImage);
     }
 
     private void displayTower(TerminalPosition startPosition, Tower tower) {

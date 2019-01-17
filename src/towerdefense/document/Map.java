@@ -88,9 +88,6 @@ public class Map implements Iterable<Field>{
 
             @Override
             public Field next() {
-               /* if (!hasNext()) {
-                    throw new NoSuchElementException();
-                }*/
                 if (column == (map.get(row).size() - 1)) {
                     column = 0;
                     row++;
