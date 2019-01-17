@@ -1,10 +1,14 @@
 package towerdefense.view;
 
+import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.screen.Screen;
+import com.googlecode.lanterna.screen.TerminalScreen;
+import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 import towerdefense.document.Document;
 
 import javax.swing.*;
+import java.io.IOException;
 
 public class View {
     protected Document document;
@@ -21,8 +25,6 @@ public class View {
 
     public View(Document document) {
         this.document = document;
-
-        /*
          if (terminal == null) {
             TerminalSize terminalSize = new TerminalSize(110, 50);
             DefaultTerminalFactory dft = new DefaultTerminalFactory();
@@ -35,7 +37,7 @@ public class View {
                 e.printStackTrace();
             }
         }
-        */
+
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {

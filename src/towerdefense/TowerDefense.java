@@ -10,6 +10,7 @@ package towerdefense;
 import towerdefense.document.CurrentPlayer;
 import towerdefense.document.Document;
 import towerdefense.document.Game;
+import towerdefense.view.ConsoleMenuView;
 import towerdefense.view.GUIMenuView;
 import towerdefense.view.GUIPlayerSelectView;
 import towerdefense.view.View;
@@ -21,14 +22,13 @@ public class TowerDefense {
      * @throws InterruptedException
      */
     public static void main(String[] args) throws InterruptedException {
-        //EarthTower lt = new EarthTower();
         Game game = new Game();
-//        game.start();
-        //Map map = new Map();
-        //map.readMapLayout("map1");
-
-        //GUI
         Document doc = new Document();
+
+        //Console
+      //  View menuConsole = new ConsoleMenuView(doc);
+      //  doc.switchToView(menuConsole);
+        //GUI
         View menuGUI = new GUIMenuView(doc);
         doc.switchToView(menuGUI);
 

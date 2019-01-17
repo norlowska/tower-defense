@@ -18,10 +18,12 @@ import java.util.List;
 public class Game {
     protected ArrayList<Player> players;
     protected CurrentPlayer currentPlayer;
+    protected Map currentMap;
 
     public Game() {
         players = new ArrayList<Player>();
         currentPlayer = CurrentPlayer.getInstance();
+        currentMap = null;
         readPlayersList();
     }
 
@@ -29,6 +31,9 @@ public class Game {
         return players;
     }
 
+    public Map getCurrentMap() {
+        return currentMap;
+    }
 //    public void setPlayers(ArrayList<Player> players) {
     //    this.players = players;
   //  }
@@ -54,6 +59,7 @@ public class Game {
             bufferedReader.close();
             if(!players.isEmpty()){
                 currentPlayer.setCurrentPlayer(players.get(0));
+                currentMap = currentPlayer.getLastMap();
             }
         } catch (FileNotFoundException ex) {
             System.out.println("Unable to open file '" + playersFileName + "'");
@@ -133,53 +139,7 @@ public class Game {
         }
     }
 
-    private void drawTower(TerminalPosition startPosition, Tower tower) {
-        String stringTowerIcon = tower.getIcon();
-        Color c = tower.getColor();
-        TextColor color;
-        switch(c) {
-            case BLACK:
-                color = TextColor.ANSI.BLACK;
-                break;
-            case BLUE:
-                color = TextColor.ANSI.BLUE;
-                break;
-            case CYAN:
-                color = TextColor.ANSI.CYAN;
-                break;
-            case GREEN:
-                color = TextColor.ANSI.GREEN;
-                break;
-            case MAGENTA:
-                color = TextColor.ANSI.MAGENTA;
-                break;
-            case RED:
-                color = TextColor.ANSI.RED;
-                break;
-            case YELLOW:
-                color = TextColor.ANSI.YELLOW;
-                break;
-            case WHITE:
-                color = TextColor.ANSI.WHITE;
-                break;
-            default:
-                color = TextColor.ANSI.DEFAULT;
-        }
 
-        TextImage towerIcon = new BasicTextImage(new TerminalSize(6, 4));
-        TextGraphics textGraphics = screen.newTextGraphics();
-        TextCharacter textCharacter;
-
-        for (int row = 0, i = 0; row < 4; row++) {
-            for (int column = 0; column < 6; column++, i++) {
-                textCharacter = new TextCharacter(stringTowerIcon.charAt(i), color, textGraphics.getBackgroundColor(),
-                        SGR.BOLD);
-                towerIcon.setCharacterAt(column, row, textCharacter);
-            }
-        }
-        textGraphics.drawImage(startPosition, towerIcon);
-
-    }
 */
     public void exit() {
         String playersFileName = "data/players.txt";

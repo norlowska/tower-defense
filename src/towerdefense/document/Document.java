@@ -27,6 +27,8 @@ public class Document {
 
     public void setCurrentPlayer(Player player) { game.currentPlayer.setCurrentPlayer(player); }
 
+    public Map getCurrentMap() { return game.getCurrentMap(); }
+
     public ArrayList<Player> getPlayers(){
         return game.getPlayers();
     }

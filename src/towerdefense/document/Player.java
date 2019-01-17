@@ -18,12 +18,6 @@ public class Player {
         this.lastMap = lastMap;
     }
 
-    public Player(String nickname, int money) {
-        this.nickname = nickname;
-        this.money = money;
-        this.lastMap = new Map(); //pierwsza mapa w kolejności
-    }
-
     public String getNickname() {
         return nickname;
     }

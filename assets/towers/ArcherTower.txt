@@ -1,4 +1,3 @@
- X  X 
-XXXXXX
-XXXXXX
- X  X 
+XXXX
+XXXX
+XXXX
