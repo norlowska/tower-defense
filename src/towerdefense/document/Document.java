@@ -1,6 +1,7 @@
 package towerdefense.document;
 
 import towerdefense.view.ConsoleMenuView;
+import towerdefense.view.GUIMenuView;
 import towerdefense.view.View;
 
 import java.util.ArrayList;
