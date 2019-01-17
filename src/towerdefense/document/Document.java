@@ -9,7 +9,7 @@ public class Document {
     private Game game;
 
     public Document() {
-        game = new Game();
+        game = new Game(this);
         currentView = new ConsoleMenuView(this);
     }
     public void switchToView(View view) {
@@ -20,6 +20,8 @@ public class Document {
     public void notifyView() {
         currentView.render();
     }
+
+    public void notifyGame(){}
 
     public CurrentPlayer getCurrentPlayer(){
         return game.getCurrentPlayer();
@@ -36,6 +38,10 @@ public class Document {
     public void addPlayer(Player player) {
         game.players.add(player);
     }
+
+    public Game getGame() {return game;}
+
+    public void setGame(Game game) {this.game = game;}
 
     public void exit(){
         game.exit();

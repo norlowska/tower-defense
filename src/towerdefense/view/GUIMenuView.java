@@ -2,6 +2,7 @@ package towerdefense.view;
 
 import towerdefense.document.CurrentPlayer;
 import towerdefense.document.Document;
+import towerdefense.document.Game;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -30,6 +31,9 @@ public class GUIMenuView extends MenuView {
         PLAYButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                window.setVisible(false);
+                document.switchToView(new GUIGameView(document));
+                document.getGame().Timer();
                 //start game play
             }
         });
