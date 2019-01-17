@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GUIGameView extends GameView {
-    private GUIGamePanel panel;
+    private JPanel panel;
 
     public GUIGameView(Document document) {
         super(document, "GUI");

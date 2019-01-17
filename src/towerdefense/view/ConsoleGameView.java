@@ -116,6 +116,7 @@ public class ConsoleGameView extends GameView {
 
     @Override
     protected void displayMap() {
+        //document.getGame().Timer();
         TerminalPosition startPosition = new TerminalPosition(0,0);
         Iterator<Field> iterator = currentMap.iterator();
         int column = 0;
@@ -156,6 +157,7 @@ public class ConsoleGameView extends GameView {
     protected void handleInput() {
         KeyStroke keyStroke = null;
         KeyType keyType = null;
+        MoveIterator<Field> moveIterator = currentMap.iteratorMove();
         while(true) {
             try {
                 keyStroke = screen.readInput();
@@ -191,26 +193,33 @@ public class ConsoleGameView extends GameView {
             }
 
             if(selectedTower != null) {
-                if(selectedField == null) selectedField = currentMap.iterator().next();
-                switch(keyType) {
+                if (selectedField == null) selectedField = currentMap.iterator().next();
+                switch (keyType) {
                     case ArrowDown:
+                        selectedField = moveIterator.down();
                         break;
                     case ArrowUp:
+                        selectedField = moveIterator.up();
                         break;
                     case ArrowLeft:
+                        selectedField = moveIterator.left();
                         break;
                     case ArrowRight:
+                        selectedField = moveIterator.right();
                         break;
                     case Enter:
                         System.out.println("Enter");
                         break;
                 }
             }
-            displayWindow();
+            System.out.println("Sprawdzam klawisz");
+            //break;
+           displayWindow();
             displayBoughtTowers();
             displayDetails();
             displayMap();
         }
+       // document.notifyView();
     }
 
     private void displayField(TerminalPosition startPosition, Field field) {
