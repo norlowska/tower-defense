@@ -5,9 +5,12 @@ import com.googlecode.lanterna.*;
 import com.googlecode.lanterna.graphics.BasicTextImage;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.graphics.TextImage;
+import com.googlecode.lanterna.input.KeyStroke;
+import com.googlecode.lanterna.input.KeyType;
 import towerdefense.document.*;
 import towerdefense.document.towers.*;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,6 +19,8 @@ import java.util.List;
 public class ConsoleGameView extends GameView {
     private Map currentMap;
     private CurrentPlayer currentPlayer;
+    private Field selectedField;
+    private Tower selectedTower;
     private final int fieldWidth = 6;
     private final int fieldHeight = 5;
     private final int characterWidth = 4;
@@ -26,6 +31,8 @@ public class ConsoleGameView extends GameView {
     public ConsoleGameView(Document document) {
         super(document, "Console");
         currentPlayer = document.getCurrentPlayer();
+        selectedField = null;
+        selectedTower = null;
         towers = new ArrayList<>();
         towers.add(new ArcherTower());
         towers.add(new EarthTower());
@@ -63,7 +70,7 @@ public class ConsoleGameView extends GameView {
 
         for(Tower t : towers) {
             displayTower(startPosition, t);
-            textGraphics.putString(startPosition.withRelativeRow(characterHeight + 1), Integer.toString(i) + ' ' + t.getName());
+            textGraphics.putString(startPosition.withRelativeRow(characterHeight + 1), 'F' + Integer.toString(i) + ' ' + t.getName());
             i++;
             startPosition = startPosition.withRelativeColumn(characterWidth + 9);
         }
@@ -88,12 +95,22 @@ public class ConsoleGameView extends GameView {
         startPosition = startPosition.withRelativeRow(3);
         title = "Your money: " + currentPlayer.getMoney();
         textGraphics.putString(startPosition.withRelativeColumn((boughtTowersBoxSize.getColumns() - title.length()) / 2), title, SGR.BOLD);
-        startPosition = startPosition.withRelativeRow(5);
-        String details = "Your goal is to defend\nyour territory against enemies.\nSelect tower\n and place it on map with keys,\nalong their path of attack,\nto stop them from\ndestroying your base.\nSurvive all waves of enemies attacks\nto win map.";
+        startPosition = startPosition.withRelativeRow(3);
+        String details = "Your goal is to defend\nyour territory against enemies.\nSelect tower with function keys\n and place it on map,\n along enemies' path off attack,\n using arrows.\n Enter accepts your choice.\nSurvive all waves of enemies attacks\n to win map.";
         String parts[] = details.split("\n");
         for(String part : parts) {
             textGraphics.putString(startPosition.withRelativeColumn((boughtTowersBoxSize.getColumns() - part.length()) / 2), part);
-            startPosition = startPosition.withRelativeRow(2);
+            startPosition = startPosition.withRelativeRow(1);
+        }
+        if(selectedTower != null) {
+            startPosition = startPosition.withRelative((boughtTowersBoxSize.getColumns() - characterWidth) / 2,2);
+            displayTower(startPosition, selectedTower);
+            startPosition = startPosition.withRelative(-2, characterHeight + 1);
+            textGraphics.fillRectangle(startPosition, new TerminalSize(15, 1), ' ');
+            textGraphics.putString(startPosition, selectedTower.getName(), SGR.BOLD);
+            textGraphics.putString(startPosition.withRelativeRow(1), "Price: " + selectedTower.getPrice());
+            textGraphics.putString(startPosition.withRelativeRow(2), "Damage: " + selectedTower.getDamage());
+            textGraphics.putString(startPosition.withRelativeRow(3), "Range: " + selectedTower.getRange());
         }
     }
 
@@ -104,7 +121,6 @@ public class ConsoleGameView extends GameView {
         int column = 0;
         Field currentField;
         while(iterator.hasNext()) {
-
             currentField = iterator.next();
             displayField(startPosition, currentField);
             if(currentField instanceof FieldRoad && ((FieldRoad) currentField).getEnemy()!=null) {
@@ -112,6 +128,7 @@ public class ConsoleGameView extends GameView {
             } else if (currentField instanceof FieldTerrain && ((FieldTerrain)currentField).getTower()!=null) {
                 displayTower(startPosition.withRelative(1,1), ((FieldTerrain)currentField).getTower());
             }
+
             if(column == 11) {
                 startPosition = startPosition.withRelativeRow(5);
                 startPosition = startPosition.withColumn(0);
@@ -121,11 +138,17 @@ public class ConsoleGameView extends GameView {
                 startPosition = startPosition.withRelativeColumn(6);
             }
         }
-        try {
-            screen.refresh();
-            screen.readInput();
-        } catch (IOException e) {
-            e.printStackTrace();
+        while(true) {
+            KeyStroke keyStroke = null;
+            try {
+                screen.refresh();
+                keyStroke = screen.readInput();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            handleKeyStroke(keyStroke);
+            displayDetails();
+            displayMap();
         }
     }
 
@@ -141,7 +164,9 @@ public class ConsoleGameView extends GameView {
         TextCharacter textCharacter;
         TextImage fieldImage = new BasicTextImage(new TerminalSize(fieldWidth, fieldHeight));
         TextColor color = getTextColor(field.getColor());
-
+        if(field == selectedField) {
+            color = getTextColor(Color.BLUE);
+        }
         for (int row = 0; row < fieldHeight; row++) {
             for (int column = 0; column < fieldWidth; column++) {
                 textCharacter = new TextCharacter(' ', textGraphics.getForegroundColor(), color, SGR.BOLD);
@@ -204,6 +229,54 @@ public class ConsoleGameView extends GameView {
                 return TextColor.ANSI.WHITE;
             default:
                 return TextColor.ANSI.DEFAULT;
+        }
+    }
+
+    private void handleKeyStroke(KeyStroke keyStroke) {
+        KeyType keyType = keyStroke.getKeyType();
+
+        switch (keyType){
+            case F1:
+                selectedTower = towers.get(0);
+                break;
+            case F2:
+                selectedTower = towers.get(1);
+                break;
+            case F3:
+                selectedTower = towers.get(2);
+                break;
+            case F4:
+                selectedTower = towers.get(3);
+                break;
+            case F5:
+                selectedTower = towers.get(4);
+                break;
+            case F6:
+                selectedTower = towers.get(5);
+                break;
+            case F7:
+                selectedTower = towers.get(6);
+                break;
+            case F8:
+                selectedTower = towers.get(7);
+                break;
+        }
+
+        if(selectedTower != null) {
+            if(selectedField == null) selectedField = currentMap.iterator().next();
+            switch(keyType) {
+                case ArrowDown:
+                    break;
+                case ArrowUp:
+                    break;
+                case ArrowLeft:
+                    break;
+                case ArrowRight:
+                    break;
+                case Enter:
+                    System.out.println("Enter");
+                    break;
+            }
         }
     }
 }
