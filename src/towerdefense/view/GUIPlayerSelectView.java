@@ -3,6 +3,7 @@ package towerdefense.view;
 import towerdefense.document.CurrentPlayer;
 import towerdefense.document.Document;
 import towerdefense.document.Player;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,6 +19,7 @@ public class GUIPlayerSelectView extends PlayerSelectView {
     private String newPlayerName;
     private CurrentPlayer currentPlayer;
     private ArrayList<Player> playersList;
+    private int exist = 0;
 
     public GUIPlayerSelectView(Document document) {
         super(document);
@@ -27,39 +29,62 @@ public class GUIPlayerSelectView extends PlayerSelectView {
 
     @Override
     protected void displayContent() {
+        for (Player p : playersList) {
+            comboBox.addItem(p.getNickname());
+        }
+
+        currentPlayerNameLabel.setText("Current player: " + currentPlayer.getNickname());
+
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 newPlayerName = newPlayerTextField.getText();
-                if(!newPlayerName.equals("")){
-                    comboBox.addItem(newPlayerName);
-//                    playersList.add(new Player(...)); //dodać do gry (listy graczy) obiekt nowego gracza
+                try {
+                    if (!newPlayerName.equals("")) {
+                        for (Player p : playersList) {
+                            if (p.getNickname().equals(newPlayerName)) {
+                                exist++;
+                            }
+                        }
+                        if (exist == 0) {
+                            comboBox.addItem(newPlayerName);
+                            document.addPlayer(new Player(newPlayerName, 500, null));
+                            JOptionPane.showMessageDialog(window,
+                                    "You have just created a new player with the nickname: "+newPlayerName);
+                        } else {
+                            JOptionPane.showMessageDialog(window,
+                                    "Such a player already exists. Create a player with a different name!",
+                                    "Error",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
+                        exist = 0;
+                    } else {
+                        JOptionPane.showMessageDialog(window,
+                                "Text field is empty!",
+                                "Warning",
+                                JOptionPane.WARNING_MESSAGE);
+                    }
+                } catch (java.util.ConcurrentModificationException exception) {
+                    exception.getMessage();
                 }
                 newPlayerTextField.setText("");
                 newPlayerTextField.grabFocus();
             }
         });
 
-        currentPlayerNameLabel.setText("Current player: " + currentPlayer.getNickname());
-
-        for (Player pl : playersList) {
-            comboBox.addItem(pl.getNickname());
-        }
-
-        //mockup
-        comboBox.addItem("One");
-        comboBox.addItem("Two");
-
         done.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 newPlayerName = comboBox.getSelectedItem().toString();
                 System.out.println(newPlayerName);
-                //aktualnego gracza zamienić na tego z nazwą -> newPlayerName (obiekt jego został już wcześniej stworzony, wystarczy po liście graczy odnaleźć nazwę pasującą do newPlayerGame)
-                //jak to zrobić z poziomu tej klasy -> nie mamy dostępu do game
-
+                for (Player p : playersList) {
+                    if (p.getNickname().equals(newPlayerName)) {
+                        document.setCurrentPlayer(p);
+                    }
+                }
                 //powrót do Menu
-
+                window.setVisible(false);
+                document.switchToView(new GUIMenuView(document));
             }
         });
     }

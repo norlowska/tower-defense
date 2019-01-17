@@ -21,7 +21,7 @@ public class GameMap {
     Screen screen;
 
     public GameMap(String name, Terminal terminal, Screen screen) {
-        maps = map.readMapLayout(name);
+//        maps = map.readMapLayout(name);
         this.terminal = terminal;
         this.screen = screen;
     }
