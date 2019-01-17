@@ -88,8 +88,8 @@ public class ConsoleMenuView extends MenuView {
     protected void displayWindow() {
        if (players.isEmpty()) {
             document.switchToView(new ConsolePlayerNewView(document));
+            document.setCurrentPlayer(players.get(0));
         }
-       document.setCurrentPlayer(players.get(0));
         try {
             screen.clear();
             screen.refresh();

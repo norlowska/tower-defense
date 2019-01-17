@@ -12,6 +12,12 @@ public class Player {
     protected Map lastMap;
     protected int money;
 
+    public Player(String nickname, int money) {
+        this.nickname = nickname;
+        this.money = money;
+        this.lastMap = new Map("map1");
+    }
+
     public Player(String nickname, int money, Map lastMap) {
         this.nickname = nickname;
         this.money = money;

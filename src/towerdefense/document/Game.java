@@ -152,6 +152,7 @@ public class Game {
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(playersFileName));
             for (Player p : players) {
+                System.out.println(p.getNickname());
                 String result = p.getNickname() + " " + p.getMoney() + " " + p.getLastMap().getMapName();
                 bufferedWriter.write(result);
                 bufferedWriter.newLine();

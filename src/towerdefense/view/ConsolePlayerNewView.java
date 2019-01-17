@@ -47,7 +47,7 @@ public class ConsolePlayerNewView extends PlayerNewView {
             switch (keyType) {
                 case Enter:
                     if (sb.length() > 0) {
-                        document.addPlayer(new Player(sb.toString(), 500, null));
+                        document.addPlayer(new Player(sb.toString(), 500));
                         creatingPlayer = false;
                     }
                     break;
