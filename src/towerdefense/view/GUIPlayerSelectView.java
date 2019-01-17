@@ -19,6 +19,7 @@ public class GUIPlayerSelectView extends PlayerSelectView {
     private String newPlayerName;
     private CurrentPlayer currentPlayer;
     private ArrayList<Player> playersList;
+    private int exist = 0;
 
     public GUIPlayerSelectView(Document document) {
         super(document);
@@ -38,20 +39,30 @@ public class GUIPlayerSelectView extends PlayerSelectView {
             @Override
             public void actionPerformed(ActionEvent e) {
                 newPlayerName = newPlayerTextField.getText();
-//                if (!newPlayerName.equals("")) {
-//                    comboBox.addItem(newPlayerName);
-//                    document.addPlayer(new Player(newPlayerName, 500, null));
-//                }
                 try {
                     if (!newPlayerName.equals("")) {
                         for (Player p : playersList) {
-                            if (!p.getNickname().equals(newPlayerName)) {
-                                comboBox.addItem(newPlayerName);
-                                document.addPlayer(new Player(newPlayerName, 500, null));
-                            } else {
-                                System.out.println("Such nickname already exists");
+                            if (p.getNickname().equals(newPlayerName)) {
+                                exist++;
                             }
                         }
+                        if (exist == 0) {
+                            comboBox.addItem(newPlayerName);
+                            document.addPlayer(new Player(newPlayerName, 500, null));
+                            JOptionPane.showMessageDialog(window,
+                                    "You have just created a new player with the nickname: "+newPlayerName);
+                        } else {
+                            JOptionPane.showMessageDialog(window,
+                                    "Such a player already exists. Create a player with a different name!",
+                                    "Error",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
+                        exist = 0;
+                    } else {
+                        JOptionPane.showMessageDialog(window,
+                                "Text field is empty!",
+                                "Warning",
+                                JOptionPane.WARNING_MESSAGE);
                     }
                 } catch (java.util.ConcurrentModificationException exception) {
                     exception.getMessage();
@@ -71,7 +82,6 @@ public class GUIPlayerSelectView extends PlayerSelectView {
                         document.setCurrentPlayer(p);
                     }
                 }
-
                 //powrót do Menu
                 window.setVisible(false);
                 document.switchToView(new GUIMenuView(document));
