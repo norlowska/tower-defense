@@ -33,7 +33,7 @@ public class GUIMenuView extends MenuView {
             public void actionPerformed(ActionEvent e) {
                 window.setVisible(false);
                 document.switchToView(new GUIGameView(document));
-                document.getGame().Timer();
+//                document.getGame().Timer();
                 //start game play
             }
         });
