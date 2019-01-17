@@ -9,6 +9,7 @@ public abstract class GameView extends View {
 
     @Override
     public final void render() {
+
         displayWindow();
         displayDetails();
         displayBoughtTowers();
