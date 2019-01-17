@@ -38,6 +38,11 @@ public class Map implements Iterable<Field>{
                 try{
                     colorScheme[0] = Color.valueOf(splitted[0]);
                     colorScheme[1] = Color.valueOf(splitted[1]);
+                    if(colorScheme[0] == Color.YELLOW || colorScheme[0] == Color.MAGENTA || colorScheme[0] == Color.RED) {
+                        colorScheme[0] = Color.BLACK;
+                    } else if (colorScheme[1] == Color.YELLOW || colorScheme[1] == Color.MAGENTA || colorScheme[1] == Color.RED) {
+                        colorScheme[1] = Color.WHITE;
+                    }
                 } catch(IllegalArgumentException e) {
                     System.out.println("Illegal color value. Default color scheme was set.");
                     colorScheme[0] = Color.BLACK;

@@ -8,16 +8,13 @@ import towerdefense.document.Tower;
 public class ArcherTower extends Tower {
 
 	public ArcherTower() {
-		super(12, 100,7, 1.1, Color.WHITE);
-	}
-
-	public void setName() {
-		super.setName(this.getClass().getName());
+		super(12, 100,7, 1.1);
+		super.setName("Archer");
 	}
 
 	@Override
 	public void setIcon() {
-		super.setIcon("assets/towers/ArcherTower.txt");
+		super.setIcon("data/towers/ArcherTower.txt");
 	}
 
 }

@@ -25,7 +25,6 @@ public class View {
 
     public View(Document document, String mode) {
         this.document = document;
-        System.out.println(mode);
         switch(mode) {
             case "Console":
                 if (terminal == null) {

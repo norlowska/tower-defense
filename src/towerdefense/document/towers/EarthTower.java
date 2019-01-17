@@ -8,12 +8,13 @@ import towerdefense.document.Tower;
 public class EarthTower extends Tower {
 
 	public EarthTower() {
-		super(12, 100,7, 1.1, Color.WHITE);
+		super(12, 100,7, 1.1);
+		super.setName("Earth");
 	}
 
 	@Override
 	public void setIcon() {
-		super.setIcon("assets/towerdefense.document.towers/EarthTower.txt");
+		super.setIcon("data/towers/EarthTower.txt");
 	}
 
 }

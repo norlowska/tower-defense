@@ -5,15 +5,16 @@ import com.googlecode.lanterna.TextColor;
 import towerdefense.document.Color;
 import towerdefense.document.Tower;
 
-public class ElectricityTower extends Tower {
+public class ElectricTower extends Tower {
 
-	public ElectricityTower() {
-		super(12, 100,7, 1.1, Color.WHITE);
+	public ElectricTower() {
+		super(12, 100,7, 1.1);
+		super.setName("Electric");
 	}
 
 	@Override
 	public void setIcon() {
-		super.setIcon("assets/towerdefense.document.towers/ElectricityTower.txt");
+		super.setIcon("data/towers/ElectricTower.txt");
 	}
 
 }

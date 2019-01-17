@@ -8,12 +8,13 @@ import towerdefense.document.Tower;
 public class WaterTower extends Tower {
 
 	public WaterTower() {
-		super(12, 100,7, 1.1, Color.WHITE);
+		super(12, 100,7, 1.1);
+		super.setName("Water");
 	}
 
 	@Override
 	public void setIcon() {
-		super.setIcon("assets/towerdefense.document.towers/WaterTower.txt");
+		super.setIcon("data/towers/WaterTower.txt");
 	}
 
 }
