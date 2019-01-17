@@ -12,6 +12,7 @@ public abstract class MenuView extends View {
         displayWindow();
         displayGreeting();
         displayOptions();
+        handleInput();
     }
 
     protected abstract void displayGreeting();
@@ -19,4 +20,6 @@ public abstract class MenuView extends View {
     protected abstract void displayOptions();
 
     protected abstract void displayWindow();
+
+    protected abstract void handleInput();
 }

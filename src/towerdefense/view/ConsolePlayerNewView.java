@@ -7,7 +7,6 @@ import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
-import com.googlecode.lanterna.screen.Screen;
 import towerdefense.document.CurrentPlayer;
 import towerdefense.document.Document;
 import towerdefense.document.Player;
@@ -29,12 +28,12 @@ public class ConsolePlayerNewView extends PlayerNewView {
     }
 
     @Override
-    protected void displayInput() {
+    protected void handleInput() {
         KeyStroke keyStroke = null;
         StringBuilder sb = new StringBuilder();
         KeyType keyType = null;
         TextGraphics textGraphics = screen.newTextGraphics();
-    startPosition = startPosition.withRelativeRow(1);
+        startPosition = startPosition.withRelativeRow(1);
         Boolean creatingPlayer = true;
 
         while (creatingPlayer) {
@@ -103,8 +102,8 @@ public class ConsolePlayerNewView extends PlayerNewView {
         terminalSize = screen.getTerminalSize();
         startPosition = new TerminalPosition(
                 (terminalSize.getColumns() - label.length() - 10) / 2, (terminalSize.getRows() - 6) / 2);
-            displayDoubleLineBox();
-            screen.setCursorPosition(startPosition.withRelative(1, 2));
+        displayDoubleLineBox();
+        screen.setCursorPosition(startPosition.withRelative(1, 2));
     }
 
     private void displayDoubleLineBox() {

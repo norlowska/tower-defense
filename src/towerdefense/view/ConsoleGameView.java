@@ -116,6 +116,7 @@ public class ConsoleGameView extends GameView {
 
     @Override
     protected void displayMap() {
+        //document.getGame().Timer();
         TerminalPosition startPosition = new TerminalPosition(0,0);
         Iterator<Field> iterator = currentMap.iterator();
         int column = 0;
@@ -138,18 +139,11 @@ public class ConsoleGameView extends GameView {
                 startPosition = startPosition.withRelativeColumn(6);
             }
         }
-        while(true) {
-            KeyStroke keyStroke = null;
             try {
                 screen.refresh();
-                keyStroke = screen.readInput();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            handleKeyStroke(keyStroke);
-            displayDetails();
-            displayMap();
-        }
     }
 
     @Override
@@ -157,6 +151,75 @@ public class ConsoleGameView extends GameView {
         currentMap = document.getCurrentMap();
         screen.setCursorPosition(null);
         screen.clear();
+    }
+
+    @Override
+    protected void handleInput() {
+        KeyStroke keyStroke = null;
+        KeyType keyType = null;
+        MoveIterator<Field> moveIterator = currentMap.iteratorMove();
+        while(true) {
+            try {
+                keyStroke = screen.readInput();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            keyType = keyStroke.getKeyType();
+            switch (keyType){
+                case F1:
+                    selectedTower = towers.get(0);
+                    break;
+                case F2:
+                    selectedTower = towers.get(1);
+                    break;
+                case F3:
+                    selectedTower = towers.get(2);
+                    break;
+                case F4:
+                    selectedTower = towers.get(3);
+                    break;
+                case F5:
+                    selectedTower = towers.get(4);
+                    break;
+                case F6:
+                    selectedTower = towers.get(5);
+                    break;
+                case F7:
+                    selectedTower = towers.get(6);
+                    break;
+                case F8:
+                    selectedTower = towers.get(7);
+                    break;
+            }
+
+            if(selectedTower != null) {
+                if (selectedField == null) selectedField = currentMap.iterator().next();
+                switch (keyType) {
+                    case ArrowDown:
+                        selectedField = moveIterator.down();
+                        break;
+                    case ArrowUp:
+                        selectedField = moveIterator.up();
+                        break;
+                    case ArrowLeft:
+                        selectedField = moveIterator.left();
+                        break;
+                    case ArrowRight:
+                        selectedField = moveIterator.right();
+                        break;
+                    case Enter:
+                        System.out.println("Enter");
+                        break;
+                }
+            }
+            System.out.println("Sprawdzam klawisz");
+            //break;
+           displayWindow();
+            displayBoughtTowers();
+            displayDetails();
+            displayMap();
+        }
+       // document.notifyView();
     }
 
     private void displayField(TerminalPosition startPosition, Field field) {
@@ -229,54 +292,6 @@ public class ConsoleGameView extends GameView {
                 return TextColor.ANSI.WHITE;
             default:
                 return TextColor.ANSI.DEFAULT;
-        }
-    }
-
-    private void handleKeyStroke(KeyStroke keyStroke) {
-        KeyType keyType = keyStroke.getKeyType();
-
-        switch (keyType){
-            case F1:
-                selectedTower = towers.get(0);
-                break;
-            case F2:
-                selectedTower = towers.get(1);
-                break;
-            case F3:
-                selectedTower = towers.get(2);
-                break;
-            case F4:
-                selectedTower = towers.get(3);
-                break;
-            case F5:
-                selectedTower = towers.get(4);
-                break;
-            case F6:
-                selectedTower = towers.get(5);
-                break;
-            case F7:
-                selectedTower = towers.get(6);
-                break;
-            case F8:
-                selectedTower = towers.get(7);
-                break;
-        }
-
-        if(selectedTower != null) {
-            if(selectedField == null) selectedField = currentMap.iterator().next();
-            switch(keyType) {
-                case ArrowDown:
-                    break;
-                case ArrowUp:
-                    break;
-                case ArrowLeft:
-                    break;
-                case ArrowRight:
-                    break;
-                case Enter:
-                    System.out.println("Enter");
-                    break;
-            }
         }
     }
 }

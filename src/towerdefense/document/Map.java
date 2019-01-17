@@ -115,6 +115,65 @@ public class Map implements Iterable<Field>{
         };
     }
 
+    public class moveIterator implements MoveIterator<Field>{
+        int row = 0, col = 0;
+
+        public Field right(){
+
+            if(col == map.get(row).size() - 1){
+                col = 0;
+                return map.get(row).get(col);
+            }
+            return map.get(row).get(++col);
+
+        }
+
+        public Field left(){
+
+            if(col == 0){
+                col = map.get(row).size() - 1;
+                return map.get(row).get(col);
+            }
+            return map.get(row).get(--col);
+
+        }
+
+        public Field down(){
+
+            if(row == map.size() - 1){
+                row = 0;
+                return map.get(row).get(col);
+            }
+            return map.get(++row).get(col);
+        }
+
+        public Field up(){
+
+            if(row == 0){
+                row = map.size() - 1;
+                return map.get(row).get(col);
+            }
+            return map.get(--row).get(col);
+        }
+
+        public boolean hasRight(){
+            return true;
+        }
+        public boolean hasLeft(){
+            return true;
+        }
+        public boolean hasUp(){
+            return true;
+        }
+        public boolean hasDown(){
+            return true;
+        }
+    }
+
+    public MoveIterator<Field> iteratorMove(){
+        return new moveIterator();
+    }
+
 
     /**
      * Zwraca mapę.

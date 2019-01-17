@@ -41,7 +41,7 @@ public class ConsoleMenuView extends MenuView {
     protected void displayOptions() {
         TextGraphics textGraphics = screen.newTextGraphics();
         textGraphics.setForegroundColor(TextColor.ANSI.RED);
-        while (true) {
+      //  while (true) {
             screen.setCursorPosition(startPosition.withRelativeRow(currentSelection));
             for (int i = 0; i < 3; i++) {
                 if (i == currentSelection) {
@@ -70,18 +70,11 @@ public class ConsoleMenuView extends MenuView {
                 }
             }
 
-            KeyStroke keyStroke;
-
             try {
                 screen.refresh();
-                keyStroke = screen.readInput();
-                handleKeysStroke(keyStroke);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-
-        }
     }
 
     @Override
@@ -101,33 +94,44 @@ public class ConsoleMenuView extends MenuView {
         }
     }
 
-    private void handleKeysStroke(KeyStroke keyStroke) {
-        KeyType keyType = keyStroke.getKeyType();
-        switch (keyType) {
-            case ArrowDown:
-                currentSelection = (currentSelection + 1) % 3;
-                break;
-            case ArrowUp:
-                currentSelection = (currentSelection - 1 + 3) % 3;
-                break;
-            case Escape:
-                document.exit();
-                break;
-            case Enter:
-                switch (currentSelection) {
-                    case 0:
-                        document.switchToView(new ConsoleGameView(document));
-                        render();
-                        break;
-                    case 1:
-                        document.switchToView(new ConsolePlayerSelectView(document));
-                        render();
-                        break;
-                    case 2:
-                        document.exit();
-                        break;
-                }
-                break;
+    @Override
+    protected void handleInput() {
+        KeyStroke keyStroke = null;
+        KeyType keyType = null;
+        while(true) {
+            try {
+                keyStroke = screen.readInput();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            keyType = keyStroke.getKeyType();
+            switch (keyType) {
+                case ArrowDown:
+                    currentSelection = (currentSelection + 1) % 3;
+                    break;
+                case ArrowUp:
+                    currentSelection = (currentSelection - 1 + 3) % 3;
+                    break;
+                case Escape:
+                    document.exit();
+                    break;
+                case Enter:
+                    switch (currentSelection) {
+                        case 0:
+                            document.switchToView(new ConsoleGameView(document));
+                            break;
+                        case 1:
+                            document.switchToView(new ConsolePlayerSelectView(document));
+                            break;
+                        case 2:
+                            document.exit();
+                            break;
+                    }
+                    break;
+            }
+            displayWindow();
+            displayGreeting();
+            displayOptions();
         }
     }
 }
