@@ -8,12 +8,13 @@ import towerdefense.document.Tower;
 public class IceTower extends Tower {
 
 	public IceTower() {
-		super(12, 100,7, 1.1, Color.WHITE);
+		super(12, 100,7, 1.1);
+		super.setName("Ice");
 	}
 
 	@Override
 	public void setIcon() {
-		super.setIcon("assets/towerdefense.document.towers/IceTower.txt");
+		super.setIcon("data/towers/IceTower.txt");
 	}
 
 }

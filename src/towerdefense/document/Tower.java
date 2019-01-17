@@ -17,13 +17,13 @@ public abstract class Tower {
     Color color;
     double speed;
 
-    public Tower(int damage, int price, int range, double speed, Color color) {
+    public Tower(int damage, int price, int range, double speed) {
         this.damage = damage;
         this.price = price;
         this.range = range;
         setIcon();
         this.speed = speed;
-        this.color = color;
+        this.color = Color.YELLOW;
     }
 
     public int getDamage() {

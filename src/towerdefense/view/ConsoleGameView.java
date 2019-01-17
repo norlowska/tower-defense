@@ -6,24 +6,95 @@ import com.googlecode.lanterna.graphics.BasicTextImage;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.graphics.TextImage;
 import towerdefense.document.*;
+import towerdefense.document.towers.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class ConsoleGameView extends GameView {
     private Map currentMap;
+    private CurrentPlayer currentPlayer;
+    private final int fieldWidth = 6;
+    private final int fieldHeight = 5;
+    private final int characterWidth = 4;
+    private final int characterHeight = 3;
+    private List<Tower> towers;
+
+
     public ConsoleGameView(Document document) {
         super(document, "Console");
+        currentPlayer = document.getCurrentPlayer();
+        towers = new ArrayList<>();
+        towers.add(new ArcherTower());
+        towers.add(new EarthTower());
+        towers.add(new ElectricTower());
+        towers.add(new FireTower());
+        towers.add(new ForceTower());
+        towers.add(new IceTower());
+        towers.add(new NuclearTower());
+        towers.add(new WaterTower());
     }
 
     @Override
     protected void displayBoughtTowers() {
+        TerminalPosition startPosition = new TerminalPosition(0,6* fieldHeight);
+        TextGraphics textGraphics = screen.newTextGraphics();
+        textGraphics.setForegroundColor(TextColor.ANSI.WHITE);
+        textGraphics.drawLine(startPosition, startPosition.withRelativeColumn(12* fieldWidth -1),
+                Symbols.DOUBLE_LINE_HORIZONTAL);
+        textGraphics.setCharacter(startPosition.withRelativeColumn(12* fieldWidth),
+                Symbols.DOUBLE_LINE_BOTTOM_RIGHT_CORNER);
+        startPosition = startPosition.withRelativeRow(2);
+        TerminalSize boughtTowersBoxSize = null;
+        try {
+            boughtTowersBoxSize = new TerminalSize(terminal.getTerminalSize().getColumns(), 20);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String title = "TOWERS";
+        String hint = "Press number of selected tower";
+        textGraphics.putString(startPosition.withRelativeColumn((boughtTowersBoxSize.getColumns() - title.length()) / 2), title, SGR.BOLD);
+        startPosition = startPosition.withRelativeRow(2);
+        textGraphics.putString(startPosition.withRelativeColumn((boughtTowersBoxSize.getColumns() - hint.length()) / 2), hint, SGR.ITALIC);
+        startPosition = startPosition.withRelative(6,2);
+        int i = 1;
 
+        for(Tower t : towers) {
+            displayTower(startPosition, t);
+            textGraphics.putString(startPosition.withRelativeRow(characterHeight + 1), Integer.toString(i) + ' ' + t.getName());
+            i++;
+            startPosition = startPosition.withRelativeColumn(characterWidth + 9);
+        }
     }
 
     @Override
     protected void displayDetails() {
-
+        TerminalPosition startPosition = new TerminalPosition(12* fieldWidth,0);
+        TextGraphics textGraphics = screen.newTextGraphics();
+        textGraphics.setForegroundColor(TextColor.ANSI.WHITE);
+        textGraphics.drawLine(startPosition, startPosition.withRelativeRow(6* fieldHeight -1),
+                Symbols.DOUBLE_LINE_VERTICAL);
+        TerminalSize boughtTowersBoxSize = null;
+        try {
+            boughtTowersBoxSize = new TerminalSize(terminal.getTerminalSize().getColumns() - startPosition.getColumn(), 6*fieldHeight);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        startPosition = startPosition.withRelativeRow(1);
+        String title = "Hello, " + currentPlayer.getNickname();
+        textGraphics.putString(startPosition.withRelativeColumn((boughtTowersBoxSize.getColumns() - title.length()) / 2), title, SGR.BOLD);
+        startPosition = startPosition.withRelativeRow(3);
+        title = "Your money: " + currentPlayer.getMoney();
+        textGraphics.putString(startPosition.withRelativeColumn((boughtTowersBoxSize.getColumns() - title.length()) / 2), title, SGR.BOLD);
+        startPosition = startPosition.withRelativeRow(5);
+        String details = "Your goal is to defend\nyour territory against enemies.\nSelect tower\n and place it on map with keys,\nalong their path of attack,\nto stop them from\ndestroying your base.\nSurvive all waves of enemies attacks\nto win map.";
+        String parts[] = details.split("\n");
+        for(String part : parts) {
+            textGraphics.putString(startPosition.withRelativeColumn((boughtTowersBoxSize.getColumns() - part.length()) / 2), part);
+            startPosition = startPosition.withRelativeRow(2);
+        }
     }
 
     @Override
@@ -36,8 +107,6 @@ public class ConsoleGameView extends GameView {
 
             currentField = iterator.next();
             displayField(startPosition, currentField);
-            System.out.println(column);
-            System.out.println(currentField);
             if(currentField instanceof FieldRoad && ((FieldRoad) currentField).getEnemy()!=null) {
                 displayEnemy(startPosition.withRelative(1,1),((FieldRoad) currentField).getEnemy());
             } else if (currentField instanceof FieldTerrain && ((FieldTerrain)currentField).getTower()!=null) {
@@ -70,11 +139,11 @@ public class ConsoleGameView extends GameView {
     private void displayField(TerminalPosition startPosition, Field field) {
         TextGraphics textGraphics = screen.newTextGraphics();
         TextCharacter textCharacter;
-        TextImage fieldImage = new BasicTextImage(new TerminalSize(6, 5));
+        TextImage fieldImage = new BasicTextImage(new TerminalSize(fieldWidth, fieldHeight));
         TextColor color = getTextColor(field.getColor());
 
-        for (int row = 0, i = 0; row < 5; row++) {
-            for (int column = 0; column < 6; column++, i++) {
+        for (int row = 0; row < fieldHeight; row++) {
+            for (int column = 0; column < fieldWidth; column++) {
                 textCharacter = new TextCharacter(' ', textGraphics.getForegroundColor(), color, SGR.BOLD);
                 fieldImage.setCharacterAt(column, row, textCharacter);
             }
@@ -85,11 +154,11 @@ public class ConsoleGameView extends GameView {
     private void displayEnemy(TerminalPosition startPosition, Enemy enemy) {
         TextGraphics textGraphics = screen.newTextGraphics();
         TextCharacter textCharacter;
-        TextImage enemyImage = new BasicTextImage(new TerminalSize(4, 3));
+        TextImage enemyImage = new BasicTextImage(new TerminalSize(characterWidth, characterHeight));
         TextColor color = getTextColor(enemy.getColor());
 
-        for (int row = 0, i = 0; row < 3; row++) {
-            for (int column = 0; column < 4; column++, i++) {
+        for (int row = 0, i = 0; row < characterHeight; row++) {
+            for (int column = 0; column < characterWidth; column++, i++) {
                 textCharacter = new TextCharacter(' ', textGraphics.getForegroundColor(), color, SGR.BOLD);
                 enemyImage.setCharacterAt(column, row, textCharacter);
             }
@@ -101,12 +170,12 @@ public class ConsoleGameView extends GameView {
         String stringTowerIcon = tower.getIcon();
         TextColor color = getTextColor(tower.getColor());
 
-        TextImage towerIcon = new BasicTextImage(new TerminalSize(4, 3));
+        TextImage towerIcon = new BasicTextImage(new TerminalSize(characterWidth, characterHeight));
         TextGraphics textGraphics = screen.newTextGraphics();
         TextCharacter textCharacter;
 
-        for (int row = 0, i = 0; row < 3; row++) {
-            for (int column = 0; column < 4; column++, i++) {
+        for (int row = 0, i = 0; row < characterHeight; row++) {
+            for (int column = 0; column < characterWidth; column++, i++) {
                 textCharacter = new TextCharacter(stringTowerIcon.charAt(i), color, textGraphics.getBackgroundColor(),
                         SGR.BOLD);
                 towerIcon.setCharacterAt(column, row, textCharacter);

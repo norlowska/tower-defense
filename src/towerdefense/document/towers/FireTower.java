@@ -8,12 +8,13 @@ import towerdefense.document.Tower;
 public class FireTower extends Tower {
 
 	public FireTower() {
-		super(12, 100,7, 1.1, Color.WHITE);
+		super(12, 100,7, 1.1);
+		super.setName("Fire");
 	}
 
 	@Override
 	public void setIcon() {
-		super.setIcon("assets/towerdefense.document.towers/FireTower.txt");
+		super.setIcon("data/towers/FireTower.txt");
 	}
 
 }

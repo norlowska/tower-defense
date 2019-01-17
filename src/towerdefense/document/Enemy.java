@@ -9,15 +9,15 @@ import java.io.IOException;
 
 public class Enemy implements IFlyweight {
 
-    protected final int maxHealth;
-    protected final double speed;
+    protected int maxHealth;
+    protected double speed;
     protected String name;
     protected Color color;
 
-    public Enemy(int maxHealth, double speed, Color color) {
+    public Enemy(int maxHealth, double speed) {
         this.maxHealth = maxHealth;
         this.speed = speed;
-        this.color = color;
+        this.color = Color.MAGENTA;
     }
 
     public String getName() {
