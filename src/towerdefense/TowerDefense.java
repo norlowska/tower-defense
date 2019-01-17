@@ -22,7 +22,7 @@ public class TowerDefense {
      * @throws InterruptedException
      */
     public static void main(String[] args) throws InterruptedException {
-        Game game = new Game();
+        //Game game = new Game();
         Document doc = new Document();
 
         //Console

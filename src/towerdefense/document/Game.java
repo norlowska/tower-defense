@@ -14,13 +14,18 @@ import com.googlecode.lanterna.terminal.Terminal;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Game {
     protected ArrayList<Player> players;
     protected CurrentPlayer currentPlayer;
     protected Map currentMap;
+    private Document document;
 
-    public Game() {
+    public Game(Document document) {
+        this.document = document;
         players = new ArrayList<Player>();
         currentPlayer = CurrentPlayer.getInstance();
         currentMap = null;
@@ -66,6 +71,19 @@ public class Game {
         } catch (IOException ex) {
             System.out.println("Error reading file '" + playersFileName + "'");
         }
+    }
+
+    public void Timer(){
+        Runnable helloRunnable = new Runnable() {
+            public void run() {
+                System.out.println("Hello world");
+
+            }
+        };
+
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+
+        executor.scheduleAtFixedRate(helloRunnable, 0, 500, TimeUnit.MILLISECONDS);
     }
  //   public void setCurrentPlayer(CurrentPlayer currentPlayer) {
       //  this.currentPlayer = currentPlayer;
