@@ -24,7 +24,7 @@ public class ConsoleMenuView extends MenuView {
 
 
     public ConsoleMenuView(Document document){
-        super(document);
+        super(document, "Console");
         currentPlayer = document.getCurrentPlayer();
         players = document.getPlayers();
     }

@@ -6,8 +6,8 @@ import towerdefense.document.Document;
 import java.io.IOException;
 
 public abstract class PlayerSelectView extends View {
-    public PlayerSelectView(Document document) {
-        super(document);
+    public PlayerSelectView(Document document, String mode) {
+        super(document, mode);
     }
 
     @Override

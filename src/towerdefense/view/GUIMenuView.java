@@ -17,7 +17,7 @@ public class GUIMenuView extends MenuView {
     private CurrentPlayer currentPlayer;
 
     public GUIMenuView(Document document) {
-        super(document);
+        super(document, "GUI");
         currentPlayer = document.getCurrentPlayer();
     }
 

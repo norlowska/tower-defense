@@ -29,7 +29,7 @@ public class TowerDefense {
         View menuConsole = new ConsoleMenuView(doc);
         doc.switchToView(menuConsole);
         //GUI
-       // View menuGUI = new GUIMenuView(doc);
+   //     View menuGUI = new GUIMenuView(doc);
        // doc.switchToView(menuGUI);
 
         return;

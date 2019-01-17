@@ -4,7 +4,7 @@ import towerdefense.document.Document;
 
 public class GUIGameView extends GameView {
     public GUIGameView(Document document) {
-        super(document);
+        super(document, "GUI");
     }
 
     @Override

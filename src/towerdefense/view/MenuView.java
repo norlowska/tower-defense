@@ -3,8 +3,8 @@ package towerdefense.view;
 import towerdefense.document.Document;
 
 public abstract class MenuView extends View {
-    public MenuView(Document document) {
-        super(document);
+    public MenuView(Document document, String mode) {
+        super(document, mode);
     }
 
     @Override

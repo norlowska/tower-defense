@@ -3,8 +3,8 @@ package towerdefense.view;
 import towerdefense.document.Document;
 
 public abstract class GameView extends View {
-    public GameView(Document document) {
-        super(document);
+    public GameView(Document document, String mode) {
+        super(document, mode);
     }
 
     @Override

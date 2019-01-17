@@ -13,7 +13,7 @@ import java.util.Iterator;
 public class ConsoleGameView extends GameView {
     private Map currentMap;
     public ConsoleGameView(Document document) {
-        super(document);
+        super(document, "Console");
     }
 
     @Override

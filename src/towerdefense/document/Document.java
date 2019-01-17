@@ -10,7 +10,7 @@ public class Document {
 
     public Document() {
         game = new Game(this);
-        currentView = new ConsoleMenuView(this);
+        currentView = null;
     }
     public void switchToView(View view) {
         currentView = view;

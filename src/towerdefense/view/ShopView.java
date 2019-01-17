@@ -4,8 +4,8 @@ import towerdefense.document.Document;
 import towerdefense.document.Tower;
 
 public abstract class ShopView extends View {
-    public ShopView(Document document) {
-        super(document);
+    public ShopView(Document document, String mode) {
+        super(document, mode);
     }
 
     @Override

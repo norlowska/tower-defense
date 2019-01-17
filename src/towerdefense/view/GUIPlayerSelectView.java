@@ -22,7 +22,7 @@ public class GUIPlayerSelectView extends PlayerSelectView {
     private int exist = 0;
 
     public GUIPlayerSelectView(Document document) {
-        super(document);
+        super(document, "GUI");
         currentPlayer = document.getCurrentPlayer();
         playersList = document.getPlayers();
     }
