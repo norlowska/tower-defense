@@ -9,32 +9,14 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
-
-/**
- * Reprezentuje mapę w grze, która składa się z pól-ścieżek,
- * po których mogą się przemieszczać potwory oraz pól-terenów,
- * na których gracz może ustawić wieże. Pola te są wizualnie
- * odróżnialne dzięki kolorom zapisanym w atrybucie <i>colorScheme</i>
- */
 public class Map implements Iterable<Field>{
-
-    /**
-     * Schemat kolorów mapy.
-     * colorScheme[0]   kolor pól-terenów
-     * colorScheme[1]   kolor pól-ścieżek
-     */
     protected Color[] colorScheme = new Color[2];
-    /**
-     * Dwuwymiarowa tablica będąca mapą.
-     */
     ArrayList<ArrayList<Field>> map = new ArrayList<ArrayList<Field>>();
     String mapName;
 
     public Map(String mapName) {
         this.mapName = mapName;
-    }
-    public Map(){
-
+        readMapLayout();
     }
 
     public String getMapName() {
@@ -43,29 +25,35 @@ public class Map implements Iterable<Field>{
 
 
 
-    /**
-     * Odczytywanie wyglądu mapy z pliku.
-     *
-     * @param name  nazwa mapy
-     * @return array list   mapa
-     */
     public ArrayList<ArrayList<Field>> readMapLayout() {
         String mapFile = "data/" + mapName + ".txt";
         String line = null;
 
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(mapFile));
-
+            String[] splitted;
             int numberOfArrays = 0;
+            if((line = bufferedReader.readLine()) != null) {
+                splitted = line.split(" ");
+                try{
+                    colorScheme[0] = Color.valueOf(splitted[0]);
+                    colorScheme[1] = Color.valueOf(splitted[1]);
+                } catch(IllegalArgumentException e) {
+                    System.out.println("Illegal color value. Default color scheme was set.");
+                    colorScheme[0] = Color.BLACK;
+                    colorScheme[1] = Color.WHITE;
+                }
+
+            }
             while ((line = bufferedReader.readLine()) != null) {
                 map.add(new ArrayList<Field>());
-                String[] splited = line.split(" ");
+                splitted = line.split(" ");
 
-                for (int i = 0; i < splited.length; i++) {
+                for (int i = 0; i < splitted.length; i++) {
                     Field f;
-                    boolean isStart = (splited[i].charAt(1) == '1');
-                    boolean isFinish = (splited[i].charAt(2) == '1');
-                    if (Character.getNumericValue(splited[i].charAt(0)) == 1) {
+                    boolean isStart = (splitted[i].charAt(1) == '1');
+                    boolean isFinish = (splitted[i].charAt(2) == '1');
+                    if (Character.getNumericValue(splitted[i].charAt(0)) == 1) {
                         f = new FieldTerrain(isStart, isFinish, colorScheme[0], null);
                     } else {
                         f = new FieldRoad(isStart, isFinish, colorScheme[1], null);
@@ -77,9 +65,9 @@ public class Map implements Iterable<Field>{
             bufferedReader.close();
             return map;
         } catch (FileNotFoundException ex) {
-            System.out.println("Unable to open file '" + mapFile + "'");
+            System.out.println("Unable to open map layout file '" + mapFile + "'");
         } catch (IOException ex) {
-            System.out.println("Error reading file '" + mapFile + "'");
+            System.out.println("Error reading map layout file file '" + mapFile + "'");
         }
         return map;
     }
@@ -91,25 +79,19 @@ public class Map implements Iterable<Field>{
             private int row = 0;
             private int column = 0;
 
-            public Field first(){
-                return map.get(0).get(0);
-            }
-
             @Override
             public boolean hasNext() {
-                if(row == map.get(0).size()-1 && column == map.size()-1 )
+                if(row == map.size())
                     return false;
                 return true;
             }
 
             @Override
             public Field next() {
-                if (!hasNext()) {
-                    throw new NoSuchElementException();
-                }
-                if (column == (map.size() - 1)) {
+                if (column == (map.get(row).size() - 1)) {
                     column = 0;
-                    return map.get(row++).get(map.size()-1);
+                    row++;
+                    return map.get(row-1).get(map.get(row-1).size()-1);
                 } else {
                     return map.get(row).get(column++);
                 }

@@ -11,14 +11,12 @@ public class Enemy implements IFlyweight {
 
     protected final int maxHealth;
     protected final double speed;
-    protected String icon;
     protected String name;
     protected Color color;
 
-    public Enemy(int maxHealth, double speed, Color color, String filename) {
+    public Enemy(int maxHealth, double speed, Color color) {
         this.maxHealth = maxHealth;
         this.speed = speed;
-        setIcon(filename);
         this.color = color;
     }
 
@@ -33,30 +31,15 @@ public class Enemy implements IFlyweight {
         return speed;
     }
 
-    protected void setIcon(String filename) {
-        StringBuilder sb = new StringBuilder();
-        String line = null;
-        int nrLine = 0;
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(filename));
-
-            while ((line = bufferedReader.readLine()) != null || nrLine < 4) {
-                sb.append(line);
-                nrLine++;
-            }
-            bufferedReader.close();
-        } catch (FileNotFoundException ex) {
-            System.out.println(
-                    "Unable to open file '" + filename + "'");
-        } catch (IOException ex) {
-            System.out.println(
-                    "Error reading file '" + filename + "'");
-        }
-        this.icon = sb.toString();
+    public Color getColor() {
+        return color;
     }
 
     @Override
     public void checkColorUpdate(int currentHealth) {
-
+        double result = (double)currentHealth/(double)maxHealth;
+        if(result <= 0.1) {
+            color = Color.RED;
+        }
     }
 }

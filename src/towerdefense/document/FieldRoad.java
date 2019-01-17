@@ -8,7 +8,11 @@ public class FieldRoad extends Field {
     public FieldRoad(boolean start, boolean finish, Color color, Enemy enemy) {
         super(start, finish, color);
         this.enemy = enemy;
-        currentHealth = enemy.getMaxHealth();
+        if(enemy != null) {
+            currentHealth = enemy.getMaxHealth();
+        } else {
+            currentHealth = 0;
+        }
     }
 
     public Enemy getEnemy() {

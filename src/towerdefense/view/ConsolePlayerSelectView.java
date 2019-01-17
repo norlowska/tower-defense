@@ -78,7 +78,6 @@ public class ConsolePlayerSelectView extends PlayerSelectView {
         displayDoubleLineBox(nicknameMaxLength);
         TextGraphics textGraphics = screen.newTextGraphics();
         startPosition = startPosition.withRelative(2, 2);
-        System.out.println("Label " + startPosition);
         textGraphics.putString(startPosition, label);
         startPosition = startPosition.withRelative(1, 2);
     }
