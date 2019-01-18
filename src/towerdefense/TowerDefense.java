@@ -5,20 +5,14 @@
  */
 package towerdefense;
 
-//import towerdefense.document.towers.EarthTower;
-
-import towerdefense.document.CurrentPlayer;
 import towerdefense.document.Document;
-import towerdefense.document.Game;
 import towerdefense.view.ConsoleMenuView;
 import towerdefense.view.GUIMenuView;
-import towerdefense.view.GUIPlayerSelectView;
 import towerdefense.view.View;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
 
 public class TowerDefense {
     /**
@@ -75,16 +69,21 @@ public class TowerDefense {
 //        1
 //        TowerDefense towerDefense = new TowerDefense();
 
+        Document doc = new Document();
+        if(args.length!= 0 && args[0].equals("GUI")) {
+            //GUI
+             View menuGUI = new GUIMenuView(doc);
+             doc.switchToView(menuGUI);
+        } else {
+            View menuConsole = new ConsoleMenuView(doc);
+            doc.switchToView(menuConsole);
+        }
 
 //        2
         //Game game = new Game();
-        Document doc = new Document();
         //Console
-        View menuConsole = new ConsoleMenuView(doc);
-        doc.switchToView(menuConsole);
-        //GUI
-//        View menuGUI = new GUIMenuView(doc);
-//        doc.switchToView(menuGUI);
+
+
 
         return;
     }

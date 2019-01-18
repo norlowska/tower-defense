@@ -16,6 +16,7 @@ import java.util.List;
 
 public class GUIGameView extends GameView {
     private CurrentPlayer currentPlayer;
+    //Przyciski z wieżami
     private JButton button1;
     private JButton button2;
     private JButton button3;
@@ -24,6 +25,7 @@ public class GUIGameView extends GameView {
     private JButton button6;
     private JButton button7;
     private JButton button8;
+    //Obrazki reprezentujące wieże
     private Image i1, i2, i3, i4, i5, i6, i7, i8;
     private JPanel mainPanel;
     private JLabel towersLabel;
@@ -76,7 +78,7 @@ public class GUIGameView extends GameView {
         playerNameLabel.setText("Hello, " + currentPlayer.getNickname() + "!");
         moneyLabel.setText("Your money: " + currentPlayer.getMoney());
         gameGoalLabel.setText(convertToMultiline("Your goal is to defend \n your territory against enemies." +
-                "\nSelect tower with function keys\n and place it on map,\n along enemies' path off attack," +
+                "\nSelect tower with function keys\n and place it on map,\n along enemies' path of attack," +
                 "\n using arrows.\n Enter accepts your choice.\nSurvive all waves of enemies attacks\n to win map."));
     }
 
