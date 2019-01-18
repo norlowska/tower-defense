@@ -23,6 +23,8 @@ public class View {
     public void render(){
     }
 
+    public void onUpdate() {}
+
     public View(Document document, String mode) {
         this.document = document;
         switch(mode) {

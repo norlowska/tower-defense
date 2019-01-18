@@ -17,6 +17,10 @@ public abstract class GameView extends View {
         handleInput();
     }
 
+    public final void onUpdate() {
+        System.out.println("UPDATE");
+    }
+
     protected abstract void displayBoughtTowers();
 
     protected  abstract void displayDetails();

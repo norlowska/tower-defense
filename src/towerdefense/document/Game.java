@@ -93,6 +93,7 @@ public class Game {
         final Field realStartField = startField;
         int interval = 0;
         enemyPosition.add(startPoint);
+        //document.notifyView();
         MyRunnable helloRunnable = new MyRunnable(interval,currentMap,startField, enemyPosition);
 
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);

@@ -79,6 +79,10 @@ public abstract class Tower {
         return name;
     }
 
+    public Image getImage() {
+        return image;
+    }
+
     protected void setIcon(String filename) {
         StringBuilder sb = new StringBuilder();
         String line = null;

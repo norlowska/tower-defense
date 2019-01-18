@@ -35,6 +35,7 @@ public class GUIGameView extends GameView {
     private MapPanel mapPanel;
     private Graphics graphics;
     private int fieldWidth = 70, fieldHeight = 70;
+ //   Enemy enemy = new Enemy(40,1);
     private java.util.List<Tower> towers;
 
 
@@ -97,6 +98,9 @@ public class GUIGameView extends GameView {
         gameGoalLabel.setText(convertToMultiline("Your goal is to defend \n your territory against enemies." +
                 "\nSelect tower with function keys\n and place it on map,\n along enemies' path of attack," +
                 "\n using arrows.\n Enter accepts your choice.\nSurvive all waves of enemies attacks\n to win map."));
+        if(!document.getGame().isTimerOn()){
+            document.getGame().Timer();
+        }
     }
 
     @Override
@@ -135,7 +139,12 @@ public class GUIGameView extends GameView {
 
     @Override
     protected void handleInput() {
-
+        /*while(true) {
+            mapPanel.repaint();
+            try { Thread.sleep(5); } catch (Exception e) {}
+        }*/
+      //  try { Thread.sleep(1000); } catch (Exception e) {}
+      //  mapPanel.repaint();
     }
 
     protected void displayMap(Graphics g) {
@@ -144,11 +153,11 @@ public class GUIGameView extends GameView {
     }
 
     protected void displayTower(Graphics g, int x, int y, Tower tower) {
-
+        g.drawImage(tower.getImage(), x, y, null);
     }
 
     protected void displayEnemy(Graphics g, int x, int y, Enemy enemy) {
-
+        g.drawImage(enemy.getImage(), x, y, null);
     }
 
     public class MapPanel extends JPanel {
@@ -160,10 +169,7 @@ public class GUIGameView extends GameView {
 
         @Override
         public void paintComponent(Graphics g) {
-            /*
-            }*/
             gameView.displayMap(g);
-
         }
 
 

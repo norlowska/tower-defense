@@ -2,10 +2,9 @@ package towerdefense.document;
 
 import com.googlecode.lanterna.TextColor;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.io.*;
 
 public class Enemy implements IFlyweight {
 
@@ -13,11 +12,20 @@ public class Enemy implements IFlyweight {
     protected double speed;
     protected String name;
     protected Color color;
+    protected Image image;
 
     public Enemy(int maxHealth, double speed) {
         this.maxHealth = maxHealth;
         this.speed = speed;
         this.color = Color.MAGENTA;
+        try {
+            this.image = ImageIO.read(new FileInputStream(new File("data/monster.png")));
+            if(this.image != null) {
+                System.out.println("Odczytano potwora");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getName() {
@@ -33,6 +41,10 @@ public class Enemy implements IFlyweight {
 
     public Color getColor() {
         return color;
+    }
+
+    public Image getImage() {
+        return image;
     }
 
     @Override

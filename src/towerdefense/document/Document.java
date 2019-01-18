@@ -20,6 +20,7 @@ public class Document {
 
     public void notifyView() {
         currentView.render();
+        //currentView.onUpdate();
     }
 
     public void notifyGame(){}
