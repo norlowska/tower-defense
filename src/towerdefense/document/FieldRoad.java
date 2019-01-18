@@ -23,6 +23,8 @@ public class FieldRoad extends Field {
         this.enemy = enemy;
     }
 
+    public boolean isRoad(){return true;}
+
     public int getCurrentHealth() {
         return currentHealth;
     }

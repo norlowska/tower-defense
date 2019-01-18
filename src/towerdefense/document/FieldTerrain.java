@@ -11,4 +11,6 @@ public class FieldTerrain extends Field {
     public Tower getTower() {
         return tower;
     }
+
+    public boolean isRoad(){return false;}
 }

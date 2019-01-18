@@ -122,9 +122,16 @@ public class Map implements Iterable<Field>{
 
             if(col == map.get(row).size() - 1){
                 col = 0;
-                return map.get(row).get(col);
+            }else{
+                col++;
             }
-            return map.get(row).get(++col);
+            while(map.get(row).get(col).isRoad()){
+                col++;
+                if(col == map.get(row).size() - 1 && map.get(row).get(col).isRoad()){
+                    col = 0;
+                }
+            }
+            return map.get(row).get(col);
 
         }
 
@@ -132,9 +139,16 @@ public class Map implements Iterable<Field>{
 
             if(col == 0){
                 col = map.get(row).size() - 1;
-                return map.get(row).get(col);
+            }else{
+                col--;
             }
-            return map.get(row).get(--col);
+            while(map.get(row).get(col).isRoad()){
+                col--;
+                if(col == 0 && map.get(row).get(col).isRoad()){
+                    col = map.get(row).size() - 1;
+                }
+            }
+            return map.get(row).get(col);
 
         }
 
@@ -142,18 +156,32 @@ public class Map implements Iterable<Field>{
 
             if(row == map.size() - 1){
                 row = 0;
-                return map.get(row).get(col);
+            }else{
+                row++;
             }
-            return map.get(++row).get(col);
+            while(map.get(row).get(col).isRoad()){
+                row++;
+                if(row == map.size() - 1 && map.get(row).get(col).isRoad()){
+                    row = 0;
+                }
+            }
+            return map.get(row).get(col);
         }
 
         public Field up(){
 
             if(row == 0){
                 row = map.size() - 1;
-                return map.get(row).get(col);
+            }else{
+                row--;
             }
-            return map.get(--row).get(col);
+            while(map.get(row).get(col).isRoad()){
+                row--;
+                if(row == 0 && map.get(row).get(col).isRoad()){
+                    row = map.size() - 1;
+                }
+            }
+            return map.get(row).get(col);
         }
 
         public boolean hasRight(){

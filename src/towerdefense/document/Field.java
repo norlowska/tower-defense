@@ -24,6 +24,8 @@ public abstract class Field {
         return finish;
     }
 
+    public boolean isRoad(){return false;}
+
     public void setFinish(boolean finish) {
         this.finish = finish;
     }
