@@ -87,10 +87,10 @@ public class GUIGameView extends GameView {
     @Override
     protected void displayMap() {
         int x = 0, y = 0;
-        Iterator<Field> iterator = currentMap.iterator();
+        CheckAllFieldIterator checkAllFieldIterator = currentMap.checkAllFieldIterator();
         Field currentField;
-        while(iterator.hasNext()) {
-            currentField = iterator.next();
+        while(checkAllFieldIterator.hasNext()) {
+            currentField = (Field) checkAllFieldIterator.next();
             graphics.setColor(getAWTColor(currentField.getColor()));
             graphics.fillRect(x, y, fieldWidth, fieldHeight);
             x+=70;
