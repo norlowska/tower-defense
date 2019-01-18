@@ -1,13 +1,11 @@
 package towerdefense.view;
 
-import javafx.stage.Screen;
 import towerdefense.document.CurrentPlayer;
 import towerdefense.document.Document;
 import towerdefense.document.Tower;
 import towerdefense.document.towers.*;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,11 +50,11 @@ public class GUIGameView extends GameView {
     @Override
     protected void displayDetails() {
         System.out.println(currentPlayer.getNickname());
-        playerNameLabel.setText("Hello, " + currentPlayer.getNickname() + "!"); //dlaczego nie wyświetla?
+        playerNameLabel.setText("Hello, " + currentPlayer.getNickname() + "!");
         moneyLabel.setText("Your money: " + currentPlayer.getMoney());
-        gameGoalLabel.setText("Your goal is to defend \n your territory against enemies." +
+        gameGoalLabel.setText(convertToMultiline("Your goal is to defend \n your territory against enemies." +
                 "\nSelect tower with function keys\n and place it on map,\n along enemies' path off attack," +
-                "\n using arrows.\n Enter accepts your choice.\nSurvive all waves of enemies attacks\n to win map.");
+                "\n using arrows.\n Enter accepts your choice.\nSurvive all waves of enemies attacks\n to win map."));
     }
 
     @Override
@@ -78,6 +76,11 @@ public class GUIGameView extends GameView {
 
     @Override
     protected void handleInput() {
-        
+
+    }
+
+    public static String convertToMultiline(String orig)
+    {
+        return "<html>" + orig.replaceAll("\n", "<br>");
     }
 }
