@@ -97,7 +97,7 @@ public class ConsoleGameView extends GameView {
         title = "Your money: " + currentPlayer.getMoney();
         textGraphics.putString(startPosition.withRelativeColumn((boughtTowersBoxSize.getColumns() - title.length()) / 2), title, SGR.BOLD);
         startPosition = startPosition.withRelativeRow(3);
-        String details = "Your goal is to defend\nyour territory against enemies.\nSelect tower with function keys\n and place it on map,\n along enemies' path off attack,\n using arrows.\n Enter accepts your choice.\nSurvive all waves of enemies attacks\n to win map.";
+        String details = "Your goal is to defend\nyour territory against enemies.\nSelect tower with function keys\n and place it on map,\n along enemies' path of attack,\n using arrows.\n Enter accepts your choice.\nSurvive all waves of enemies attacks\n to win map.";
         String parts[] = details.split("\n");
         for(String part : parts) {
             textGraphics.putString(startPosition.withRelativeColumn((boughtTowersBoxSize.getColumns() - part.length()) / 2), part);
