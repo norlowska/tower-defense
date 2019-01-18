@@ -22,7 +22,7 @@ public class ArcherTower extends Tower {
 	@Override
 	public void setImage(){
 		try {
-			super.setImage("data/towersPNG/archer.png");
+			super.setImage("archer.png");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -22,7 +22,7 @@ public class NuclearTower extends Tower {
 	@Override
 	public void setImage() {
 		try {
-			super.setImage("data/towersPNG/nuclear.png");
+			super.setImage("nuclear.png");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

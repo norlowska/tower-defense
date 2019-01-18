@@ -22,7 +22,7 @@ public class FireTower extends Tower {
 	@Override
 	public void setImage() {
 		try {
-			super.setImage("data/towersPNG/fire.png");
+			super.setImage("fire.png");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -22,7 +22,7 @@ public class ForceTower extends Tower {
 	@Override
 	public void setImage() {
 		try {
-			super.setImage("data/towersPNG/force.png");
+			super.setImage("force.png");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

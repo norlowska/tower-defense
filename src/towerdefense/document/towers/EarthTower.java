@@ -22,7 +22,7 @@ public class EarthTower extends Tower {
     @Override
     public void setImage() {
         try {
-            super.setImage("data/towersPNG/earth.png");
+            super.setImage("earth.png");
         } catch (IOException e) {
             e.printStackTrace();
         }

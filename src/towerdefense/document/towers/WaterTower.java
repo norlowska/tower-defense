@@ -22,7 +22,7 @@ public class WaterTower extends Tower {
 	@Override
 	public void setImage() {
 		try {
-			super.setImage("data/towersPNG/water.png");
+			super.setImage("water.png");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

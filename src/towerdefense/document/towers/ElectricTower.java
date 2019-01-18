@@ -22,7 +22,7 @@ public class ElectricTower extends Tower {
 	@Override
 	public void setImage() {
 		try {
-			super.setImage("data/towersPNG/electric.png");
+			super.setImage("electric.png");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
