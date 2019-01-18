@@ -1,4 +1,4 @@
-Ania 300 map1
-Zosia 200 map1
-Marek 100 map1
-Krzysztof 500 map1
+Ania 300 mapTest
+Zosia 200 mapTest
+Marek 100 mapTest
+Krzysztof 500 mapTest

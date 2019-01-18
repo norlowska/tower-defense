@@ -13,7 +13,6 @@ import towerdefense.document.towers.*;
 import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class ConsoleGameView extends GameView {
@@ -33,6 +32,7 @@ public class ConsoleGameView extends GameView {
         currentPlayer = document.getCurrentPlayer();
         selectedField = null;
         selectedTower = null;
+        Enemy enemy = new Enemy(40,1);
         towers = new ArrayList<>();
         towers.add(new ArcherTower());
         towers.add(new EarthTower());
@@ -118,11 +118,11 @@ public class ConsoleGameView extends GameView {
     protected void displayMap() {
         //document.getGame().Timer();
         TerminalPosition startPosition = new TerminalPosition(0,0);
-        Iterator<Field> iterator = currentMap.iterator();
+        CheckAllFieldIterator checkAllFieldIterator = currentMap.checkAllFieldIterator();
         int column = 0;
         Field currentField;
-        while(iterator.hasNext()) {
-            currentField = iterator.next();
+        while(checkAllFieldIterator.hasNext()) {
+            currentField = (Field) checkAllFieldIterator.next();
             displayField(startPosition, currentField);
             if(currentField instanceof FieldRoad && ((FieldRoad) currentField).getEnemy()!=null) {
                 displayEnemy(startPosition.withRelative(1,1),((FieldRoad) currentField).getEnemy());
@@ -158,6 +158,10 @@ public class ConsoleGameView extends GameView {
         KeyStroke keyStroke = null;
         KeyType keyType = null;
         MoveIterator<Field> moveIterator = currentMap.iteratorMove();
+        if(!document.getGame().isTimerOn()){
+            document.getGame().Timer();
+        }
+
         while(true) {
             try {
                 keyStroke = screen.readInput();
@@ -193,7 +197,7 @@ public class ConsoleGameView extends GameView {
             }
 
             if(selectedTower != null) {
-                if (selectedField == null) selectedField = currentMap.iterator().next();
+                if (selectedField == null) selectedField = currentMap.checkAllFieldIterator().next();
                 switch (keyType) {
                     case ArrowDown:
                         selectedField = moveIterator.down();
@@ -209,10 +213,11 @@ public class ConsoleGameView extends GameView {
                         break;
                     case Enter:
                         System.out.println("Enter");
+                        ((FieldTerrain) selectedField).setTower(selectedTower);
                         break;
                 }
             }
-            System.out.println("Sprawdzam klawisz");
+            //System.out.println("Sprawdzam klawisz");
             //break;
            displayWindow();
             displayBoughtTowers();
