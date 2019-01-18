@@ -1,43 +1,43 @@
 package towerdefense.view;
 
-import towerdefense.document.CurrentPlayer;
-import towerdefense.document.Document;
-import towerdefense.document.Tower;
+import towerdefense.document.*;
 import towerdefense.document.towers.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class GUIGameView extends GameView {
+    private Map currentMap;
     private CurrentPlayer currentPlayer;
     //Przyciski z wieżami
-    private JButton button1;
-    private JButton button2;
-    private JButton button3;
-    private JButton button4;
-    private JButton button5;
-    private JButton button6;
-    private JButton button7;
-    private JButton button8;
+    private JButton button1, button2, button3, button4;
+    private JButton button5, button6, button7, button8;
     //Obrazki reprezentujące wieże
     private Image i1, i2, i3, i4, i5, i6, i7, i8;
     private JPanel mainPanel;
     private JLabel towersLabel;
-    private JPanel mapPanel;
     private JPanel infoPanel;
     private JLabel moneyLabel;
     private JLabel playerNameLabel;
     private JLabel gameGoalLabel;
+    private MapPanel mapPanel;
 
     public GUIGameView(Document document) {
         super(document, "GUI");
         currentPlayer = document.getCurrentPlayer();
+        currentMap = document.getCurrentMap();
+    }
+
+    private void createUIComponents() {
+        mapPanel = new MapPanel();
     }
 
     @Override
@@ -84,6 +84,7 @@ public class GUIGameView extends GameView {
 
     @Override
     protected void displayMap() {
+
 //        mapPanel
     }
 
@@ -104,9 +105,54 @@ public class GUIGameView extends GameView {
 
     }
 
+    public class MapPanel extends JPanel {
+        private int x = 0, y = 0;
+        private int fieldWidth = 6, fieldHeight = 5;
+
+        public MapPanel(){
+       //     setSize(new Dimension(12*fieldWidth*10,6*fieldHeight*10));
+       //     setBackground(Color.BLACK);
+        }
+
+        @Override
+        public void paintComponent(Graphics g) {
+            Iterator<Field> iterator = currentMap.iterator();
+            Field currentField;
+            while(iterator.hasNext()) {
+                currentField = iterator.next();
+                setBackground(getAWTColor(currentField.getColor()));
+            }
+
+
+        }
+
+
+    }
+
     public static String convertToMultiline(String orig)
     {
         return "<html>" + orig.replaceAll("\n", "<br>");
     }
 
+    private Color getAWTColor(towerdefense.document.Color color) {
+        switch (color) {
+            case BLACK:
+                return Color.BLACK;
+            case BLUE:
+                return Color.BLUE;
+            case CYAN:
+                return Color.CYAN;
+            case GREEN:
+                return Color.GREEN;
+            case MAGENTA:
+                return Color.MAGENTA;
+            case RED:
+                return Color.RED;
+            case YELLOW:
+                return Color.YELLOW;
+            case WHITE:
+            default:
+                return Color.WHITE;
+        }
+    }
 }
