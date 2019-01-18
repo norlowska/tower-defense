@@ -12,9 +12,7 @@ import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -23,13 +21,15 @@ public class Game {
     protected ArrayList<Player> players;
     protected CurrentPlayer currentPlayer;
     protected Map currentMap;
+    protected HashSet<Point> enemyPosition = new HashSet<Point>();
     private Document document;
+    private boolean timerOn = false;
 
     public Game(Document document) {
         this.document = document;
         players = new ArrayList<Player>();
         currentPlayer = CurrentPlayer.getInstance();
-        currentMap = new Map("map1");
+        currentMap = new Map("mapTest");
         readPlayersList();
     }
 
@@ -80,16 +80,30 @@ public class Game {
     }
 
     public void Timer(){
-        Runnable helloRunnable = new Runnable() {
-            public void run() {
-                System.out.println("Hello world");
-
+        CheckAllFieldIterator<Field> iterator = currentMap.checkAllFieldIterator();
+        Field startField = null;
+        Point startPoint = null;
+        while(iterator.hasNext()){
+            Field tmp = iterator.next();
+            if(tmp.isStart()){
+                startField = tmp;
+                startPoint = iterator.fieldPoint();
             }
-        };
+        }
+        final Field realStartField = startField;
+        int interval = 0;
+        enemyPosition.add(startPoint);
+        MyRunnable helloRunnable = new MyRunnable(interval,currentMap,startField, enemyPosition);
 
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
         executor.scheduleAtFixedRate(helloRunnable, 0, 500, TimeUnit.MILLISECONDS);
+
+        timerOn = true;
+    }
+
+    public boolean isTimerOn(){
+        return timerOn;
     }
  //   public void setCurrentPlayer(CurrentPlayer currentPlayer) {
       //  this.currentPlayer = currentPlayer;

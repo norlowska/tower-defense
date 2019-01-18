@@ -5,11 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.function.Consumer;
 
-public class Map implements Iterable<Field>{
+public class Map{
     protected Color[] colorScheme = new Color[2];
     ArrayList<ArrayList<Field>> map = new ArrayList<ArrayList<Field>>();
     String mapName;
@@ -58,10 +55,11 @@ public class Map implements Iterable<Field>{
                     Field f;
                     boolean isStart = (splitted[i].charAt(1) == '1');
                     boolean isFinish = (splitted[i].charAt(2) == '1');
+                    int whereMove = splitted[i].charAt(3);
                     if (Character.getNumericValue(splitted[i].charAt(0)) == 1) {
                         f = new FieldTerrain(isStart, isFinish, colorScheme[0], null);
                     } else {
-                        f = new FieldRoad(isStart, isFinish, colorScheme[1], null);
+                        f = new FieldRoad(isStart, isFinish, colorScheme[1], null, whereMove);
                     }
                     map.get(numberOfArrays).add(f);
                 }
@@ -77,10 +75,7 @@ public class Map implements Iterable<Field>{
         return map;
     }
 
-
-    @Override
-    public Iterator<Field> iterator() {
-        return new Iterator<Field> () {
+    public class checkAllFieldIterator implements CheckAllFieldIterator {
             private int row = 0;
             private int column = 0;
 
@@ -103,52 +98,45 @@ public class Map implements Iterable<Field>{
 
             }
 
-            @Override
-            public void remove(){
-                 throw new UnsupportedOperationException();
+            public Point fieldPoint(){
+                return new Point(column,row);
             }
-
-            @Override
-            public void forEachRemaining(Consumer<? super Field> action){
-                throw new UnsupportedOperationException();
-            }
-        };
     }
 
     public class moveIterator implements MoveIterator<Field>{
-        int row = 0, col = 0;
+        int row = 0, column = 0;
 
         public Field right(){
 
-            if(col == map.get(row).size() - 1){
-                col = 0;
+            if(column == map.get(row).size() - 1){
+                column = 0;
             }else{
-                col++;
+                column++;
             }
-            while(map.get(row).get(col).isRoad()){
-                col++;
-                if(col == map.get(row).size() - 1 && map.get(row).get(col).isRoad()){
-                    col = 0;
+            while(map.get(row).get(column).isRoad()){
+                column++;
+                if(column == map.get(row).size() - 1 && map.get(row).get(column).isRoad()){
+                    column = 0;
                 }
             }
-            return map.get(row).get(col);
+            return map.get(row).get(column);
 
         }
 
         public Field left(){
 
-            if(col == 0){
-                col = map.get(row).size() - 1;
+            if(column == 0){
+                column = map.get(row).size() - 1;
             }else{
-                col--;
+                column--;
             }
-            while(map.get(row).get(col).isRoad()){
-                col--;
-                if(col == 0 && map.get(row).get(col).isRoad()){
-                    col = map.get(row).size() - 1;
+            while(map.get(row).get(column).isRoad()){
+                column--;
+                if(column == 0 && map.get(row).get(column).isRoad()){
+                    column = map.get(row).size() - 1;
                 }
             }
-            return map.get(row).get(col);
+            return map.get(row).get(column);
 
         }
 
@@ -159,13 +147,13 @@ public class Map implements Iterable<Field>{
             }else{
                 row++;
             }
-            while(map.get(row).get(col).isRoad()){
+            while(map.get(row).get(column).isRoad()){
                 row++;
-                if(row == map.size() - 1 && map.get(row).get(col).isRoad()){
+                if(row == map.size() - 1 && map.get(row).get(column).isRoad()){
                     row = 0;
                 }
             }
-            return map.get(row).get(col);
+            return map.get(row).get(column);
         }
 
         public Field up(){
@@ -175,13 +163,17 @@ public class Map implements Iterable<Field>{
             }else{
                 row--;
             }
-            while(map.get(row).get(col).isRoad()){
+            while(map.get(row).get(column).isRoad()){
                 row--;
-                if(row == 0 && map.get(row).get(col).isRoad()){
+                if(row == 0 && map.get(row).get(column).isRoad()){
                     row = map.size() - 1;
                 }
             }
-            return map.get(row).get(col);
+            return map.get(row).get(column);
+        }
+
+        public Point fieldPoint(){
+            return new Point(column,row);
         }
 
         public boolean hasRight(){
@@ -201,6 +193,7 @@ public class Map implements Iterable<Field>{
     public MoveIterator<Field> iteratorMove(){
         return new moveIterator();
     }
+    public CheckAllFieldIterator<Field> checkAllFieldIterator() { return new checkAllFieldIterator();}
 
 
     /**

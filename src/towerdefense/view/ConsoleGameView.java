@@ -33,6 +33,7 @@ public class ConsoleGameView extends GameView {
         currentPlayer = document.getCurrentPlayer();
         selectedField = null;
         selectedTower = null;
+        Enemy enemy = new Enemy(40,1);
         towers = new ArrayList<>();
         towers.add(new ArcherTower());
         towers.add(new EarthTower());
@@ -158,6 +159,10 @@ public class ConsoleGameView extends GameView {
         KeyStroke keyStroke = null;
         KeyType keyType = null;
         MoveIterator<Field> moveIterator = currentMap.iteratorMove();
+        if(!document.getGame().isTimerOn()){
+            document.getGame().Timer();
+        }
+
         while(true) {
             try {
                 keyStroke = screen.readInput();
@@ -209,10 +214,11 @@ public class ConsoleGameView extends GameView {
                         break;
                     case Enter:
                         System.out.println("Enter");
+                        ((FieldTerrain) selectedField).setTower(selectedTower);
                         break;
                 }
             }
-            System.out.println("Sprawdzam klawisz");
+            //System.out.println("Sprawdzam klawisz");
             //break;
            displayWindow();
             displayBoughtTowers();
