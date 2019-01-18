@@ -105,80 +105,7 @@ public class Game {
     public boolean isTimerOn(){
         return timerOn;
     }
- //   public void setCurrentPlayer(CurrentPlayer currentPlayer) {
-      //  this.currentPlayer = currentPlayer;
-   // }
 
-  /*  public void start() throws InterruptedException {
-        try {
-            TerminalSize ts = new TerminalSize(110, 50);
-            DefaultTerminalFactory dft = new DefaultTerminalFactory();
-            dft.setInitialTerminalSize(ts);
-            terminal = dft.createTerminal();
-            screen = new TerminalScreen(terminal);
-
-            screen.startScreen();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (terminal != null) {
-                try {
-                    terminal.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-
-
-    private void printTowerDetails(TerminalPosition startPosition, TerminalSize boxSize, TextColor foregroundColor,
-                                   TextColor backgroundColor, Tower tower) throws IOException {
-        TextGraphics textGraphics = screen.newTextGraphics();
-        if (foregroundColor != null) {
-            textGraphics.setForegroundColor(foregroundColor);
-        }
-        if (backgroundColor != null) {
-            textGraphics.setBackgroundColor(backgroundColor);
-        }
-
-       // drawDoubleLineBox(startPosition.withRelative((boxSize.getColumns() - 10) / 2, 1), new TerminalSize(10, 6),
-         //       TextColor.ANSI.RED, null);
-        drawTower(startPosition.withRelative((boxSize.getColumns() - 10) / 2 + 2, 2), tower);
-        textGraphics.putString(startPosition.withRelative((boxSize.getColumns() - tower.getName().length()) / 2, 7),
-                tower.getName());
-        textGraphics.putString(startPosition.withRelative(boxSize.getColumns() / 4, 9), "POWER: ", SGR.BOLD);
-        textGraphics.putString(startPosition.withRelative(boxSize.getColumns() * 3 / 4, 9),
-                Integer.toString(tower.getDamage()));
-        textGraphics.putString(startPosition.withRelative(boxSize.getColumns() / 4, 10), "RANGE: ", SGR.BOLD);
-        textGraphics.putString(startPosition.withRelative(boxSize.getColumns() * 3 / 4, 10),
-                Integer.toString(tower.getRange()));
-        textGraphics.putString(startPosition.withRelative(boxSize.getColumns() / 4, 11), "COST: ", SGR.BOLD);
-        textGraphics.putString(startPosition.withRelative(boxSize.getColumns() * 3 / 4, 11),
-                Integer.toString(tower.getPrice()));
-    }
-
-    private void drawTowersBox(TerminalPosition startPosition, TextColor color, List<Tower> towers) throws IOException {
-        TerminalSize towerBoxSize = new TerminalSize(10, 6);
-        TextGraphics textGraphics = screen.newTextGraphics();
-        textGraphics.setForegroundColor(color);
-        Tower currentTower;
-
-        for (int i = 0; i < 4 && i < towers.size(); i++) {
-            currentTower = towers.get(i);
-          //  drawDoubleLineBox(startPosition.withRelativeColumn(14 * i), towerBoxSize, color, null);
-            drawTower(startPosition.withRelative(2 + 14 * i, 1), currentTower);
-            textGraphics.putString(
-                    startPosition.withRelative(
-                            (towerBoxSize.getColumns() - currentTower.getName().length()) / 2 + 14 * i, 6),
-                    currentTower.getName());
-        }
-    }
-
-
-*/
     public void exit() {
         String playersFileName = "data/players.txt";
         try {
@@ -196,44 +123,5 @@ public class Game {
         }
         System.exit(0);
     }
-/*
-    public void displayMap() throws IOException {
-
-        screen.clear();
-        screen.setCursorPosition(null);
-        //screen = new TerminalScreen(terminal);
-
-        //screen.startScreen();
-        TerminalSize terminalSize = terminal.getTerminalSize();
-        TerminalPosition startPosition = new TerminalPosition(terminalSize.getColumns() / 12,
-                terminalSize.getRows() / 16);
-        TerminalPosition endPosition = new TerminalPosition(terminalSize.getColumns(),
-                terminalSize.getRows());
-        TextGraphics textGraphics = screen.newTextGraphics();
-        //textGraphics.drawLine(startPosition, endPosition, '.');
-        drawField(startPosition);
-        //textGraphics.drawLine(startPosition.withRelative(1,1), endPosition, '.');
-        //drawField(startPosition.withRelative(0,6));
-        //textGraphics.drawLine(startPosition, endPosition, 'x');
-        screen.refresh();
-        //screen.refresh();
-        screen.readInput();
-
-    }
-
-    public void drawField(TerminalPosition startPosition) throws IOException {
-        TextGraphics textGraphics = screen.newTextGraphics();
-        int column = startPosition.getColumn();
-        int row = startPosition.getRow();
-        for (column = 3; column < 6; column++) {
-            for (row = 5; row < 6; row++) {
-                screen.setCharacter(column, row, new TextCharacter(
-                        ' ',
-                        TextColor.ANSI.DEFAULT,
-                        TextColor.ANSI.GREEN));
-            }
-        }
-        screen.refresh();
-    }*/
 
 }
