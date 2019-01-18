@@ -69,7 +69,7 @@ public class ConsoleGameView extends GameView {
         int i = 1;
 
         for(Tower t : towers) {
-            displayTower(startPosition, t);
+            displayTower(startPosition, t, textGraphics.getBackgroundColor());
             textGraphics.putString(startPosition.withRelativeRow(characterHeight + 1), 'F' + Integer.toString(i) + ' ' + t.getName());
             i++;
             startPosition = startPosition.withRelativeColumn(characterWidth + 9);
@@ -104,7 +104,7 @@ public class ConsoleGameView extends GameView {
         }
         if(selectedTower != null) {
             startPosition = startPosition.withRelative((boughtTowersBoxSize.getColumns() - characterWidth) / 2,2);
-            displayTower(startPosition, selectedTower);
+            displayTower(startPosition, selectedTower, textGraphics.getBackgroundColor());
             startPosition = startPosition.withRelative(-2, characterHeight + 1);
             textGraphics.fillRectangle(startPosition, new TerminalSize(15, 1), ' ');
             textGraphics.putString(startPosition, selectedTower.getName(), SGR.BOLD);
@@ -124,11 +124,6 @@ public class ConsoleGameView extends GameView {
         while(checkAllFieldIterator.hasNext()) {
             currentField = (Field) checkAllFieldIterator.next();
             displayField(startPosition, currentField);
-            if(currentField instanceof FieldRoad && ((FieldRoad) currentField).getEnemy()!=null) {
-                displayEnemy(startPosition.withRelative(1,1),((FieldRoad) currentField).getEnemy());
-            } else if (currentField instanceof FieldTerrain && ((FieldTerrain)currentField).getTower()!=null) {
-                displayTower(startPosition.withRelative(1,1), ((FieldTerrain)currentField).getTower());
-            }
 
             if(column == 11) {
                 startPosition = startPosition.withRelativeRow(5);
@@ -242,6 +237,11 @@ public class ConsoleGameView extends GameView {
             }
         }
         textGraphics.drawImage(startPosition, fieldImage);
+        if(field instanceof FieldRoad && ((FieldRoad) field).getEnemy()!=null) {
+            displayEnemy(startPosition.withRelative(1,1),((FieldRoad) field).getEnemy());
+        } else if (field instanceof FieldTerrain && ((FieldTerrain)field).getTower()!=null) {
+            displayTower(startPosition.withRelative(1,1), ((FieldTerrain)field).getTower(), color);
+        }
     }
 
     private void displayEnemy(TerminalPosition startPosition, Enemy enemy) {
@@ -259,17 +259,18 @@ public class ConsoleGameView extends GameView {
         textGraphics.drawImage(startPosition, enemyImage);
     }
 
-    private void displayTower(TerminalPosition startPosition, Tower tower) {
+    private void displayTower(TerminalPosition startPosition, Tower tower, TextColor backgroundColor) {
         String stringTowerIcon = tower.getIcon();
-        TextColor color = getTextColor(tower.getColor());
+        TextColor foregroundColor = getTextColor(tower.getColor());
 
         TextImage towerIcon = new BasicTextImage(new TerminalSize(characterWidth, characterHeight));
         TextGraphics textGraphics = screen.newTextGraphics();
         TextCharacter textCharacter;
+        System.out.println(backgroundColor);
 
         for (int row = 0, i = 0; row < characterHeight; row++) {
             for (int column = 0; column < characterWidth; column++, i++) {
-                textCharacter = new TextCharacter(stringTowerIcon.charAt(i), color, textGraphics.getBackgroundColor(),
+                textCharacter = new TextCharacter(stringTowerIcon.charAt(i), foregroundColor, backgroundColor,
                         SGR.BOLD);
                 towerIcon.setCharacterAt(column, row, textCharacter);
             }

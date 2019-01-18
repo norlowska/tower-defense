@@ -1,14 +1,14 @@
 package towerdefense.view;
 
 import towerdefense.document.*;
+import towerdefense.document.Point;
 import towerdefense.document.towers.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -160,18 +160,96 @@ public class GUIGameView extends GameView {
         g.drawImage(enemy.getImage(), x, y, null);
     }
 
-    public class MapPanel extends JPanel {
+    public class MapPanel extends JPanel implements MouseListener, MouseMotionListener {
         private GUIGameView gameView;
+        /**
+         * Pozycja kursora myszy
+         */
+        public int mouseX, mouseY;
+        public boolean mouseIsPressed;
 
         public MapPanel(GUIGameView gameView) {
+            this.addMouseListener(this);
+            this.addMouseMotionListener(this);
             this.gameView = gameView;
         }
 
         @Override
         public void paintComponent(Graphics g) {
+            super.paintComponent(g);
             gameView.displayMap(g);
         }
 
+        public Point getPoint()
+        {
+            return new Point(mouseX, mouseY);
+        }
+
+        /**
+         * Implementacja metod interfejsu MouseListener
+         *
+         */
+
+        @Override
+        public void mouseClicked(MouseEvent e)
+        {
+            mouseX = e.getX();
+            mouseY = e.getY();
+            mouseIsPressed = true;
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e)
+        {
+            mouseX = e.getX();
+            mouseY = e.getY();
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e)
+        {
+            mouseX = e.getX();
+            mouseY = e.getY();
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e)
+        {
+            mouseX = e.getX();
+            mouseY = e.getY();
+            mouseIsPressed = true;
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e)
+        {
+            mouseX = e.getX();
+            mouseY = e.getY();
+            mouseIsPressed = true;
+
+        }
+
+        /**
+         * Implementacja metod interfejsu MouseMotionListener
+         *
+         */
+
+        @Override
+        public void mouseDragged(MouseEvent e)
+        {
+            mouseX = e.getX();
+            mouseY = e.getY();
+            mouseIsPressed = false;
+        }
+
+        @Override
+        public void mouseMoved(MouseEvent e)
+        {
+            mouseX = e.getX();
+            mouseY = e.getY();
+            mouseIsPressed = false;
+
+        }
 
     }
 
