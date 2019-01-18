@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="towerdefense.view.GUIGameView">
-  <grid id="27dc6" binding="mainPanel" layout-manager="GridLayoutManager" row-count="4" column-count="8" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="mainPanel" layout-manager="GridLayoutManager" row-count="4" column-count="9" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="10" left="10" bottom="10" right="10"/>
     <constraints>
-      <xy x="20" y="20" width="1052" height="546"/>
+      <xy x="20" y="20" width="1529" height="575"/>
     </constraints>
     <properties>
       <background color="-5842027"/>
-      <preferredSize width="1185" height="800"/>
+      <preferredSize width="1175" height="800"/>
     </properties>
     <border type="none"/>
     <children>
@@ -26,7 +26,7 @@
       </component>
       <component id="9798d" class="javax.swing.JButton" binding="button2" default-binding="true">
         <constraints>
-          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
+          <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
             <minimum-size width="64" height="64"/>
             <preferred-size width="64" height="64"/>
             <maximum-size width="64" height="64"/>
@@ -39,7 +39,7 @@
       </component>
       <component id="be6ff" class="javax.swing.JButton" binding="button3" default-binding="true">
         <constraints>
-          <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
+          <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
             <minimum-size width="64" height="64"/>
             <preferred-size width="64" height="64"/>
             <maximum-size width="64" height="64"/>
@@ -52,7 +52,7 @@
       </component>
       <component id="95ec4" class="javax.swing.JButton" binding="button4" default-binding="true">
         <constraints>
-          <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
+          <grid row="3" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
             <minimum-size width="64" height="64"/>
             <preferred-size width="64" height="64"/>
             <maximum-size width="64" height="64"/>
@@ -65,7 +65,7 @@
       </component>
       <component id="cd69f" class="javax.swing.JButton" binding="button5" default-binding="true">
         <constraints>
-          <grid row="3" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
+          <grid row="3" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
             <minimum-size width="64" height="64"/>
             <preferred-size width="64" height="64"/>
             <maximum-size width="64" height="64"/>
@@ -78,7 +78,7 @@
       </component>
       <component id="eba76" class="javax.swing.JButton" binding="button6" default-binding="true">
         <constraints>
-          <grid row="3" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
+          <grid row="3" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
             <minimum-size width="64" height="64"/>
             <preferred-size width="64" height="64"/>
             <maximum-size width="64" height="64"/>
@@ -100,7 +100,7 @@
       </component>
       <component id="c3642" class="javax.swing.JLabel">
         <constraints>
-          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="2" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="2" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <font name="Bernard MT Condensed" size="18" style="0"/>
@@ -109,7 +109,7 @@
       </component>
       <component id="62314" class="javax.swing.JLabel">
         <constraints>
-          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="2" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="2" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <font name="Bernard MT Condensed" size="18" style="0"/>
@@ -118,7 +118,7 @@
       </component>
       <component id="bebd" class="javax.swing.JLabel">
         <constraints>
-          <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="2" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="2" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <font name="Bernard MT Condensed" size="18" style="0"/>
@@ -127,7 +127,7 @@
       </component>
       <component id="db3c" class="javax.swing.JLabel">
         <constraints>
-          <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="2" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="2" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="2" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <font name="Bernard MT Condensed" size="18" style="0"/>
@@ -136,7 +136,7 @@
       </component>
       <component id="f44b4" class="javax.swing.JButton" binding="button7" default-binding="true">
         <constraints>
-          <grid row="3" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
+          <grid row="3" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
             <minimum-size width="64" height="64"/>
             <preferred-size width="77" height="64"/>
             <maximum-size width="64" height="64"/>
@@ -149,7 +149,7 @@
       </component>
       <component id="48a5" class="javax.swing.JButton" binding="button8" default-binding="true">
         <constraints>
-          <grid row="3" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
+          <grid row="3" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
             <minimum-size width="64" height="64"/>
             <preferred-size width="64" height="64"/>
             <maximum-size width="64" height="64"/>
@@ -163,7 +163,7 @@
       <grid id="8cfd6" binding="infoPanel" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
-          <grid row="0" column="6" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+          <grid row="0" column="7" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <minimum-size width="250" height="384"/>
             <preferred-size width="250" height="384"/>
             <maximum-size width="250" height="384"/>
@@ -203,22 +203,9 @@
           </component>
         </children>
       </grid>
-      <grid id="9cf67" binding="mapPanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-        <margin top="0" left="0" bottom="0" right="0"/>
-        <constraints>
-          <grid row="0" column="0" row-span="1" col-span="6" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <minimum-size width="768" height="384"/>
-            <preferred-size width="768" height="384"/>
-            <maximum-size width="768" height="384"/>
-          </grid>
-        </constraints>
-        <properties/>
-        <border type="none"/>
-        <children/>
-      </grid>
       <component id="356da" class="javax.swing.JLabel">
         <constraints>
-          <grid row="2" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="2" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="2" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="2" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <font name="Bernard MT Condensed" size="18" style="0"/>
@@ -227,7 +214,7 @@
       </component>
       <component id="3ef83" class="javax.swing.JLabel">
         <constraints>
-          <grid row="2" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="2" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="2" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="2" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <enabled value="true"/>
@@ -237,7 +224,7 @@
       </component>
       <component id="fc6bd" class="javax.swing.JLabel">
         <constraints>
-          <grid row="2" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="2" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="2" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="2" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <font name="Bernard MT Condensed" size="18" style="0"/>
@@ -246,11 +233,25 @@
       </component>
       <component id="264d5" class="javax.swing.JLabel" binding="towersLabel">
         <constraints>
-          <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <font name="Bernard MT Condensed" size="24" style="0"/>
           <text value="Towers"/>
+        </properties>
+      </component>
+      <component id="da27d" class="towerdefense.view.GUIGameView$MapPanel" binding="mapPanel" custom-create="true">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="7" vsize-policy="3" hsize-policy="3" anchor="9" fill="0" indent="1" use-parent-layout="false">
+            <minimum-size width="840" height="420"/>
+            <preferred-size width="840" height="420"/>
+            <maximum-size width="840" height="420"/>
+          </grid>
+        </constraints>
+        <properties>
+          <background color="-13024959"/>
+          <enabled value="true"/>
+          <foreground color="-5213509"/>
         </properties>
       </component>
     </children>

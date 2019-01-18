@@ -6,39 +6,40 @@ import towerdefense.document.towers.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
+import java.awt.Color;
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 public class GUIGameView extends GameView {
     private Map currentMap;
     private CurrentPlayer currentPlayer;
-    private List<Tower> towers;
-    //Przyciski z wieżami
-    private JButton button1;
-    private JButton button2;
-    private JButton button3;
-    private JButton button4;
-    private JButton button5;
-    private JButton button6;
-    private JButton button7;
-    private JButton button8;
-    //Obrazki reprezentujące wieże
+    /**
+     * Przyciski z wieżami
+     */
+    private JButton button1, button2, button3, button4;
+    private JButton button5, button6, button7, button8;
+    /**
+     * Obrazki wież
+      */
     private Image i1, i2, i3, i4, i5, i6, i7, i8;
     private JPanel mainPanel;
     private JLabel towersLabel;
-    private JPanel mapPanel;
     private JPanel infoPanel;
     private JLabel moneyLabel;
     private JLabel playerNameLabel;
     private JLabel gameGoalLabel;
+    private MapPanel mapPanel;
+    private Graphics graphics;
+    private int fieldWidth = 70, fieldHeight = 70;
 
     public GUIGameView(Document document) {
         super(document, "GUI");
         currentPlayer = document.getCurrentPlayer();
+        currentMap = document.getCurrentMap();
+    }
+
+    private void createUIComponents() {
+        mapPanel = new MapPanel(this);
     }
 
     @Override
@@ -85,7 +86,19 @@ public class GUIGameView extends GameView {
 
     @Override
     protected void displayMap() {
-//        mapPanel
+        int x = 0, y = 0;
+        CheckAllFieldIterator checkAllFieldIterator = currentMap.checkAllFieldIterator();
+        Field currentField;
+        while(checkAllFieldIterator.hasNext()) {
+            currentField = (Field) checkAllFieldIterator.next();
+            graphics.setColor(getAWTColor(currentField.getColor()));
+            graphics.fillRect(x, y, fieldWidth, fieldHeight);
+            x+=70;
+            if(x == 840) {
+                y+=70;
+                x=0;
+            }
+        }
     }
 
     @Override
@@ -93,15 +106,38 @@ public class GUIGameView extends GameView {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                window.setSize(1050, 600);
+                window.setSize(1175, 600);
                 window.setContentPane(mainPanel);
                 window.setVisible(true);
             }
         });
     }
 
+    protected void displayMap(Graphics g) {
+        this.graphics = g;
+        displayMap();
+    }
+
     @Override
     protected void handleInput() {
+
+    }
+
+    public class MapPanel extends JPanel {
+        private GUIGameView gameView;
+
+        public MapPanel(GUIGameView gameView){
+           this.gameView = gameView;
+        }
+
+        @Override
+        public void paintComponent(Graphics g) {
+            /*
+            }*/
+            gameView.displayMap(g);
+
+        }
+
 
     }
 
@@ -110,4 +146,25 @@ public class GUIGameView extends GameView {
         return "<html>" + orig.replaceAll("\n", "<br>");
     }
 
+    private Color getAWTColor(towerdefense.document.Color color) {
+        switch (color) {
+            case BLACK:
+                return Color.BLACK;
+            case BLUE:
+                return Color.BLUE;
+            case CYAN:
+                return Color.CYAN;
+            case GREEN:
+                return Color.GREEN;
+            case MAGENTA:
+                return Color.MAGENTA;
+            case RED:
+                return Color.RED;
+            case YELLOW:
+                return Color.YELLOW;
+            case WHITE:
+            default:
+                return Color.WHITE;
+        }
+    }
 }
