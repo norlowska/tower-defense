@@ -108,10 +108,15 @@ public class GUIGameView extends GameView {
             currentField = (Field) checkAllFieldIterator.next();
             graphics.setColor(getAWTColor(currentField.getColor()));
             graphics.fillRect(x, y, fieldWidth, fieldHeight);
-            x += 70;
-            if (x == 840) {
-                y += 70;
-                x = 0;
+            if(currentField instanceof FieldRoad && ((FieldRoad) currentField).getEnemy()!=null) {
+                displayEnemy(graphics, x, y,((FieldRoad) currentField).getEnemy());
+            } else if (currentField instanceof FieldTerrain && ((FieldTerrain)currentField).getTower()!=null) {
+                displayTower(graphics, x, y, ((FieldTerrain)currentField).getTower());
+            }
+            x+=70;
+            if(x == 840) {
+                y+=70;
+                x=0;
             }
         }
     }
@@ -128,13 +133,21 @@ public class GUIGameView extends GameView {
         });
     }
 
+    @Override
+    protected void handleInput() {
+
+    }
+
     protected void displayMap(Graphics g) {
         this.graphics = g;
         displayMap();
     }
 
-    @Override
-    protected void handleInput() {
+    protected void displayTower(Graphics g, int x, int y, Tower tower) {
+
+    }
+
+    protected void displayEnemy(Graphics g, int x, int y, Enemy enemy) {
 
     }
 
