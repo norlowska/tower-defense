@@ -55,7 +55,7 @@ public class Map{
                     Field f;
                     boolean isStart = (splitted[i].charAt(1) == '1');
                     boolean isFinish = (splitted[i].charAt(2) == '1');
-                    int whereMove = splitted[i].charAt(3);
+                    int whereMove = Character.getNumericValue(splitted[i].charAt(3));
                     if (Character.getNumericValue(splitted[i].charAt(0)) == 1) {
                         f = new FieldTerrain(isStart, isFinish, colorScheme[0], null);
                     } else {
@@ -79,14 +79,12 @@ public class Map{
             private int row = 0;
             private int column = 0;
 
-            @Override
             public boolean hasNext() {
                 if(row == map.size())
                     return false;
                 return true;
             }
 
-            @Override
             public Field next() {
                 if (column == (map.get(row).size() - 1)) {
                     column = 0;

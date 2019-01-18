@@ -61,7 +61,7 @@ public class Game {
                 int money = Integer.parseInt(parts[1]);
                 Map lastMap;
                 if(Objects.equals(parts[2], "null")) {
-                    lastMap = new Map("map1");
+                    lastMap = new Map("mapTest");
                 } else {
                     lastMap = new Map(parts[2]);
                 }
