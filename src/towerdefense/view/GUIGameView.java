@@ -1,8 +1,6 @@
 package towerdefense.view;
 
-import towerdefense.document.CurrentPlayer;
-import towerdefense.document.Document;
-import towerdefense.document.Tower;
+import towerdefense.document.*;
 import towerdefense.document.towers.*;
 
 import javax.imageio.ImageIO;
@@ -12,10 +10,13 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class GUIGameView extends GameView {
+    private Map currentMap;
     private CurrentPlayer currentPlayer;
+    private List<Tower> towers;
     //Przyciski z wieżami
     private JButton button1;
     private JButton button2;
