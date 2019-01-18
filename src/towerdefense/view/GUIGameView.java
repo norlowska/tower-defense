@@ -82,7 +82,7 @@ public class GUIGameView extends GameView {
 
     @Override
     protected void displayMap() {
-
+//        mapPanel
     }
 
     @Override

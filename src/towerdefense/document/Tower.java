@@ -9,13 +9,13 @@ import java.io.IOException;
 
 public abstract class Tower {
 
-    int damage;
-    int price;
-    int range;
-    String icon;
-    String name;
-    Color color;
-    double speed;
+    protected int damage;
+    protected int price;
+    protected int range;
+    protected String icon;
+    protected String name;
+    protected Color color;
+    protected double speed;
 
     public Tower(int damage, int price, int range, double speed) {
         this.damage = damage;

@@ -80,11 +80,11 @@ public class TowerDefense {
         //Game game = new Game();
         Document doc = new Document();
         //Console
-//        View menuConsole = new ConsoleMenuView(doc);
-//        doc.switchToView(menuConsole);
+        View menuConsole = new ConsoleMenuView(doc);
+        doc.switchToView(menuConsole);
         //GUI
-        View menuGUI = new GUIMenuView(doc);
-        doc.switchToView(menuGUI);
+//        View menuGUI = new GUIMenuView(doc);
+//        doc.switchToView(menuGUI);
 
         return;
     }
