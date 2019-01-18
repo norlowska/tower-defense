@@ -5,6 +5,8 @@ import com.googlecode.lanterna.TextColor;
 import towerdefense.document.Color;
 import towerdefense.document.Tower;
 
+import java.io.IOException;
+
 public class ArcherTower extends Tower {
 
 	public ArcherTower() {
@@ -17,4 +19,12 @@ public class ArcherTower extends Tower {
 		super.setIcon("data/towers/ArcherTower.txt");
 	}
 
+	@Override
+	public void setImage(){
+		try {
+			super.setImage("data/towersPNG/archer.png");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

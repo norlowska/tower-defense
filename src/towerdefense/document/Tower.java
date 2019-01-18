@@ -2,10 +2,9 @@ package towerdefense.document;
 
 import com.googlecode.lanterna.TextColor;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.io.*;
 
 public abstract class Tower {
 
@@ -16,6 +15,7 @@ public abstract class Tower {
     protected String name;
     protected Color color;
     protected double speed;
+    protected Image image;
 
     public Tower(int damage, int price, int range, double speed) {
         this.damage = damage;
@@ -24,6 +24,7 @@ public abstract class Tower {
         setIcon();
         this.speed = speed;
         this.color = Color.YELLOW;
+        setImage();
     }
 
     public int getDamage() {
@@ -98,6 +99,12 @@ public abstract class Tower {
         this.icon = sb.toString();
     }
 
+    protected void setImage(String filename) throws IOException {
+        image = ImageIO.read(new File("data/towersPNG/" + filename));
+    }
+
     abstract public void setIcon();
+
+    abstract public void setImage();
 
 }

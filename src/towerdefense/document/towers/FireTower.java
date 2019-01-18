@@ -5,6 +5,8 @@ import com.googlecode.lanterna.TextColor;
 import towerdefense.document.Color;
 import towerdefense.document.Tower;
 
+import java.io.IOException;
+
 public class FireTower extends Tower {
 
 	public FireTower() {
@@ -17,4 +19,12 @@ public class FireTower extends Tower {
 		super.setIcon("data/towers/FireTower.txt");
 	}
 
+	@Override
+	public void setImage() {
+		try {
+			super.setImage("data/towersPNG/fire.png");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

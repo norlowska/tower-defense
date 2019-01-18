@@ -5,6 +5,8 @@ import com.googlecode.lanterna.TextColor;
 import towerdefense.document.Color;
 import towerdefense.document.Tower;
 
+import java.io.IOException;
+
 public class NuclearTower extends Tower {
 
 	public NuclearTower() {
@@ -17,4 +19,12 @@ public class NuclearTower extends Tower {
 		super.setIcon("data/towers/NuclearTower.txt");
 	}
 
+	@Override
+	public void setImage() {
+		try {
+			super.setImage("data/towersPNG/nuclear.png");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

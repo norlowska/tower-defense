@@ -7,7 +7,11 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public class GUIGameView extends GameView {
@@ -20,7 +24,7 @@ public class GUIGameView extends GameView {
     private JButton button5, button6, button7, button8;
     /**
      * Obrazki wież
-      */
+     */
     private Image i1, i2, i3, i4, i5, i6, i7, i8;
     private JPanel mainPanel;
     private JLabel towersLabel;
@@ -31,11 +35,14 @@ public class GUIGameView extends GameView {
     private MapPanel mapPanel;
     private Graphics graphics;
     private int fieldWidth = 70, fieldHeight = 70;
+    private java.util.List<Tower> towers;
+
 
     public GUIGameView(Document document) {
         super(document, "GUI");
         currentPlayer = document.getCurrentPlayer();
         currentMap = document.getCurrentMap();
+        towers = new ArrayList<Tower>();
     }
 
     private void createUIComponents() {
@@ -45,33 +52,41 @@ public class GUIGameView extends GameView {
     @Override
     protected void displayBoughtTowers() {
         try {
-            i1 = ImageIO.read(new File("data/towersPNG/archer.png"));
+            i1 = getTowerImage("archer.png");
             button1.setBorder(BorderFactory.createEmptyBorder(4, 12, 2, 0));
             button1.setIcon(new ImageIcon(i1));
-            i2 = ImageIO.read(new File("data/towersPNG/earth.png"));
+            i2 = getTowerImage("earth.png");
             button2.setBorder(BorderFactory.createEmptyBorder(4, 12, 2, 0));
             button2.setIcon(new ImageIcon(i2));
-            i3 = ImageIO.read(new File("data/towersPNG/electric.png"));
+            i3 = getTowerImage("electric.png");
             button3.setBorder(BorderFactory.createEmptyBorder(4, 12, 2, 0));
             button3.setIcon(new ImageIcon(i3));
-            i4 = ImageIO.read(new File("data/towersPNG/fire.png"));
+            i4 = getTowerImage("fire.png");
             button4.setBorder(BorderFactory.createEmptyBorder(4, 12, 2, 0));
             button4.setIcon(new ImageIcon(i4));
-            i5 = ImageIO.read(new File("data/towersPNG/force.png"));
+            i5 = getTowerImage("force.png");
             button5.setBorder(BorderFactory.createEmptyBorder(4, 12, 2, 0));
             button5.setIcon(new ImageIcon(i5));
-            i6 = ImageIO.read(new File("data/towersPNG/ice.png"));
+            i6 = getTowerImage("ice.png");
             button6.setBorder(BorderFactory.createEmptyBorder(4, 12, 2, 0));
             button6.setIcon(new ImageIcon(i6));
-            i7 = ImageIO.read(new File("data/towersPNG/nuclear.png"));
+            i7 = getTowerImage("nuclear.png");
             button7.setBorder(BorderFactory.createEmptyBorder(4, 12, 2, 0));
             button7.setIcon(new ImageIcon(i7));
-            i8 = ImageIO.read(new File("data/towersPNG/water.png"));
+            i8 = getTowerImage("water.png");
             button8.setBorder(BorderFactory.createEmptyBorder(4, 12, 2, 0));
             button8.setIcon(new ImageIcon(i8));
         } catch (Exception ex) {
             System.out.println(ex);
         }
+
+        button1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
     }
 
     @Override
@@ -89,14 +104,14 @@ public class GUIGameView extends GameView {
         int x = 0, y = 0;
         CheckAllFieldIterator checkAllFieldIterator = currentMap.checkAllFieldIterator();
         Field currentField;
-        while(checkAllFieldIterator.hasNext()) {
+        while (checkAllFieldIterator.hasNext()) {
             currentField = (Field) checkAllFieldIterator.next();
             graphics.setColor(getAWTColor(currentField.getColor()));
             graphics.fillRect(x, y, fieldWidth, fieldHeight);
-            x+=70;
-            if(x == 840) {
-                y+=70;
-                x=0;
+            x += 70;
+            if (x == 840) {
+                y += 70;
+                x = 0;
             }
         }
     }
@@ -126,8 +141,8 @@ public class GUIGameView extends GameView {
     public class MapPanel extends JPanel {
         private GUIGameView gameView;
 
-        public MapPanel(GUIGameView gameView){
-           this.gameView = gameView;
+        public MapPanel(GUIGameView gameView) {
+            this.gameView = gameView;
         }
 
         @Override
@@ -141,8 +156,7 @@ public class GUIGameView extends GameView {
 
     }
 
-    public static String convertToMultiline(String orig)
-    {
+    public static String convertToMultiline(String orig) {
         return "<html>" + orig.replaceAll("\n", "<br>");
     }
 
@@ -166,5 +180,9 @@ public class GUIGameView extends GameView {
             default:
                 return Color.WHITE;
         }
+    }
+
+    public Image getTowerImage(String filename) throws IOException {
+        return ImageIO.read(new File("data/towersPNG/" + filename));
     }
 }

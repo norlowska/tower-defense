@@ -5,6 +5,8 @@ import com.googlecode.lanterna.TextColor;
 import towerdefense.document.Color;
 import towerdefense.document.Tower;
 
+import java.io.IOException;
+
 public class ForceTower extends Tower {
 
 	public ForceTower() {
@@ -15,5 +17,14 @@ public class ForceTower extends Tower {
 	@Override
 	public void setIcon() {
 		super.setIcon("data/towers/ForceTower.txt");
+	}
+
+	@Override
+	public void setImage() {
+		try {
+			super.setImage("data/towersPNG/force.png");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
