@@ -13,13 +13,15 @@ class GameLogic implements Runnable {
     Field nextField;
     ArrayList<Field> fieldWithEnemy = new ArrayList<>();
     ArrayList<Field> fieldMoveEnemy = new ArrayList<>();
+    Document document;
 
 
-    public GameLogic(int interval, Map currentMap, Field startField, HashSet<Point> enemyPosition) {
+    public GameLogic(int interval, Map currentMap, Field startField, HashSet<Point> enemyPosition,Document document) {
         this.interval = interval;
         this.startField = startField;
         this.currentMap = currentMap;
         this.enemyPosition = enemyPosition;
+        this.document = document;
     }
 
     public void run() {
@@ -52,6 +54,7 @@ class GameLogic implements Runnable {
             for(int i = 0;i < fieldMoveEnemy.size(); i++){
                 ((FieldRoad)fieldMoveEnemy.get(i)).setEnemy(((FieldRoad)fieldWithEnemy.get(i)).getEnemy());
                 ((FieldRoad)fieldWithEnemy.get(i)).removeEnemy();
+                //document.notifyView();
             }
             if(interval == 3){
                 interval = 0;

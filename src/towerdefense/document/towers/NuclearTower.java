@@ -1,10 +1,12 @@
 package towerdefense.document.towers;
 
 import towerdefense.document.Tower;
+import towerdefense.document.TowerFactoryInterface;
+import towerdefense.document.TowerFactory;
 
 import java.io.IOException;
 
-public class NuclearTower extends Tower implements TowerF {
+public class NuclearTower extends Tower implements TowerFactoryInterface {
 
 	public NuclearTower() {
 		super(12, 100,7, 1.1);
@@ -25,8 +27,8 @@ public class NuclearTower extends Tower implements TowerF {
 		}
 	}
 
-	private static class Factory extends TowerFactory{
-		protected TowerF create(){
+	private static class Factory extends TowerFactory {
+		protected TowerFactoryInterface create(){
 			return new NuclearTower();
 		}
 

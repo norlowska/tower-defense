@@ -83,7 +83,7 @@ public class Game {
         int interval = 0;
         enemyPosition.add(startPoint);
         //document.notifyView();
-        GameLogic helloRunnable = new GameLogic(interval,currentMap,startField, enemyPosition);
+        GameLogic helloRunnable = new GameLogic(interval,currentMap,startField, enemyPosition, document);
 
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 

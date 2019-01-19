@@ -2,7 +2,6 @@ package towerdefense.view;
 
 import towerdefense.document.*;
 import towerdefense.document.Point;
-import towerdefense.document.towers.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -12,7 +11,6 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class GUIGameView extends GameView {
     private Map currentMap;
@@ -34,7 +32,7 @@ public class GUIGameView extends GameView {
     private JLabel towerDetailsLabel;
     private MapPanel mapPanel;
     private Graphics graphics;
-    private TowerF selectedTower;
+    private TowerFactoryInterface selectedTower;
     private int fieldSize = 70, characterSize = 64;
  //   Enemy enemy = new Enemy(40,1);
     private java.util.List<Tower> towers;
@@ -48,7 +46,7 @@ public class GUIGameView extends GameView {
         selectedTower = null;
     }
 
-    public void setSelectedTower(TowerF selectedTower) {
+    public void setSelectedTower(TowerFactoryInterface selectedTower) {
         this.selectedTower = selectedTower;
         displayMap();
         displayDetails();
@@ -209,7 +207,7 @@ public class GUIGameView extends GameView {
         displayMap();
     }
 
-    protected void displayTower(Graphics g, int x, int y, TowerF tower) {
+    protected void displayTower(Graphics g, int x, int y, TowerFactoryInterface tower) {
         g.drawImage(tower.getImage(), x, y, null);
     }
 

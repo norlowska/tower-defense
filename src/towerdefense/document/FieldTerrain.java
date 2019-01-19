@@ -1,20 +1,18 @@
 package towerdefense.document;
 
-import towerdefense.document.towers.TowerF;
-
 public class FieldTerrain extends Field {
-    private TowerF tower;
+    private TowerFactoryInterface tower;
 
-    public FieldTerrain(boolean start, boolean finish, Color color, Point point, TowerF tower) {
+    public FieldTerrain(boolean start, boolean finish, Color color, Point point, TowerFactoryInterface tower) {
         super(start, finish, color, point);
         this.tower = tower;
     }
 
-    public TowerF getTower() {
+    public TowerFactoryInterface getTower() {
         return tower;
     }
 
-    public void setTower(TowerF tower){this.tower = tower;}
+    public void setTower(TowerFactoryInterface tower){this.tower = tower;}
 
     public boolean isRoad(){return false;}
 }

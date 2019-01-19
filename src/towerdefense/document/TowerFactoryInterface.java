@@ -1,4 +1,4 @@
-package towerdefense.document.towers;
+package towerdefense.document;
 
 import towerdefense.document.*;
 
@@ -9,7 +9,7 @@ import java.io.*;
 /**
  * Created by user on 2019-01-19.
  */
-public interface TowerF {
+public interface TowerFactoryInterface {
     String getIcon();
     towerdefense.document.Color getColor();
     int getPrice();
