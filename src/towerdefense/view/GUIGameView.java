@@ -17,24 +17,25 @@ import java.util.Iterator;
 public class GUIGameView extends GameView {
     private Map currentMap;
     private CurrentPlayer currentPlayer;
+    private ButtonGroup towersGroup;
     /**
      * Przyciski z wieżami
      */
-    private JButton button1, button2, button3, button4;
-    private JButton button5, button6, button7, button8;
+    private JToggleButton[] towersButtons = new JToggleButton[8];
     /**
      * Obrazki wież
      */
-    private Image i1, i2, i3, i4, i5, i6, i7, i8;
+    private Image[] towersImages = new Image[8];
     private JPanel mainPanel;
     private JLabel towersLabel;
     private JPanel infoPanel;
-    private JLabel moneyLabel;
-    private JLabel playerNameLabel;
     private JLabel gameGoalLabel;
+    private JLabel greetingLabel;
+    private JLabel towerDetailsLabel;
     private MapPanel mapPanel;
     private Graphics graphics;
-    private int fieldWidth = 70, fieldHeight = 70;
+    private Tower selectedTower;
+    private int fieldSize = 70;
  //   Enemy enemy = new Enemy(40,1);
     private java.util.List<Tower> towers;
 
@@ -44,6 +45,13 @@ public class GUIGameView extends GameView {
         currentPlayer = document.getCurrentPlayer();
         currentMap = document.getCurrentMap();
         towers = new ArrayList<Tower>();
+        selectedTower = null;
+    }
+
+    public void setSelectedTower(Tower selectedTower) {
+        this.selectedTower = selectedTower;
+        displayMap();
+        displayDetails();
     }
 
     private void createUIComponents() {
@@ -52,52 +60,92 @@ public class GUIGameView extends GameView {
 
     @Override
     protected void displayBoughtTowers() {
+        towersGroup = new ButtonGroup();
+        ActionListener listener = new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                String type = actionEvent.getActionCommand();
+
+                switch (type) {
+                    case "archer":
+                        setSelectedTower(new ArcherTower());
+                        break;
+                    case "earth":
+                        setSelectedTower(new EarthTower());
+                        break;
+                    case "electric":
+                        setSelectedTower(new ElectricTower());
+                        break;
+                    case "fire":
+                        setSelectedTower(new FireTower());
+                        break;
+                    case "force":
+                        setSelectedTower(new ForceTower());
+                        break;
+                    case "ice":
+                        setSelectedTower(new IceTower());
+                        break;
+                    case "nuclear":
+                        setSelectedTower(new NuclearTower());
+                        break;
+                    case "water":
+                        setSelectedTower(new WaterTower());
+                        break;
+                }
+                System.out.println(selectedTower.getName());
+            }
+        };
+
         try {
-            i1 = getTowerImage("archer.png");
-            button1.setBorder(BorderFactory.createEmptyBorder(4, 12, 2, 0));
-            button1.setIcon(new ImageIcon(i1));
-            i2 = getTowerImage("earth.png");
-            button2.setBorder(BorderFactory.createEmptyBorder(4, 12, 2, 0));
-            button2.setIcon(new ImageIcon(i2));
-            i3 = getTowerImage("electric.png");
-            button3.setBorder(BorderFactory.createEmptyBorder(4, 12, 2, 0));
-            button3.setIcon(new ImageIcon(i3));
-            i4 = getTowerImage("fire.png");
-            button4.setBorder(BorderFactory.createEmptyBorder(4, 12, 2, 0));
-            button4.setIcon(new ImageIcon(i4));
-            i5 = getTowerImage("force.png");
-            button5.setBorder(BorderFactory.createEmptyBorder(4, 12, 2, 0));
-            button5.setIcon(new ImageIcon(i5));
-            i6 = getTowerImage("ice.png");
-            button6.setBorder(BorderFactory.createEmptyBorder(4, 12, 2, 0));
-            button6.setIcon(new ImageIcon(i6));
-            i7 = getTowerImage("nuclear.png");
-            button7.setBorder(BorderFactory.createEmptyBorder(4, 12, 2, 0));
-            button7.setIcon(new ImageIcon(i7));
-            i8 = getTowerImage("water.png");
-            button8.setBorder(BorderFactory.createEmptyBorder(4, 12, 2, 0));
-            button8.setIcon(new ImageIcon(i8));
+            towersImages[0] = getTowerImage("archer.png");
+            towersImages[1] = getTowerImage("earth.png");
+            towersImages[2] = getTowerImage("electric.png");
+            towersImages[3] = getTowerImage("fire.png");
+            towersImages[4] = getTowerImage("force.png");
+            towersImages[5] = getTowerImage("ice.png");
+            towersImages[6] = getTowerImage("nuclear.png");
+            towersImages[7] = getTowerImage("water.png");
         } catch (Exception ex) {
             System.out.println(ex);
         }
 
-        button1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-
+        for (int i = 0; i < 8; i++) {
+            towersButtons[i] = new JToggleButton();
+            towersButtons[i].addActionListener(listener);
+            towersGroup.add(towersButtons[i]);
+            GridBagConstraints c = new GridBagConstraints();
+            c.weightx = 0.4;
+            c.gridx = i;
+            c.gridy = 3;
+            mainPanel.add(towersButtons[i], c);
+            towersButtons[i].setSize(64,64);
+            towersButtons[i].setBackground(new Color(253, 180, 96));
+            towersButtons[i].setOpaque(true);
+            towersButtons[i].setIcon(new ImageIcon(towersImages[i]));
+        }
+        towersButtons[0].setActionCommand("archer");
+        towersButtons[1].setActionCommand("earth");
+        towersButtons[2].setActionCommand("electric");
+        towersButtons[3].setActionCommand("fire");
+        towersButtons[4].setActionCommand("force");
+        towersButtons[5].setActionCommand("ice");
+        towersButtons[6].setActionCommand("nuclear");
+        towersButtons[7].setActionCommand("water");
     }
 
     @Override
     protected void displayDetails() {
         System.out.println(currentPlayer.getNickname());
-        playerNameLabel.setText("Hello, " + currentPlayer.getNickname() + "!");
-        moneyLabel.setText("Your money: " + currentPlayer.getMoney());
-        gameGoalLabel.setText(convertToMultiline("Your goal is to defend \n your territory against enemies." +
-                "\nSelect tower with function keys\n and place it on map,\n along enemies' path of attack," +
-                "\n using arrows.\n Enter accepts your choice.\nSurvive all waves of enemies attacks\n to win map."));
+        greetingLabel.setText(convertToMultiline("Hello, " + currentPlayer.getNickname() + "!\n Your money: " + currentPlayer.getMoney()));
+        towerDetailsLabel.setMinimumSize(new Dimension(50, 150));
+        if(selectedTower != null) {
+            towerDetailsLabel.setText(convertToMultiline( selectedTower.getName() + "\n Price: " + selectedTower.getPrice() +
+                    "\nDamage: " + selectedTower.getDamage() + "\n Range: " + selectedTower.getRange()));
+        }
+        gameGoalLabel.setText(convertToMultiline("Your goal is to defend your territory\n against enemies." +
+                "\nSelect tower by clicking on its image\n and place it on map,\n along enemies' path of attack," +
+                "\n clicking on map.\n Survive all waves of enemies attacks\n to win map."));
+        gameGoalLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        gameGoalLabel.setVerticalAlignment(SwingConstants.CENTER);
         if(!document.getGame().isTimerOn()){
             document.getGame().Timer();
         }
@@ -111,7 +159,7 @@ public class GUIGameView extends GameView {
         while (checkAllFieldIterator.hasNext()) {
             currentField = (Field) checkAllFieldIterator.next();
             graphics.setColor(getAWTColor(currentField.getColor()));
-            graphics.fillRect(x, y, fieldWidth, fieldHeight);
+            graphics.fillRect(x, y, fieldSize, fieldSize);
             if(currentField instanceof FieldRoad && ((FieldRoad) currentField).getEnemy()!=null) {
                 displayEnemy(graphics, x, y,((FieldRoad) currentField).getEnemy());
             } else if (currentField instanceof FieldTerrain && ((FieldTerrain)currentField).getTower()!=null) {
@@ -139,12 +187,24 @@ public class GUIGameView extends GameView {
 
     @Override
     protected void handleInput() {
-        /*while(true) {
+        Point mouseLocation = mapPanel.getMouseLocation();
+        System.out.println(mouseLocation.getX());
+        System.out.println(mouseLocation.getY());
+        System.out.println((mouseLocation.getX() + mouseLocation.getY())/fieldSize);
+        CheckAllFieldIterator checkAllFieldIterator = currentMap.checkAllFieldIterator();
+        int iterationsNumber = (mouseLocation.getX() / fieldSize + 1 ) + (mouseLocation.getY() / fieldSize) * 12;
+        int iteration = 0;
+        Field selectedField = null;
+        while(iteration < iterationsNumber && checkAllFieldIterator.hasNext()) {
+            System.out.println("Iteration " + iteration);
+            selectedField = (Field) checkAllFieldIterator.next();
+            iteration++;
+        }
+        if(selectedField != null && !selectedField.isRoad()) {
+            System.out.println(selectedField.getColor());
+            ((FieldTerrain) selectedField).setTower(selectedTower);
             mapPanel.repaint();
-            try { Thread.sleep(5); } catch (Exception e) {}
-        }*/
-      //  try { Thread.sleep(1000); } catch (Exception e) {}
-      //  mapPanel.repaint();
+        }
     }
 
     protected void displayMap(Graphics g) {
@@ -160,17 +220,23 @@ public class GUIGameView extends GameView {
         g.drawImage(enemy.getImage(), x, y, null);
     }
 
-    public class MapPanel extends JPanel implements MouseListener, MouseMotionListener {
+    public class MapPanel extends JPanel {
         private GUIGameView gameView;
         /**
          * Pozycja kursora myszy
          */
-        public int mouseX, mouseY;
-        public boolean mouseIsPressed;
+        private int mouseX, mouseY;
 
         public MapPanel(GUIGameView gameView) {
-            this.addMouseListener(this);
-            this.addMouseMotionListener(this);
+            this.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    super.mouseClicked(e);
+                    mouseX = e.getX();
+                    mouseY = e.getY();
+                    handleInput();
+                }
+            });
             this.gameView = gameView;
         }
 
@@ -180,81 +246,15 @@ public class GUIGameView extends GameView {
             gameView.displayMap(g);
         }
 
-        public Point getPoint()
+        public Point getMouseLocation()
         {
             return new Point(mouseX, mouseY);
-        }
-
-        /**
-         * Implementacja metod interfejsu MouseListener
-         *
-         */
-
-        @Override
-        public void mouseClicked(MouseEvent e)
-        {
-            mouseX = e.getX();
-            mouseY = e.getY();
-            mouseIsPressed = true;
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e)
-        {
-            mouseX = e.getX();
-            mouseY = e.getY();
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e)
-        {
-            mouseX = e.getX();
-            mouseY = e.getY();
-        }
-
-        @Override
-        public void mousePressed(MouseEvent e)
-        {
-            mouseX = e.getX();
-            mouseY = e.getY();
-            mouseIsPressed = true;
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e)
-        {
-            mouseX = e.getX();
-            mouseY = e.getY();
-            mouseIsPressed = true;
-
-        }
-
-        /**
-         * Implementacja metod interfejsu MouseMotionListener
-         *
-         */
-
-        @Override
-        public void mouseDragged(MouseEvent e)
-        {
-            mouseX = e.getX();
-            mouseY = e.getY();
-            mouseIsPressed = false;
-        }
-
-        @Override
-        public void mouseMoved(MouseEvent e)
-        {
-            mouseX = e.getX();
-            mouseY = e.getY();
-            mouseIsPressed = false;
-
         }
 
     }
 
     public static String convertToMultiline(String orig) {
-        return "<html>" + orig.replaceAll("\n", "<br>");
+        return "<html><div style='text-align: center;'>" + orig.replaceAll("\n", "<br>") + "</div></html>";
     }
 
     private Color getAWTColor(towerdefense.document.Color color) {
