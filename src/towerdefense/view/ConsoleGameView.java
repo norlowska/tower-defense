@@ -237,8 +237,13 @@ public class ConsoleGameView extends GameView {
             }
         }
         textGraphics.drawImage(startPosition, fieldImage);
+        textGraphics.setBackgroundColor(color);
+        textGraphics.setForegroundColor(getTextColor(Color.MAGENTA));
         if(field instanceof FieldRoad && ((FieldRoad) field).getEnemy()!=null) {
             displayEnemy(startPosition.withRelative(1,1),((FieldRoad) field).getEnemy());
+            int currentHealthPercent = ((FieldRoad) field).getCurrentHealth() / ((FieldRoad) field).getEnemy().getMaxHealth() * 100;
+            String currentHealthLabel = Integer.toString(currentHealthPercent) + "%";
+            textGraphics.putString(startPosition.withRelative( (characterWidth - currentHealthLabel.length()) /2 + 1, characterHeight + 1), currentHealthLabel);
         } else if (field instanceof FieldTerrain && ((FieldTerrain)field).getTower()!=null) {
             displayTower(startPosition.withRelative(1,1), ((FieldTerrain)field).getTower(), color);
         }
@@ -266,7 +271,6 @@ public class ConsoleGameView extends GameView {
         TextImage towerIcon = new BasicTextImage(new TerminalSize(characterWidth, characterHeight));
         TextGraphics textGraphics = screen.newTextGraphics();
         TextCharacter textCharacter;
-        System.out.println(backgroundColor);
 
         for (int row = 0, i = 0; row < characterHeight; row++) {
             for (int column = 0; column < characterWidth; column++, i++) {

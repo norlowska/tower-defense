@@ -20,9 +20,6 @@ public class Enemy implements IFlyweight {
         this.color = Color.MAGENTA;
         try {
             this.image = ImageIO.read(new FileInputStream(new File("data/monster.png")));
-            if(this.image != null) {
-                System.out.println("Odczytano potwora");
-            }
         } catch (IOException e) {
             e.printStackTrace();
         }

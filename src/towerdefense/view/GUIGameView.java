@@ -35,7 +35,7 @@ public class GUIGameView extends GameView {
     private MapPanel mapPanel;
     private Graphics graphics;
     private Tower selectedTower;
-    private int fieldSize = 70;
+    private int fieldSize = 70, characterSize = 64;
  //   Enemy enemy = new Enemy(40,1);
     private java.util.List<Tower> towers;
 
@@ -91,7 +91,6 @@ public class GUIGameView extends GameView {
                         setSelectedTower(new WaterTower());
                         break;
                 }
-                System.out.println(selectedTower.getName());
             }
         };
 
@@ -117,7 +116,7 @@ public class GUIGameView extends GameView {
             c.gridx = i;
             c.gridy = 3;
             mainPanel.add(towersButtons[i], c);
-            towersButtons[i].setSize(64,64);
+            towersButtons[i].setSize(characterSize,characterSize);
             towersButtons[i].setBackground(new Color(253, 180, 96));
             towersButtons[i].setOpaque(true);
             towersButtons[i].setIcon(new ImageIcon(towersImages[i]));
@@ -134,7 +133,6 @@ public class GUIGameView extends GameView {
 
     @Override
     protected void displayDetails() {
-        System.out.println(currentPlayer.getNickname());
         greetingLabel.setText(convertToMultiline("Hello, " + currentPlayer.getNickname() + "!\n Your money: " + currentPlayer.getMoney()));
         towerDetailsLabel.setMinimumSize(new Dimension(50, 150));
         if(selectedTower != null) {
@@ -162,6 +160,10 @@ public class GUIGameView extends GameView {
             graphics.fillRect(x, y, fieldSize, fieldSize);
             if(currentField instanceof FieldRoad && ((FieldRoad) currentField).getEnemy()!=null) {
                 displayEnemy(graphics, x, y,((FieldRoad) currentField).getEnemy());
+                int currentHealthPercent = ((FieldRoad) currentField).getCurrentHealth() / ((FieldRoad) currentField).getEnemy().getMaxHealth() * 100;
+                String currentHealthLabel = Integer.toString(currentHealthPercent) + "%";
+                graphics.setColor(Color.BLACK);
+                graphics.drawString(currentHealthLabel, (x + characterSize - currentHealthLabel.length()) /2 + 1,   characterSize +1);
             } else if (currentField instanceof FieldTerrain && ((FieldTerrain)currentField).getTower()!=null) {
                 displayTower(graphics, x, y, ((FieldTerrain)currentField).getTower());
             }
@@ -188,20 +190,15 @@ public class GUIGameView extends GameView {
     @Override
     protected void handleInput() {
         Point mouseLocation = mapPanel.getMouseLocation();
-        System.out.println(mouseLocation.getX());
-        System.out.println(mouseLocation.getY());
-        System.out.println((mouseLocation.getX() + mouseLocation.getY())/fieldSize);
         CheckAllFieldIterator checkAllFieldIterator = currentMap.checkAllFieldIterator();
         int iterationsNumber = (mouseLocation.getX() / fieldSize + 1 ) + (mouseLocation.getY() / fieldSize) * 12;
         int iteration = 0;
         Field selectedField = null;
         while(iteration < iterationsNumber && checkAllFieldIterator.hasNext()) {
-            System.out.println("Iteration " + iteration);
             selectedField = (Field) checkAllFieldIterator.next();
             iteration++;
         }
         if(selectedField != null && !selectedField.isRoad()) {
-            System.out.println(selectedField.getColor());
             ((FieldTerrain) selectedField).setTower(selectedTower);
             mapPanel.repaint();
         }

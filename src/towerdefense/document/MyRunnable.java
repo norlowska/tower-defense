@@ -24,7 +24,8 @@ class MyRunnable implements Runnable {
         if(((FieldTerrain)currentMap.getMap().get(0).get(0)).getTower()!=null)
             System.out.println("Mam wieze");
         if(interval == 1){
-            if(((FieldRoad) startField).getEnemy() == null){
+            Enemy enemy = ((FieldRoad) startField).getEnemy();
+            if( enemy == null){
                 ((FieldRoad) startField).setEnemy(new Enemy(40,1));
                 System.out.println("Added Enemy");
                 do{
