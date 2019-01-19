@@ -34,6 +34,7 @@ class GameLogic implements Runnable {
             Enemy enemy = ((FieldRoad) startField).getEnemy();
             if( enemy == null){
                 ((FieldRoad) startField).setEnemy(new Enemy(40,1));
+                //document.notifyView();
                 System.out.println("Added Enemy");
 
             }
@@ -43,6 +44,9 @@ class GameLogic implements Runnable {
             while (checkAllFieldIterator.hasNext()){
                 nextField = (Field) checkAllFieldIterator.nextMove();
                 moveField = (Field) checkAllFieldIterator.next();
+                if(moveField.isFinish()){
+                    ((FieldRoad) moveField).removeEnemy();
+                }
                 if(moveField instanceof FieldRoad){
                     if(((FieldRoad) moveField).hasEnemy()){
                         fieldWithEnemy.add(moveField);
@@ -54,8 +58,10 @@ class GameLogic implements Runnable {
             for(int i = 0;i < fieldMoveEnemy.size(); i++){
                 ((FieldRoad)fieldMoveEnemy.get(i)).setEnemy(((FieldRoad)fieldWithEnemy.get(i)).getEnemy());
                 ((FieldRoad)fieldWithEnemy.get(i)).removeEnemy();
-                //document.notifyView();
             }
+            //document.notifyView();
+            fieldMoveEnemy.clear();
+            fieldWithEnemy.clear();
             if(interval == 3){
                 interval = 0;
             }

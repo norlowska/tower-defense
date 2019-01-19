@@ -217,6 +217,7 @@ public class ConsoleGameView extends GameView {
             displayBoughtTowers();
             displayDetails();
             displayMap();
+
         }
        //document.notifyView();
     }

@@ -125,6 +125,8 @@ public class Map{
             }
     }
 
+
+
     public class moveIterator implements MoveIterator<Field>{
         int row = 0, column = 0;
 
