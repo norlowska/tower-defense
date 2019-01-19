@@ -34,7 +34,7 @@ public class GUIGameView extends GameView {
     private JLabel towerDetailsLabel;
     private MapPanel mapPanel;
     private Graphics graphics;
-    private Tower selectedTower;
+    private TowerF selectedTower;
     private int fieldSize = 70, characterSize = 64;
  //   Enemy enemy = new Enemy(40,1);
     private java.util.List<Tower> towers;
@@ -48,7 +48,7 @@ public class GUIGameView extends GameView {
         selectedTower = null;
     }
 
-    public void setSelectedTower(Tower selectedTower) {
+    public void setSelectedTower(TowerF selectedTower) {
         this.selectedTower = selectedTower;
         displayMap();
         displayDetails();
@@ -67,28 +67,28 @@ public class GUIGameView extends GameView {
 
                 switch (type) {
                     case "archer":
-                        setSelectedTower(new ArcherTower());
+                        setSelectedTower(TowerFactory.createTower("ArcherTower"));
                         break;
                     case "earth":
-                        setSelectedTower(new EarthTower());
+                        setSelectedTower(TowerFactory.createTower("EarthTower"));
                         break;
                     case "electric":
-                        setSelectedTower(new ElectricTower());
+                        setSelectedTower(TowerFactory.createTower("ElectricTower"));
                         break;
                     case "fire":
-                        setSelectedTower(new FireTower());
+                        setSelectedTower(TowerFactory.createTower("FireTower"));
                         break;
                     case "force":
-                        setSelectedTower(new ForceTower());
+                        setSelectedTower(TowerFactory.createTower("ForceTower"));
                         break;
                     case "ice":
-                        setSelectedTower(new IceTower());
+                        setSelectedTower(TowerFactory.createTower("IceTower"));
                         break;
                     case "nuclear":
-                        setSelectedTower(new NuclearTower());
+                        setSelectedTower(TowerFactory.createTower("NuclearTower"));
                         break;
                     case "water":
-                        setSelectedTower(new WaterTower());
+                        setSelectedTower(TowerFactory.createTower("WaterTower"));
                         break;
                 }
             }
@@ -209,7 +209,7 @@ public class GUIGameView extends GameView {
         displayMap();
     }
 
-    protected void displayTower(Graphics g, int x, int y, Tower tower) {
+    protected void displayTower(Graphics g, int x, int y, TowerF tower) {
         g.drawImage(tower.getImage(), x, y, null);
     }
 

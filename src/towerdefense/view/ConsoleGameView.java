@@ -7,6 +7,7 @@ import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.graphics.TextImage;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
+import sun.security.smartcardio.SunPCSC;
 import towerdefense.document.*;
 import towerdefense.document.towers.*;
 
@@ -19,12 +20,12 @@ public class ConsoleGameView extends GameView {
     private Map currentMap;
     private CurrentPlayer currentPlayer;
     private Field selectedField;
-    private Tower selectedTower;
+    private TowerF selectedTower;
     private final int fieldWidth = 6;
     private final int fieldHeight = 5;
     private final int characterWidth = 4;
     private final int characterHeight = 3;
-    private List<Tower> towers;
+    private List<TowerF> towers;
 
 
     public ConsoleGameView(Document document) {
@@ -32,16 +33,17 @@ public class ConsoleGameView extends GameView {
         currentPlayer = document.getCurrentPlayer();
         selectedField = null;
         selectedTower = null;
+        TowerFactory.createTower("ArcherTower");
         Enemy enemy = new Enemy(40,1);
         towers = new ArrayList<>();
-        towers.add(new ArcherTower());
-        towers.add(new EarthTower());
-        towers.add(new ElectricTower());
-        towers.add(new FireTower());
-        towers.add(new ForceTower());
-        towers.add(new IceTower());
-        towers.add(new NuclearTower());
-        towers.add(new WaterTower());
+        towers.add(TowerFactory.createTower("ArcherTower"));
+        towers.add(TowerFactory.createTower("EarthTower"));
+        towers.add(TowerFactory.createTower("ElectricTower"));
+        towers.add(TowerFactory.createTower("FireTower"));
+        towers.add(TowerFactory.createTower("ForceTower"));
+        towers.add(TowerFactory.createTower("IceTower"));
+        towers.add(TowerFactory.createTower("NuclearTower"));
+        towers.add(TowerFactory.createTower("WaterTower"));
     }
 
     @Override
@@ -68,7 +70,7 @@ public class ConsoleGameView extends GameView {
         startPosition = startPosition.withRelative(6,2);
         int i = 1;
 
-        for(Tower t : towers) {
+        for(TowerF t : towers) {
             displayTower(startPosition, t, textGraphics.getBackgroundColor());
             textGraphics.putString(startPosition.withRelativeRow(characterHeight + 1), 'F' + Integer.toString(i) + ' ' + t.getName());
             i++;
@@ -264,7 +266,7 @@ public class ConsoleGameView extends GameView {
         textGraphics.drawImage(startPosition, enemyImage);
     }
 
-    private void displayTower(TerminalPosition startPosition, Tower tower, TextColor backgroundColor) {
+    private void displayTower(TerminalPosition startPosition, TowerF tower, TextColor backgroundColor) {
         String stringTowerIcon = tower.getIcon();
         TextColor foregroundColor = getTextColor(tower.getColor());
 

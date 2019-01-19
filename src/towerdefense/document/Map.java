@@ -25,6 +25,7 @@ public class Map{
     public ArrayList<ArrayList<Field>> readMapLayout() {
         String mapFile = "data/" + mapName + ".txt";
         String line = null;
+        Point point;
 
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(mapFile));
@@ -53,13 +54,14 @@ public class Map{
 
                 for (int i = 0; i < splitted.length; i++) {
                     Field f;
+                    point = new Point(i,numberOfArrays);
                     boolean isStart = (splitted[i].charAt(1) == '1');
                     boolean isFinish = (splitted[i].charAt(2) == '1');
                     int whereMove = Character.getNumericValue(splitted[i].charAt(3));
                     if (Character.getNumericValue(splitted[i].charAt(0)) == 1) {
-                        f = new FieldTerrain(isStart, isFinish, colorScheme[0], null);
+                        f = new FieldTerrain(isStart, isFinish, colorScheme[0], point, null);
                     } else {
-                        f = new FieldRoad(isStart, isFinish, colorScheme[1], null, whereMove);
+                        f = new FieldRoad(isStart, isFinish, colorScheme[1], point, null, whereMove);
                     }
                     map.get(numberOfArrays).add(f);
                 }
@@ -94,6 +96,28 @@ public class Map{
                     return map.get(row).get(column++);
                 }
 
+            }
+
+            public Field nextMove(){
+                if(map.get(row).get(column) instanceof FieldRoad) {
+                    int whereMove = ((FieldRoad) map.get(row).get(column)).getWhereMove();
+
+                    switch (whereMove) {
+                        case 1:
+                            return map.get(row - 1).get(column);
+                        case 2:
+                            return map.get(row).get(column + 1);
+                        case 3:
+                            return map.get(row + 1).get(column);
+                        case 4:
+                            return map.get(row).get(column - 1);
+                        default:
+                            System.out.println("Zly whereMove");
+                            break;
+                    }
+                    return null;
+                }
+                return null;
             }
 
             public Point fieldPoint(){

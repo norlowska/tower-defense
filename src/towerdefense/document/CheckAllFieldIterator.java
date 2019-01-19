@@ -9,5 +9,6 @@ public interface CheckAllFieldIterator<E> {
     E next();
     boolean hasNext();
     Point fieldPoint();
+    E nextMove();
 
 }

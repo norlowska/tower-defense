@@ -9,6 +9,10 @@ class MyRunnable implements Runnable {
     Map currentMap;
     Field startField;
     HashSet<Point> enemyPosition;
+    Field moveField;
+    Field nextField;
+    ArrayList<Field> fieldWithEnemy = new ArrayList<>();
+    ArrayList<Field> fieldMoveEnemy = new ArrayList<>();
 
 
     public MyRunnable(int interval, Map currentMap,Field startField, HashSet<Point> enemyPosition) {
@@ -21,6 +25,7 @@ class MyRunnable implements Runnable {
     public void run() {
         System.out.println("Hello world");
         Iterator<Point> iterator = enemyPosition.iterator();
+        CheckAllFieldIterator checkAllFieldIterator = currentMap.checkAllFieldIterator();
         if(((FieldTerrain)currentMap.getMap().get(0).get(0)).getTower()!=null)
             System.out.println("Mam wieze");
         if(interval == 1){
@@ -28,12 +33,28 @@ class MyRunnable implements Runnable {
             if( enemy == null){
                 ((FieldRoad) startField).setEnemy(new Enemy(40,1));
                 System.out.println("Added Enemy");
-                do{
 
+            }
+        }
+        if(interval == 2){
 
-                }while (iterator.hasNext());
+            while (checkAllFieldIterator.hasNext()){
+                nextField = (Field) checkAllFieldIterator.nextMove();
+                moveField = (Field) checkAllFieldIterator.next();
+                if(moveField instanceof FieldRoad){
+                    if(((FieldRoad) moveField).hasEnemy()){
+                        fieldWithEnemy.add(moveField);
+                        fieldMoveEnemy.add(nextField);
+                    }
+                }
+
+            }
+            for(int i = 0;i < fieldMoveEnemy.size(); i++){
+                ((FieldRoad)fieldMoveEnemy.get(i)).setEnemy(((FieldRoad)fieldWithEnemy.get(i)).getEnemy());
+                ((FieldRoad)fieldWithEnemy.get(i)).removeEnemy();
             }
             interval = 0;
+
         }
         interval++;
 

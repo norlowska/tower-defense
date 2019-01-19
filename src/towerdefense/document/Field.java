@@ -5,11 +5,13 @@ public abstract class Field {
     protected boolean start;
     protected boolean finish;
     protected Color color;
+    protected Point point;
 
-    public Field(boolean start, boolean finish, Color color) {
+    public Field(boolean start, boolean finish, Color color, Point point) {
         this.start = start;
         this.finish = finish;
         this.color = color;
+        this.point = point;
     }
 
     public boolean isStart() {
@@ -37,4 +39,6 @@ public abstract class Field {
     public void setColor(Color color) {
         this.color = color;
     }
+
+    public Point getPoint(){return point;}
 }

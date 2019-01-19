@@ -1,13 +1,10 @@
 package towerdefense.document.towers;
 
-import com.googlecode.lanterna.TextColor;
-
-import towerdefense.document.Color;
 import towerdefense.document.Tower;
 
 import java.io.IOException;
 
-public class ElectricTower extends Tower {
+public class ElectricTower extends Tower implements TowerF {
 
 	public ElectricTower() {
 		super(12, 100,7, 1.1);
@@ -27,4 +24,12 @@ public class ElectricTower extends Tower {
 			e.printStackTrace();
 		}
 	}
+
+	private static class Factory extends TowerFactory{
+		protected TowerF create(){
+			return new ElectricTower();
+		}
+
+	}
+	static {TowerFactory.addFactory("ElectricTower", new Factory());}
 }
