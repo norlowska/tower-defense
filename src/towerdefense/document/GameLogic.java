@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
-class MyRunnable implements Runnable {
+class GameLogic implements Runnable {
     int interval;
     Map currentMap;
     Field startField;
@@ -15,7 +15,7 @@ class MyRunnable implements Runnable {
     ArrayList<Field> fieldMoveEnemy = new ArrayList<>();
 
 
-    public MyRunnable(int interval, Map currentMap,Field startField, HashSet<Point> enemyPosition) {
+    public GameLogic(int interval, Map currentMap, Field startField, HashSet<Point> enemyPosition) {
         this.interval = interval;
         this.startField = startField;
         this.currentMap = currentMap;
@@ -36,7 +36,7 @@ class MyRunnable implements Runnable {
 
             }
         }
-        if(interval == 2){
+        if(interval == 2 || interval == 3){
 
             while (checkAllFieldIterator.hasNext()){
                 nextField = (Field) checkAllFieldIterator.nextMove();
@@ -53,7 +53,10 @@ class MyRunnable implements Runnable {
                 ((FieldRoad)fieldMoveEnemy.get(i)).setEnemy(((FieldRoad)fieldWithEnemy.get(i)).getEnemy());
                 ((FieldRoad)fieldWithEnemy.get(i)).removeEnemy();
             }
-            interval = 0;
+            if(interval == 3){
+                interval = 0;
+            }
+
 
         }
         interval++;

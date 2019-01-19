@@ -1,16 +1,5 @@
 package towerdefense.document;
 
-import com.googlecode.lanterna.*;
-import com.googlecode.lanterna.graphics.BasicTextImage;
-import com.googlecode.lanterna.graphics.TextGraphics;
-import com.googlecode.lanterna.graphics.TextImage;
-import com.googlecode.lanterna.input.KeyStroke;
-import com.googlecode.lanterna.input.KeyType;
-import com.googlecode.lanterna.screen.Screen;
-import com.googlecode.lanterna.screen.TerminalScreen;
-import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
-import com.googlecode.lanterna.terminal.Terminal;
-
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.Executors;
@@ -94,7 +83,7 @@ public class Game {
         int interval = 0;
         enemyPosition.add(startPoint);
         //document.notifyView();
-        MyRunnable helloRunnable = new MyRunnable(interval,currentMap,startField, enemyPosition);
+        GameLogic helloRunnable = new GameLogic(interval,currentMap,startField, enemyPosition);
 
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
